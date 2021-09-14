@@ -7,10 +7,35 @@ async function main() {
     console.log("Input:");
     console.log(fileData);
 
-    const result = parser.parse(fileData);
+    const ast = parser.parse(fileData);
 
-    console.log("Output:");
-    console.log(JSON.stringify(result, null, 4));
+    console.log("AST:");
+    console.log(JSON.stringify(ast, null, 4));
+
+    const output = [];
+    genCode(ast, output);
+
+    console.log("Generated code:");
+    console.log(output.join("\r\n"));
+}
+
+function genCode(node, output) {
+
+    if (node.children) {
+        for (const child of node.children) {
+            genCode(child, output);
+        }
+    }
+
+    if (node.nodeType === "operator") {
+        output.push(node.opcode);
+    }
+    else if (node.nodeType === "literal") {
+        output.push(`${node.opcode} ${node.value}`);
+    }
+    else {
+        throw new Error(`Unexpected node type ${node.nodeType}`);
+    }
 }
 
 main()

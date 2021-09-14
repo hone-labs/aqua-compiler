@@ -4,7 +4,9 @@ start
 additive
     = left:multiplicative "+" right:additive { 
         return {
-            node: "+",
+            nodeType: "operator",
+            opcode: "+",
+            type: left.type,
             children: [
                 left,
                 right,
@@ -16,7 +18,9 @@ additive
 multiplicative
     = left:primary "*" right:multiplicative { 
         return {
-            node: "*",
+            nodeType: "operator",
+            opcode: "*",
+            type: left.type,
             children: [
                 left,
                 right,
@@ -32,7 +36,9 @@ primary
 integer "integer"
     = [0-9]+ { 
         return {
-            node: "integer",
+            nodeType: "literal",
+            type: "integer",
+            opcode: "int",
             value: parseInt(text(), 10),
         };
     }
