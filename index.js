@@ -1,22 +1,44 @@
 const parser = require("./parser");
 const fs = require("fs/promises");
+const minimist = require("minimist");
+const readline = require('readline');
 
 async function main() {
 
-    const fileData = await fs.readFile("./test.tl", "utf8");
-    console.log("Input:");
-    console.log(fileData);
+    const argv = minimist(process.argv.slice(2));
 
-    const ast = parser.parse(fileData);
+    const filePath = argv._.length > 0 && argv._[0];
+    if (filePath) {
+        // Compile a file.
+        const fileData = await fs.readFile(filePath, "utf8");
+        const output = compile(fileData);
+        console.log(output);
+    }
+    else {
+        // REPL.
+        var repl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout,
+            terminal: false
+        });
 
-    console.log("AST:");
-    console.log(JSON.stringify(ast, null, 4));
+        process.stdout.write("% ");
+        
+        repl.on('line', text => {
+            console.log(compile(text));
+
+            process.stdout.write("% ");
+        });        
+    }
+}
+
+function compile(input) {
+    const ast = parser.parse(input);
 
     const output = [];
     genCode(ast, output);
 
-    console.log("Generated code:");
-    console.log(output.join("\r\n"));
+    return output.join("\r\n");
 }
 
 function genCode(node, output) {

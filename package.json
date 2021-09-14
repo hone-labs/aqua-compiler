@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "pegjs -o parser.js grammar.pegjs",
-    "start": "npm run build && nodemon index.js"
+    "start": "npm run build && nodemon index.js test.tl"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "minimist": "^1.2.5",
     "pegjs": "^0.10.0"
   },
   "devDependencies": {
