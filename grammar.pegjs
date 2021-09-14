@@ -2,16 +2,37 @@ start
   = additive
 
 additive
-  = left:multiplicative "+" right:additive { return left + right; }
-  / multiplicative
+    = left:multiplicative "+" right:additive { 
+        return {
+            node: "+",
+            children: [
+                left,
+                right,
+            ], 
+        };
+    }
+    / multiplicative
 
 multiplicative
-  = left:primary "*" right:multiplicative { return left * right; }
-  / primary
+    = left:primary "*" right:multiplicative { 
+        return {
+            node: "*",
+            children: [
+                left,
+                right,
+            ], 
+        };
+    }
+    / primary
 
 primary
   = integer
-  / "(" additive:additive ")" { return additive; }
+  / "(" additive ")"
 
 integer "integer"
-  = [0-9]+ { return parseInt(text(), 10); }
+    = [0-9]+ { 
+        return {
+            node: "integer",
+            value: parseInt(text(), 10),
+        };
+    }
