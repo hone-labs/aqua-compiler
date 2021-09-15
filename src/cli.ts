@@ -1,4 +1,5 @@
-const parser = require("./parser");
+import { compile } from ".";
+
 const fs = require("fs/promises");
 const minimist = require("minimist");
 const readline = require('readline');
@@ -32,33 +33,6 @@ async function main() {
     }
 }
 
-function compile(input: string): string {
-    const ast = parser.parse(input);
-
-    const output: string[] = [];
-    genCode(ast, output);
-
-    return output.join("\r\n");
-}
-
-function genCode(node: any, output: string[]) {
-
-    if (node.children) {
-        for (const child of node.children) {
-            genCode(child, output);
-        }
-    }
-
-    if (node.nodeType === "operator") {
-        output.push(node.opcode);
-    }
-    else if (node.nodeType === "literal") {
-        output.push(`${node.opcode} ${node.value}`);
-    }
-    else {
-        throw new Error(`Unexpected node type ${node.nodeType}`);
-    }
-}
 
 main()
     .catch(err => {
