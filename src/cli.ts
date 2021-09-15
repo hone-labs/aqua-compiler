@@ -24,7 +24,7 @@ async function main() {
 
         process.stdout.write("% ");
         
-        repl.on('line', text => {
+        repl.on('line', (text: string) => {
             console.log(compile(text));
 
             process.stdout.write("% ");
@@ -32,16 +32,16 @@ async function main() {
     }
 }
 
-function compile(input) {
+function compile(input: string): string {
     const ast = parser.parse(input);
 
-    const output = [];
+    const output: string[] = [];
     genCode(ast, output);
 
     return output.join("\r\n");
 }
 
-function genCode(node, output) {
+function genCode(node: any, output: string[]) {
 
     if (node.children) {
         for (const child of node.children) {

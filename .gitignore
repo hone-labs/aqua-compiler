@@ -1,2 +1,4 @@
 node_modules/
-parser.js
+build/
+tsconfig.tsbuildinfo
+src/parser.js
