@@ -1,15 +1,15 @@
 {
-  "name": "peg-test",
+  "name": "aqua-compiler",
   "version": "1.0.0",
-  "description": "",
+  "description": "A TEAL compiler and REPL.",
   "main": "index.js",
   "scripts": {
     "build": "pegjs -o parser.js grammar.pegjs",
     "start": "npm run build && nodemon index.js test.tl"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "ashley@codecapers.com.au",
+  "license": "private",
   "dependencies": {
     "minimist": "^1.2.5",
     "pegjs": "^0.10.0"
