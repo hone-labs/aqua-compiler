@@ -121,7 +121,7 @@ describe("aqua-compiler", () => {
         expect(teal).toEqual(expectedTeal);
     });
 
-    it("divison is left associative", () => {
+    it("division is left associative", () => {
 
         const teal = normalize(compile("1/2/3"));
         const expectedTeal = normalize(dedent(`
@@ -135,7 +135,7 @@ describe("aqua-compiler", () => {
         expect(teal).toEqual(expectedTeal);
     });
 
-    it("can mix multiplication and divison", () => {
+    it("can mix multiplication and division", () => {
 
         const teal = normalize(compile("1*2/3"));
         const expectedTeal = normalize(dedent(`
