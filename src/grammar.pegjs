@@ -22,9 +22,19 @@ start
   = additive
 
 additive
-    = left:multiplicative whitespace "+" whitespace right:additive { return makeOperator("+", left.type, [ left, right ]); }
-    / left:multiplicative whitespace "-" whitespace right:additive { return makeOperator("-", left.type, [ left, right ]); }
-    / multiplicative
+    = head:multiplicative whitespace tail:(("+" / "-") whitespace multiplicative)* { 
+        return tail.reduce((result, element) => {
+            if (element[0] === "+") {
+                return makeOperator("+", head.type, [ result, element[2] ]);
+            }
+            else if (element[0] === "-") {
+                return makeOperator("-", head.type, [ result, element[2] ]);
+            }
+            else {
+                throw new Error(`Unexpected operator ${element[0]}`);
+            }
+        }, head);
+    }
 
 multiplicative
     = left:primary whitespace "*" whitespace right:multiplicative { return makeOperator("*", left.type, [ left, right ]); }

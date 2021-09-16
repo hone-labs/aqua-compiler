@@ -32,7 +32,6 @@ describe("aqua-compiler", () => {
         expect(teal).toEqual(expectedTeal);
     });
 
-
     it("can compile an multiplication expression", ()  => {
 
         const teal = normalize(compile("1 * 1"));
@@ -55,7 +54,6 @@ describe("aqua-compiler", () => {
         expect(teal).toEqual(expectedTeal);
     });
 
-
     it("can compile a parenthesized expression", ()  => {
 
         const teal = normalize(compile("( 1 + 1 )"));
@@ -64,6 +62,48 @@ describe("aqua-compiler", () => {
             int 1
             +
         `));
+        expect(teal).toEqual(expectedTeal);
+    });
+
+    it("addition is left associative", () => {
+
+        const teal = normalize(compile("1+2+3"));
+        const expectedTeal = normalize(dedent(`
+            int 1
+            int 2
+            +
+            int 3
+            +
+        `));
+
+        expect(teal).toEqual(expectedTeal);
+    });
+
+    it("subtraction is left associative", () => {
+
+        const teal = normalize(compile("1-2-3"));
+        const expectedTeal = normalize(dedent(`
+            int 1
+            int 2
+            -
+            int 3
+            -
+        `));
+
+        expect(teal).toEqual(expectedTeal);
+    });
+
+    it("can mix addition and subtaction", () => {
+
+        const teal = normalize(compile("1+2-3"));
+        const expectedTeal = normalize(dedent(`
+            int 1
+            int 2
+            +
+            int 3
+            -
+        `));
+
         expect(teal).toEqual(expectedTeal);
     });
 
