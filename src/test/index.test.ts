@@ -10,7 +10,7 @@ function normalize(input: string): string {
 
 describe("aqua-compiler", () => {
 
-    it("can compile an expression", ()  => {
+    it("can compile an addition expression", ()  => {
 
         const teal = normalize(compile("1 + 1"));
         const expectedTeal = normalize(dedent(`
@@ -20,6 +20,41 @@ describe("aqua-compiler", () => {
         `));
         expect(teal).toEqual(expectedTeal);
     });
+
+    it("can compile an subtraction expression", ()  => {
+
+        const teal = normalize(compile("1 - 1"));
+        const expectedTeal = normalize(dedent(`
+            int 1
+            int 1
+            -
+        `));
+        expect(teal).toEqual(expectedTeal);
+    });
+
+
+    it("can compile an multiplication expression", ()  => {
+
+        const teal = normalize(compile("1 * 1"));
+        const expectedTeal = normalize(dedent(`
+            int 1
+            int 1
+            *
+        `));
+        expect(teal).toEqual(expectedTeal);
+    });
+
+    it("can compile an division expression", ()  => {
+
+        const teal = normalize(compile("1 / 1"));
+        const expectedTeal = normalize(dedent(`
+            int 1
+            int 1
+            /
+        `));
+        expect(teal).toEqual(expectedTeal);
+    });
+
 
     it("can compile a parenthesized expression", ()  => {
 
