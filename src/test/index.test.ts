@@ -19,52 +19,20 @@ describe("aqua-compiler", () => {
         expect(teal).toEqual(expectedTeal);
     }
 
-    it("can compile an addition expression", ()  => {
+    it("can compile an mathematical expressions", ()  => {
 
-        check(
-            "1 + 1", 
-            dedent(`
-                int 1
-                int 1
-                +
-            `)
-        );
-    });
+        const operators = ["+", "-", "*", "/"];
 
-    it("can compile an subtraction expression", ()  => {
-
-        check(
-            "1 - 1",
-            dedent(`
-                int 1
-                int 1
-                -
-            `)
-        );
-    });
-
-    it("can compile an multiplication expression", ()  => {
-
-        check(
-            "1 * 1",
-            dedent(`
-                int 1
-                int 1
-                *
-            `)
-        );
-    });
-
-    it("can compile an division expression", ()  => {
-
-        check(
-            "1 / 1",
-            dedent(`
-                int 1
-                int 1
-                /
-            `)
-        );
+        for (const operator of operators) {
+            check(
+                `1 ${operator} 2`, 
+                dedent(`
+                    int 1
+                    int 2
+                    ${operator}
+                `)
+            );    
+        }
     });
 
     it("can compile a parenthesized expression", ()  => {
@@ -79,18 +47,22 @@ describe("aqua-compiler", () => {
         );
     });
 
-    it("addition is left associative", () => {
+    it("maths expressions are left associative", () => {
 
-        check(
-            "1+2+3",
-            dedent(`
-                int 1
-                int 2
-                +
-                int 3
-                +
-            `)
-        );
+        const operators = ["+", "-", "*", "/"];
+
+        for (const operator of operators) {
+            check(
+                `1 ${operator} 2 ${operator} 3`, 
+                dedent(`
+                    int 1
+                    int 2
+                    ${operator}
+                    int 3
+                    ${operator}
+                `)
+            );    
+        }
     });
 
     it("can change association with parenthesis", () => {
