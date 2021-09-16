@@ -4,7 +4,7 @@
   "description": "A TEAL compiler and REPL.",
   "main": "index.js",
   "scripts": {
-    "build-parser": "pegjs -o src/parser.js src/grammar.pegjs",
+    "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
     "start": "npm run build-parser && node ./build/cli.js",
     "start:dev": "npm run build-parser && nodemon",
     "c": "npm run clean",

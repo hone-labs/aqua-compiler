@@ -1,4 +1,4 @@
-import { compile, genCode } from "..";
+import { compileExpression, genCode } from "..";
 import * as dedent from "dedent";
 
 //
@@ -14,7 +14,7 @@ describe("aqua-compiler", () => {
     // Compile the input string and check it against the expected output.
     // 
     function check(input: string, expected: string): void {
-        const teal = normalize(compile(input));
+        const teal = normalize(compileExpression(input));
         const expectedTeal = normalize(expected);
         expect(teal).toEqual(expectedTeal);
     }

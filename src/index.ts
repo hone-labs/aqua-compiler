@@ -13,6 +13,18 @@ export function compile(input: string): string {
 }
 
 //
+// Compiles an expression to TEAL.
+//
+export function compileExpression(input: string): string {
+    const ast = parser.parse(input, { startRule: "expression" });
+
+    const output: string[] = [];
+    genCode(ast, output);
+
+    return output.join("\r\n");
+}
+
+//
 // Generates code from an AST representation of an Aqua script.
 //
 export function genCode(node: any, output: string[]): void {
