@@ -16,7 +16,11 @@
     //
     function makeExpression(head, tail) {
         return tail.reduce((result, element) => {
-            return makeOperator(element[0], head.type, [ result, element[2] ]);
+            // element[0] == whitespace
+            // element[1] == <the operator>
+            // element[2] == whitespace
+            // element[3] == <child AST node>
+            return makeOperator(element[1], head.type, [ result, element[3] ]);
         }, head);
     }
 
@@ -40,19 +44,19 @@ expression
     = logical
 
 logical
-    = head:equality tail:(("&&" / "||") whitespace equality)* { return makeExpression(head, tail); }
+    = head:equality tail:(whitespace ("&&" / "||") whitespace equality)* { return makeExpression(head, tail); }
 
 equality
-    = head:comparison whitespace tail:(("!=" / "==") whitespace comparison)* { return makeExpression(head, tail); }
+    = head:comparison tail:(whitespace ("!=" / "==") whitespace comparison)* { return makeExpression(head, tail); }
 
 comparison
-    = head:term whitespace tail:(("<" / "<=" / ">" / ">=") whitespace term)* { return makeExpression(head, tail); }
+    = head:term tail:(whitespace ("<" / "<=" / ">" / ">=") whitespace term)* { return makeExpression(head, tail); }
 
 term
-    = head:factor whitespace tail:(("+" / "-") whitespace factor)* { return makeExpression(head, tail); }
+    = head:factor tail:(whitespace ("+" / "-") whitespace factor)* { return makeExpression(head, tail); }
 
 factor
-    = head:primary whitespace tail:(("*" / "/") whitespace primary)* { return makeExpression(head, tail); }
+    = head:primary tail:(whitespace ("*" / "/") whitespace primary)* { return makeExpression(head, tail); }
 
 primary
   = integer
