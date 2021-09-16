@@ -34,17 +34,20 @@
 }
 
 start
-  = additive
+  = expression
 
-additive
-    = head:multiplicative whitespace tail:(("+" / "-") whitespace multiplicative)* { return makeExpression(head, tail); }
+expression
+    = term
 
-multiplicative
+term
+    = head:factor whitespace tail:(("+" / "-") whitespace factor)* { return makeExpression(head, tail); }
+
+factor
     = head:primary whitespace tail:(("*" / "/") whitespace primary)* { return makeExpression(head, tail); }
 
 primary
   = integer
-  / "(" whitespace node:additive whitespace ")" { return node; }
+  / "(" whitespace node:expression whitespace ")" { return node; }
 
 integer "integer"
     = [0-9]+ { return makeLiteral("int", "integer", parseInt(text(), 10)); }
