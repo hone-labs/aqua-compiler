@@ -143,6 +143,16 @@ describe("aqua-compiler", () => {
         );
     });
 
+    it("can compile not operator", () => {
+        check(
+            "! 1",
+            dedent(`
+                int 1
+                !
+            `)
+        );
+    });
+
     it("can generate code for operator", () => {
 
         const opcode = "test-opcode";

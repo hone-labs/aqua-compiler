@@ -56,7 +56,11 @@ term
     = head:factor tail:(whitespace ("+" / "-") whitespace factor)* { return makeExpression(head, tail); }
 
 factor
-    = head:primary tail:(whitespace ("*" / "/") whitespace primary)* { return makeExpression(head, tail); }
+    = head:unary tail:(whitespace ("*" / "/") whitespace unary)* { return makeExpression(head, tail); }
+
+unary
+    = "!" whitespace child:unary { return makeOperator("!", child.type, [ child ]) }
+    / primary
 
 primary
   = integer
