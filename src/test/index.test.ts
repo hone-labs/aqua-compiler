@@ -10,143 +10,157 @@ function normalize(input: string): string {
 
 describe("aqua-compiler", () => {
 
+    //
+    // Compile the input string and check it against the expected output.
+    // 
+    function check(input: string, expected: string): void {
+        const teal = normalize(compile(input));
+        const expectedTeal = normalize(expected);
+        expect(teal).toEqual(expectedTeal);
+    }
+
     it("can compile an addition expression", ()  => {
 
-        const teal = normalize(compile("1 + 1"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 1
-            +
-        `));
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "1 + 1", 
+            dedent(`
+                int 1
+                int 1
+                +
+            `)
+        );
     });
 
     it("can compile an subtraction expression", ()  => {
 
-        const teal = normalize(compile("1 - 1"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 1
-            -
-        `));
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "1 - 1",
+            dedent(`
+                int 1
+                int 1
+                -
+            `)
+        );
     });
 
     it("can compile an multiplication expression", ()  => {
 
-        const teal = normalize(compile("1 * 1"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 1
-            *
-        `));
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "1 * 1",
+            dedent(`
+                int 1
+                int 1
+                *
+            `)
+        );
     });
 
     it("can compile an division expression", ()  => {
 
-        const teal = normalize(compile("1 / 1"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 1
-            /
-        `));
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "1 / 1",
+            dedent(`
+                int 1
+                int 1
+                /
+            `)
+        );
     });
 
     it("can compile a parenthesized expression", ()  => {
 
-        const teal = normalize(compile("( 1 + 1 )"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 1
-            +
-        `));
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "( 1 + 1 )",
+            dedent(`
+                int 1
+                int 1
+                +
+            `)
+        );
     });
 
     it("addition is left associative", () => {
 
-        const teal = normalize(compile("1+2+3"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 2
-            +
-            int 3
-            +
-        `));
-
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "1+2+3",
+            dedent(`
+                int 1
+                int 2
+                +
+                int 3
+                +
+            `)
+        );
     });
 
     it("subtraction is left associative", () => {
 
-        const teal = normalize(compile("1-2-3"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 2
-            -
-            int 3
-            -
-        `));
-
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "1-2-3",
+            dedent(`
+                int 1
+                int 2
+                -
+                int 3
+                -
+            `)
+        );
     });
 
     it("can mix addition and subtraction", () => {
 
-        const teal = normalize(compile("1+2-3"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 2
-            +
-            int 3
-            -
-        `));
-
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "1+2-3",
+            dedent(`
+                int 1
+                int 2
+                +
+                int 3
+                -
+            `)
+        );
     });
 
     it("multiplication is left associative", () => {
 
-        const teal = normalize(compile("1*2*3"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 2
-            *
-            int 3
-            *
-        `));
-
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "1*2*3",
+            dedent(`
+                int 1
+                int 2
+                *
+                int 3
+                *
+            `)
+        );
     });
 
     it("division is left associative", () => {
 
-        const teal = normalize(compile("1/2/3"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 2
-            /
-            int 3
-            /
-        `));
-
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "1/2/3",
+            dedent(`
+                int 1
+                int 2
+                /
+                int 3
+                /
+            `)
+        );
     });
 
     it("can mix multiplication and division", () => {
 
-        const teal = normalize(compile("1*2/3"));
-        const expectedTeal = normalize(dedent(`
-            int 1
-            int 2
-            *
-            int 3
-            /
-        `));
-
-        expect(teal).toEqual(expectedTeal);
+        check(
+            "1*2/3",
+            dedent(`
+                int 1
+                int 2
+                *
+                int 3
+                /
+            `)
+        );
     });
 
     it("can generate code for operator", () => {
