@@ -18,6 +18,7 @@ describe("aqua-compiler", () => {
             int 1
             +
         `));
+        expect(teal).toEqual(expectedTeal);
     });
 
     it("can generate code for operator", () => {
