@@ -37,7 +37,16 @@ start
   = expression
 
 expression
-    = term
+    = logical
+
+logical
+    = head:equality tail:(("&&" / "||") whitespace equality)* { return makeExpression(head, tail); }
+
+equality
+    = head:comparison whitespace tail:(("!=" / "==") whitespace comparison)* { return makeExpression(head, tail); }
+
+comparison
+    = head:term whitespace tail:(("<" / "<=" / ">" / ">=") whitespace term)* { return makeExpression(head, tail); }
 
 term
     = head:factor whitespace tail:(("+" / "-") whitespace factor)* { return makeExpression(head, tail); }
