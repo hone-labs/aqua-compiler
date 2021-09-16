@@ -19,11 +19,8 @@ describe("aqua-compiler", () => {
         expect(teal).toEqual(expectedTeal);
     }
 
-    it("can compile an mathematical expressions", ()  => {
-
-        const operators = ["+", "-", "*", "/"];
-
-        for (const operator of operators) {
+    for (const operator of ["+", "-", "*", "/"]) {
+        it(`can compile a ${operator} expression`, ()  => {
             check(
                 `1 ${operator} 2`, 
                 dedent(`
@@ -32,8 +29,8 @@ describe("aqua-compiler", () => {
                     ${operator}
                 `)
             );    
-        }
-    });
+        });
+    }
 
     it("can compile a parenthesized expression", ()  => {
 
@@ -47,11 +44,8 @@ describe("aqua-compiler", () => {
         );
     });
 
-    it("maths expressions are left associative", () => {
-
-        const operators = ["+", "-", "*", "/"];
-
-        for (const operator of operators) {
+    for (const operator of ["+", "-", "*", "/"]) {
+        it(`${operator} expressions are left associative`, () => {
             check(
                 `1 ${operator} 2 ${operator} 3`, 
                 dedent(`
@@ -62,8 +56,8 @@ describe("aqua-compiler", () => {
                     ${operator}
                 `)
             );    
-        }
-    });
+        });
+    }
 
     it("can change association with parenthesis", () => {
 
