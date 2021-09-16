@@ -37,9 +37,19 @@ additive
     }
 
 multiplicative
-    = left:primary whitespace "*" whitespace right:multiplicative { return makeOperator("*", left.type, [ left, right ]); }
-    / left:primary whitespace "/" whitespace right:multiplicative { return makeOperator("/", left.type, [ left, right ]); }
-    / primary
+    = head:primary whitespace tail:(("*" / "/") whitespace primary)* { 
+        return tail.reduce((result, element) => {
+            if (element[0] === "*") {
+                return makeOperator("*", head.type, [ result, element[2] ]);
+            }
+            else if (element[0] === "/") {
+                return makeOperator("/", head.type, [ result, element[2] ]);
+            }
+            else {
+                throw new Error(`Unexpected operator ${element[0]}`);
+            }
+        }, head);
+    }
 
 primary
   = integer
