@@ -73,20 +73,6 @@ describe("aqua-compiler", () => {
         );
     });
 
-    it("subtraction is left associative", () => {
-
-        check(
-            "1-2-3",
-            dedent(`
-                int 1
-                int 2
-                -
-                int 3
-                -
-            `)
-        );
-    });
-
     it("can mix addition and subtraction", () => {
 
         check(
@@ -97,34 +83,6 @@ describe("aqua-compiler", () => {
                 +
                 int 3
                 -
-            `)
-        );
-    });
-
-    it("multiplication is left associative", () => {
-
-        check(
-            "1*2*3",
-            dedent(`
-                int 1
-                int 2
-                *
-                int 3
-                *
-            `)
-        );
-    });
-
-    it("division is left associative", () => {
-
-        check(
-            "1/2/3",
-            dedent(`
-                int 1
-                int 2
-                /
-                int 3
-                /
             `)
         );
     });
