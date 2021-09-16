@@ -93,6 +93,20 @@ describe("aqua-compiler", () => {
         );
     });
 
+    it("can change association with parenthesis", () => {
+
+        check(
+            "1+(2+3)",
+            dedent(`
+                int 1
+                int 2
+                int 3
+                +
+                +
+            `)
+        );
+    });
+
     it("subtraction is left associative", () => {
 
         check(
