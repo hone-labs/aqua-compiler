@@ -12,7 +12,18 @@ describe("aqua-compiler", () => {
 
     it("can compile an expression", ()  => {
 
-        const teal = normalize(compile("1+1"));
+        const teal = normalize(compile("1 + 1"));
+        const expectedTeal = normalize(dedent(`
+            int 1
+            int 1
+            +
+        `));
+        expect(teal).toEqual(expectedTeal);
+    });
+
+    it("can compile a parenthesized expression", ()  => {
+
+        const teal = normalize(compile("( 1 + 1 )"));
         const expectedTeal = normalize(dedent(`
             int 1
             int 1
