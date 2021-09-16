@@ -19,7 +19,7 @@
     "t": "npm run test",
     "test": "jest",
     "tw": "npm run test:watch",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch --runInBand"
   },
   "keywords": [],
   "author": "ashley@codecapers.com.au",
