@@ -45,6 +45,16 @@
             fieldName: name,
         };
     }
+
+    //
+    // Makes an AST node an arg operation.
+    //
+    function makeArg(argIndex) {
+        return {
+            nodeType: "arg",
+            argIndex: argIndex,
+        };
+    }
 }
 
 start
@@ -73,12 +83,16 @@ unary
     / primary
 
 primary
-  = integer
+  = integerLiteral
   / "txn" whitespace id:identifier { return makeTxn(id); }
+  / "arg" whitespace value:integer { return makeArg(value); }
   / "(" whitespace node:expression whitespace ")" { return node; }
 
-integer "integer"
-    = [0-9]+ { return makeLiteral("int", "integer", parseInt(text(), 10)); }
+integerLiteral
+    = value:integer { return makeLiteral("int", "integer", value); }
+
+integer
+    = [0-9]+ { return parseInt(text(), 10); }
 
 identifier
     = [A-Za-z_] [A-Za-z0-9_]* { return text(); }

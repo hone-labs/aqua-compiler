@@ -44,6 +44,9 @@ export function genCode(node: any, output: string[]): void {
     else if (node.nodeType === "txn") {
         output.push(`txn ${node.fieldName}`);
     }
+    else if (node.nodeType === "arg") {
+        output.push(`arg ${node.argIndex}`);
+    }
     else {
         throw new Error(`Unexpected node type ${node.nodeType}`);
     }

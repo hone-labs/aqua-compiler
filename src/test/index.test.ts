@@ -141,6 +141,21 @@ describe("aqua-compiler", () => {
         );
     });
 
+    it("can get arg", () => {
+        check("arg 2", "arg 2");
+    });
+
+    it("can use arg in expression", () => {
+        check(
+            "arg 3 >= 1000", 
+            dedent(`
+                arg 3
+                int 1000
+                >=
+            `)
+        );
+    });
+
     it("can generate code for children", () => {
 
         const opcode = "test-opcode";
