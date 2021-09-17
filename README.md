@@ -24,10 +24,22 @@ npm run build
 ## Compile a file
 
 ```bash
-ts-node src/cli.ts test.aqua
+npx ts-node src/cli.ts test.aqua
 ```
 
 ## Run the REPL
+
+```bash
+npx ts-node src/cli.ts
+```
+
+Or 
+
+```bash
+npm start
+```
+
+Or with live reload:
 
 ```bash
 npm run start:dev
