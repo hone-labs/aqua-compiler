@@ -26,7 +26,7 @@ async function main() {
         process.stdout.write("% ");
         
         repl.on('line', (text: string) => {
-            console.log(compile(text));
+            console.log(compile(text.trim()));
 
             process.stdout.write("% ");
         });        
