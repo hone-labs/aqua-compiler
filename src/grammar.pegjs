@@ -35,6 +35,16 @@
             value: value,
         };
     }
+
+    //
+    // Makes an AST node for a txn operation.
+    //
+    function makeTxn(name) {
+        return {
+            nodeType: "txn",
+            fieldName: name,
+        };
+    }
 }
 
 start
@@ -64,10 +74,14 @@ unary
 
 primary
   = integer
+  / "txn" whitespace id:identifier { return makeTxn(id); }
   / "(" whitespace node:expression whitespace ")" { return node; }
 
 integer "integer"
     = [0-9]+ { return makeLiteral("int", "integer", parseInt(text(), 10)); }
+
+identifier
+    = [A-Za-z_] [A-Za-z0-9_]* { return text(); }
 
 whitespace "whitespace"
   = [ \t\n\r]*    

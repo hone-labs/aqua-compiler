@@ -41,6 +41,9 @@ export function genCode(node: any, output: string[]): void {
     else if (node.nodeType === "literal") {
         output.push(`${node.opcode} ${node.value}`);
     }
+    else if (node.nodeType === "txn") {
+        output.push(`txn ${node.fieldName}`);
+    }
     else {
         throw new Error(`Unexpected node type ${node.nodeType}`);
     }

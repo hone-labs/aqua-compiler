@@ -126,6 +126,21 @@ describe("aqua-compiler", () => {
         ]);
     });
 
+    it("can get txn field", () => {
+        check("txn Amount", "txn Amount");
+    });
+
+    it("can use txn field in expression", () => {
+        check(
+            "txn Amount >= 1000", 
+            dedent(`
+                txn Amount
+                int 1000
+                >=
+            `)
+        );
+    });
+
     it("can generate code for children", () => {
 
         const opcode = "test-opcode";
@@ -171,4 +186,5 @@ describe("aqua-compiler", () => {
             `${opcode} ${value}`,
         ]);
     });    
+
 });
