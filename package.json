@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
-    "start": "npm run build-parser && node ./build/cli.js",
+    "start": "npm run build-parser && ts-node ./src/cli.ts",
     "start:dev": "npm run build-parser && nodemon",
     "c": "npm run clean",
     "clean": "rm -rf build/*",
