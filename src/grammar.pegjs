@@ -50,7 +50,7 @@ equality
     = head:comparison tail:(whitespace ("!=" / "==") whitespace comparison)* { return makeExpression(head, tail); }
 
 comparison
-    = head:term tail:(whitespace ("<" / "<=" / ">" / ">=") whitespace term)* { return makeExpression(head, tail); }
+    = head:term tail:(whitespace ("<=" / "<" / ">=" / ">") whitespace term)* { return makeExpression(head, tail); }
 
 term
     = head:factor tail:(whitespace ("+" / "-") whitespace factor)* { return makeExpression(head, tail); }
