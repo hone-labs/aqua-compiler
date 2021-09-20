@@ -165,6 +165,15 @@ describe("aqua-compiler", () => {
         );
     });
 
+    it("can compile string literal", () => {
+        check(
+            '"a cool string"',
+            dedent(`
+                byte "a cool string"
+            `)
+        );
+    });
+
     it("can generate code for children", () => {
 
         const opcode = "test-opcode";

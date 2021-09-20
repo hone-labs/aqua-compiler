@@ -87,19 +87,23 @@ primary
   / "txn" whitespace id:identifier { return makeTxn(id); }
   / "arg" whitespace value:integer { return makeArg(value); }
   / "addr" whitespace value:addr { return makeLiteral("addr", "addr", value); }
+  / '"' value:stringCharacters '"' { return makeLiteral("byte", "byte", `"${value}"`); }
   / "(" whitespace node:expression whitespace ")" { return node; }
 
-integerLiteral
+integerLiteral "integer"
     = value:integer { return makeLiteral("int", "integer", value); }
 
-integer
+integer "integer"
     = [0-9]+ { return parseInt(text(), 10); }
 
-addr   
+addr "address"
     = [A-Za-z0-9]+ { return text(); }
 
-identifier
+identifier "identifier"
     = [A-Za-z_] [A-Za-z0-9_]* { return text(); }
+
+stringCharacters "byte string"
+    = (!('"') .)* { return text(); }
 
 whitespace "whitespace"
   = [ \t\n\r]*    
