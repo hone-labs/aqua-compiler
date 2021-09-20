@@ -86,6 +86,7 @@ primary
   = integerLiteral
   / "txn" whitespace id:identifier { return makeTxn(id); }
   / "arg" whitespace value:integer { return makeArg(value); }
+  / "addr" whitespace value:addr { return makeLiteral("addr", "addr", value); }
   / "(" whitespace node:expression whitespace ")" { return node; }
 
 integerLiteral
@@ -93,6 +94,9 @@ integerLiteral
 
 integer
     = [0-9]+ { return parseInt(text(), 10); }
+
+addr   
+    = [A-Za-z0-9]+ { return text(); }
 
 identifier
     = [A-Za-z_] [A-Za-z0-9_]* { return text(); }

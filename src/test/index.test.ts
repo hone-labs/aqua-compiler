@@ -156,6 +156,15 @@ describe("aqua-compiler", () => {
         );
     });
 
+    it("can compile addr", () => {
+        check(
+            "addr ABC1234",
+            dedent(`
+                addr ABC1234
+            `)
+        );
+    });
+
     it("can generate code for children", () => {
 
         const opcode = "test-opcode";

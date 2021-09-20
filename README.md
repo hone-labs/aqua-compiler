@@ -51,6 +51,7 @@ Trying entering expressions at the REPL prompt:
 - `15 + txn Amount >= 1000`
 - `txn Amount <= arg 0`
 - `txn Amount + arg0 > 1000 && arg1 > 30`
+- `txn Receiver == addr ABC123`
 
 
 ## Run tests
