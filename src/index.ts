@@ -47,6 +47,20 @@ export function genCode(node: any, output: string[]): void {
     else if (node.nodeType === "arg") {
         output.push(`arg ${node.argIndex}`);
     }
+    else if (node.nodeType === "block") {
+        // No need for anything else.
+    }
+    else if (node.nodeType === "statement") {
+        if (node.stmtType === "expr") {
+            // No need for anything else.
+        }
+        else if (node.stmtType === "return") {
+            output.push(`return`);
+        }
+        else {
+            throw new Error(`Unexpected statement type ${node.stmtType}`);
+        }
+    }
     else {
         throw new Error(`Unexpected node type ${node.nodeType}`);
     }

@@ -55,10 +55,38 @@
             argIndex: argIndex,
         };
     }
+
+    //
+    // Makes an AST node for a statement.
+    //
+    function makeStmt(stmtType, children) {
+        return {
+            nodeType: "statement",
+            stmtType: stmtType,
+            children: children, 
+        };
+    }
+
+    //
+    // Make a block of statements.
+    //
+    function makeBlock(stmts) {
+        return {
+            nodeType: "block",
+            children: stmts,
+        };
+    }
 }
 
 start
-  = expression
+    = program
+
+program
+    = stmts:((whitespace statement)*) { return makeBlock(stmts.map(stmt => stmt[1])); }
+
+statement
+    = expr:expression whitespace ";" { return makeStmt("expr", [ expr ]); }
+    / "return" whitespace expr:expression whitespace ";" { return makeStmt("return", [ expr ]); }
 
 expression
     = logical

@@ -63,4 +63,53 @@ describe("code generator", () => {
         ]);
     });    
 
+    it("can generate code for expression statement", () => {
+
+        const node = {
+            nodeType: "statement",
+            stmtType: "expr",
+            children: [],
+        };
+
+        const output: string[] = [];
+        genCode(node, output);
+        
+        expect(output).toEqual([]);
+    });    
+
+    it("can generate code for return statement", () => {
+
+        const node = {
+            nodeType: "statement",
+            stmtType: "return",
+            children: [
+                {
+                    nodeType: "literal",
+                    opcode: "int",
+                    value: 1,
+                },
+            ],
+        };
+
+        const output: string[] = [];
+        genCode(node, output);
+        
+        expect(output).toEqual([
+            `int 1`,
+            `return`,
+        ]);
+    });    
+
+    it("can generate code for block", () => {
+
+        const node = {
+            nodeType: "block",
+            children: [],
+        };
+
+        const output: string[] = [];
+        genCode(node, output);
+        
+        expect(output).toEqual([]);
+    });    
 });

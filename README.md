@@ -47,12 +47,13 @@ npm run start:dev
 
 Trying entering expressions at the REPL prompt:
 
-- `txn Amount >= 1000`
-- `15 + txn Amount >= 1000`
-- `txn Amount <= arg 0`
-- `txn Amount + arg0 > 1000 && arg1 > 30`
-- `txn Receiver == addr ABC123`
-- `"a string" == txn Something`
+- `txn Amount >= 1000;`
+- `15 + txn Amount >= 1000;`
+- `txn Amount <= arg 0;`
+- `txn Amount + arg0 > 1000 && arg1 > 30;`
+- `txn Receiver == addr ABC123;`
+- `"a string" == txn Something;`
+- `return 1+2;`
 
 
 ## Run tests
