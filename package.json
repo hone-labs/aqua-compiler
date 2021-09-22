@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
-    "start": "npm run build-parser && ts-node -T ./src/cli.ts exec test.aqua",
+    "start": "npm run build-parser && npm run build && ts-node -T ./src/cli.ts exec test.aqua",
     "s": "npm run start",
-    "start:dev": "npm run build-parser && nodemon",
+    "start:dev": "npm run build-parser && npm run build && nodemon",
     "c": "npm run clean",
     "clean": "rm -rf build/*",
     "b": "npm run build",
