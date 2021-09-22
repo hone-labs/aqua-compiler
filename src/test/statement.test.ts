@@ -24,6 +24,7 @@ describe("statement", () => {
         check(
             "1 + 1 ;",
             dedent(`
+                #pragma version 3
                 int 1
                 int 1
                 +
@@ -36,6 +37,7 @@ describe("statement", () => {
         check(
             "return 1 ;",
             dedent(`
+                #pragma version 3   
                 int 1
                 return
             `)
@@ -47,10 +49,30 @@ describe("statement", () => {
         check(
             "1 + 2 ; return 3 ;",
             dedent(`
+                #pragma version 3
                 int 1
                 int 2
                 +
                 int 3
+                return
+            `)
+        );
+    });
+
+    it("can declare and use a variable", ()  => {
+
+        check(
+            dedent(`
+                var x = 2;
+                return x > 3;
+            `),
+            dedent(`
+                #pragma version 3
+                int 2
+                store 0
+                load 0
+                int 3
+                >
                 return
             `)
         );

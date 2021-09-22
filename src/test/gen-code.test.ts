@@ -112,4 +112,59 @@ describe("code generator", () => {
         
         expect(output).toEqual([]);
     });    
+
+    it("can declare variable", () => {
+
+        const node = {
+            nodeType: "declare-variable",
+            name: "myVar",
+            position: 2,
+        };
+
+        const output: string[] = [];
+        genCode(node, output, new Map<string, number>());
+        
+        expect(output).toEqual([]); // Nothing generated for an uninitialised variable.
+    });
+
+    it("can declare variable with initialiser", () => {
+
+        const node = {
+            nodeType: "declare-variable",
+            name: "myVar",
+            position: 2,
+            children: [
+                {
+                    nodeType: "literal",
+                    opcode: "int",
+                    value: 3,        
+                },
+            ],
+        };
+
+        const output: string[] = [];
+        genCode(node, output, new Map<string, number>());
+        
+        expect(output).toEqual([
+            `int 3`,
+            `store 2`,
+        ]);
+    });
+
+    it("can access variable", () => {
+
+        const node = {
+            nodeType: "access-variable",
+            name: "myVar",
+        };
+
+        const output: string[] = [];
+        const variables = new Map<string, number>();
+        variables.set("myVar", 5)
+        genCode(node, output, variables);
+        
+        expect(output).toEqual([
+            `load 5`
+        ]);
+    });
 });
