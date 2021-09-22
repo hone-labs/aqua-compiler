@@ -9,7 +9,8 @@ export function compile(input: string): string {
     const output: string[] = [];
     genCode(ast, output);
 
-    return output.join("\r\n");
+
+    return `#pragma version 3\r\n` + output.join("\r\n");
 }
 
 //
