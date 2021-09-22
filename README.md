@@ -4,6 +4,12 @@ A TEAL compiler and REPL.
 
 ## Setup
 
+This is a [meta repo](https://www.npmjs.com/package/meta) so clone like this:
+
+```bash
+meta git clone git@github.com:sovereign-labs/aqua-compiler.git
+```
+
 ```bash
 cd aqua-compiler
 npm install
