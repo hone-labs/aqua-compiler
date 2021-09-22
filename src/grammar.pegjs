@@ -76,6 +76,31 @@
             children: stmts,
         };
     }
+
+    let nextVariablePosition = 0;
+
+    //
+    // Makes an AST node that defines a variable.
+    //
+    function declareVariable(name, initialiser) {
+        return {
+            nodeType: "declare-variable",
+            name: name,
+            position: nextVariablePosition++,
+            children: initialiser && [ initialiser ] || undefined,
+        };
+    }
+
+    //
+    // Makes an AST node that represents a variable.
+    // Represents a variable.
+    //
+    function useVariable(name) {
+        return {
+            nodeType: "access-variable",
+            name: name,
+        };
+    }
 }
 
 start
@@ -86,6 +111,7 @@ program
 
 statement
     = expr:expression whitespace ";" { return makeStmt("expr", [ expr ]); }
+    / "var" whitespace name:identifier expr:(whitespace "=" whitespace expression)? whitespace ";" { return declareVariable(name, expr && expr[3] || undefined); }
     / "return" whitespace expr:expression whitespace ";" { return makeStmt("return", [ expr ]); }
 
 expression
@@ -117,6 +143,7 @@ primary
   / "addr" whitespace value:addr { return makeLiteral("addr", "addr", value); }
   / '"' value:stringCharacters '"' { return makeLiteral("byte", "byte", `"${value}"`); }
   / "(" whitespace node:expression whitespace ")" { return node; }
+  / id:identifier { return useVariable(id); }
 
 integerLiteral "integer"
     = value:integer { return makeLiteral("int", "integer", value); }

@@ -22,7 +22,7 @@ describe("code generator", () => {
             ],
         };
         const output: string[] = [];
-        genCode(node, output);
+        genCode(node, output, new Map<string, number>());
         
         expect(output).toEqual([
             `${opcode}-child-1`,
@@ -39,7 +39,7 @@ describe("code generator", () => {
             opcode: opcode,
         };
         const output: string[] = [];
-        genCode(node, output);
+        genCode(node, output, new Map<string, number>());
         
         expect(output).toEqual([
             opcode,
@@ -56,7 +56,7 @@ describe("code generator", () => {
             value: value,
         };
         const output: string[] = [];
-        genCode(node, output);
+        genCode(node, output, new Map<string, number>());
         
         expect(output).toEqual([
             `${opcode} ${value}`,
@@ -72,7 +72,7 @@ describe("code generator", () => {
         };
 
         const output: string[] = [];
-        genCode(node, output);
+        genCode(node, output, new Map<string, number>());
         
         expect(output).toEqual([]);
     });    
@@ -92,7 +92,7 @@ describe("code generator", () => {
         };
 
         const output: string[] = [];
-        genCode(node, output);
+        genCode(node, output, new Map<string, number>());
         
         expect(output).toEqual([
             `int 1`,
@@ -108,7 +108,7 @@ describe("code generator", () => {
         };
 
         const output: string[] = [];
-        genCode(node, output);
+        genCode(node, output, new Map<string, number>());
         
         expect(output).toEqual([]);
     });    

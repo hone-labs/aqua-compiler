@@ -48,9 +48,9 @@ async function main() {
         if (exec) {
             console.log(`== TEAL ==`);
             console.log(teal);
-            console.log(`== END ==`);
 
             // Execute the file directly.
+            console.log(`\r\n== EVALUATION ==`);
             execute(teal);
         }
         else {
