@@ -66,8 +66,7 @@ describe("code generator", () => {
     it("can generate code for expression statement", () => {
 
         const node = {
-            nodeType: "statement",
-            stmtType: "expr",
+            nodeType: "expr-statement",
             children: [],
         };
 
@@ -80,8 +79,7 @@ describe("code generator", () => {
     it("can generate code for return statement", () => {
 
         const node = {
-            nodeType: "statement",
-            stmtType: "return",
+            nodeType: "return-statement",
             children: [
                 {
                     nodeType: "literal",
@@ -103,7 +101,7 @@ describe("code generator", () => {
     it("can generate code for block", () => {
 
         const node = {
-            nodeType: "block",
+            nodeType: "block-statement",
             children: [],
         };
 

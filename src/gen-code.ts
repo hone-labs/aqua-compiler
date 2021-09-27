@@ -22,19 +22,14 @@ export function genCode(node: any, output: string[], variables: Map<string, numb
     else if (node.nodeType === "arg") {
         output.push(`arg ${node.argIndex}`);
     }
-    else if (node.nodeType === "block") {
+    else if (node.nodeType === "block-statement") {
         // No need for anything else.
     }
-    else if (node.nodeType === "statement") {
-        if (node.stmtType === "expr") {
-            // No need for anything else.
-        }
-        else if (node.stmtType === "return") {
-            output.push(`return`);
-        }
-        else {
-            throw new Error(`Unexpected statement type ${node.stmtType}`);
-        }
+    else if (node.nodeType === "expr-statement") {
+        // No need for anything else.
+    }
+    else if (node.nodeType === "return-statement") {
+        output.push(`return`);
     }
     else if (node.nodeType === "declare-variable") {
         if (variables.has(node.name)) {

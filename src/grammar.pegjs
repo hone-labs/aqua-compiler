@@ -59,21 +59,10 @@
     //
     // Makes an AST node for a statement.
     //
-    function makeStmt(stmtType, children) {
+    function makeStmt(nodeType, children) {
         return {
-            nodeType: "statement",
-            stmtType: stmtType,
+            nodeType: nodeType,
             children: children, 
-        };
-    }
-
-    //
-    // Make a block of statements.
-    //
-    function makeBlock(stmts) {
-        return {
-            nodeType: "block",
-            children: stmts,
         };
     }
 
@@ -107,12 +96,12 @@ start
     = program
 
 program
-    = stmts:((whitespace statement)*) { return makeBlock(stmts.map(stmt => stmt[1])); }
+    = stmts:((whitespace statement)*) { return makeStmt("block-statement", stmts.map(stmt => stmt[1])); }
 
 statement
-    = expr:expression whitespace ";" { return makeStmt("expr", [ expr ]); }
+    = expr:expression whitespace ";" { return makeStmt("expr-statement", [ expr ]); }
     / "var" whitespace name:identifier expr:(whitespace "=" whitespace expression)? whitespace ";" { return declareVariable(name, expr && expr[3] || undefined); }
-    / "return" whitespace expr:expression whitespace ";" { return makeStmt("return", [ expr ]); }
+    / "return" whitespace expr:expression whitespace ";" { return makeStmt("return-statement", [ expr ]); }
 
 expression
     = logical
