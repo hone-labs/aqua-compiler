@@ -1,4 +1,4 @@
-import { genCode } from "..";
+import { genCode } from "../gen-code";
 
 describe("code generator", () => {
 
