@@ -1,5 +1,5 @@
 import { compileExpression } from "..";
-import * as dedent from "dedent";
+import dedent from "dedent";
 
 //
 // Normalize whitespace so we don't have to consider it when testing.
