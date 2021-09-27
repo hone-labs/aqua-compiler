@@ -19,7 +19,7 @@
     "test": "npm run build-parser && jest",
     "tw": "npm run test:watch",
     "test:watch": "npm run build-parser && jest --watch --runInBand",
-    "preinstall": "cd algo-builder/packages/web && npm install && cd ../runtime && npm install"
+    "preinstall": "cd algo-builder/packages/web && npm install --ignore-scripts && cd ../runtime && npm install --ignore-scripts"
   },
   "keywords": [],
   "author": "ashley@codecapers.com.au",
