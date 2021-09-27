@@ -15,18 +15,6 @@ cd aqua-compiler
 npm install
 ```
 
-Also do an npm install on Algo-builder/runtime which Aqua uses to interpret TEAL code:
-
-```
-cd algo-builder/packages/runtime
-yarn install
-
-cd ../web
-yarn install
-```
-
-Doing an `npm install` in the above steps results in an error.
-
 ## Build Aqua
 
 Build the parser:
@@ -35,7 +23,7 @@ Build the parser:
 npm run build-parse
 ```
 
-Build TypeScript code
+Build TypeScript code:
 
 ```bash
 npm run build 
