@@ -2,7 +2,7 @@
 
 A TEAL compiler and REPL.
 
-## Setup
+## Quick setup
 
 This is a [meta repo](https://www.npmjs.com/package/meta) so clone like this:
 
@@ -10,10 +10,19 @@ This is a [meta repo](https://www.npmjs.com/package/meta) so clone like this:
 meta git clone git@github.com:sovereign-labs/aqua-compiler.git
 ```
 
+Install dependencies:
+
 ```bash
 cd aqua-compiler
 npm install
 ```
+
+Then run it:
+
+```bash
+npm start
+```
+
 
 ## Build Aqua
 
