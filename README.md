@@ -23,6 +23,11 @@ Then run it:
 npm start
 ```
 
+Or with live reload:
+
+```bash
+npm run start:dev
+```
 
 ## Build Aqua
 
@@ -77,14 +82,9 @@ npx ts-node src/cli.ts
 Or 
 
 ```bash
-npm start
+npm run start:repl
 ```
 
-Or with live reload:
-
-```bash
-npm run start:dev
-```
 
 Trying entering expressions at the REPL prompt:
 
