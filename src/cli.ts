@@ -88,5 +88,5 @@ main()
 function execute(teal: string) {
     const runtime = new Runtime([]);
     const interpreter = new Interpreter();
-    interpreter.execute(teal, types.ExecutionMode.APPLICATION, runtime, 10);
+    interpreter.execute(teal, types.ExecutionMode.APPLICATION, runtime);
 }
