@@ -1,3 +1,52 @@
+//
+// Defines a function that can generate code for a node.
+//
+type NodeHandler = (node: any, output: string[], variables: Map<string, number>) => void;
+
+//
+// Lookup table for funtions that handle code generation for each node.
+//
+interface INodeHandlerMap {
+    [index: string]: NodeHandler;
+}
+
+//
+// Lookup table for funtions that handle code generation for each node.
+//
+const nodeHandlers: INodeHandlerMap = {
+    operator: (node, output, variables) => output.push(node.opcode),
+    literal: (node, output, variables) => output.push(`${node.opcode} ${node.value}`),
+    txn: (node, output, variables) => output.push(`txn ${node.fieldName}`),
+    arg: (node, output, variables) => output.push(`arg ${node.argIndex}`),
+    "block-statement": (node, output, variables) => {},
+    "expr-statement": (node, output, variables) => {},
+    "return-statement": (node, output, variables) => output.push(`return`),
+    "print-statement": (node, output, variables) => output.push(`print`),
+    "declare-variable": (node, output, variables) => {
+        if (variables.has(node.name)) {
+            throw new Error(`Variable ${node.name} is already declared!`);
+        }
+
+        variables.set(node.name, node.position);
+
+        if (node.children && node.children.length > 0) {
+            // Set variable from initialiser.
+            output.push(`store ${node.position}`);
+        }
+    },
+    "access-variable": (node, output, variables) => {
+        const position = variables.get(node.name);
+        if (position === undefined) {
+            throw new Error(`Variable ${node.name} is not declared!`);
+        }
+
+        // Get variable from scratch.
+        output.push(`load ${position}`);
+    }
+};
+
+
+
 
 //
 // Generates code from an AST representation of an Aqua script.
@@ -10,52 +59,10 @@ export function genCode(node: any, output: string[], variables: Map<string, numb
         }
     }
 
-    if (node.nodeType === "operator") {
-        output.push(node.opcode);
-    }
-    else if (node.nodeType === "literal") {
-        output.push(`${node.opcode} ${node.value}`);
-    }
-    else if (node.nodeType === "txn") {
-        output.push(`txn ${node.fieldName}`);
-    }
-    else if (node.nodeType === "arg") {
-        output.push(`arg ${node.argIndex}`);
-    }
-    else if (node.nodeType === "block-statement") {
-        // No need for anything else.
-    }
-    else if (node.nodeType === "expr-statement") {
-        // No need for anything else.
-    }
-    else if (node.nodeType === "return-statement") {
-        output.push(`return`);
-    }
-    else if (node.nodeType === "print-statement") {
-        output.push(`print`);
-    }
-    else if (node.nodeType === "declare-variable") {
-        if (variables.has(node.name)) {
-            throw new Error(`Variable ${node.name} is already declared!`);
-        }
-
-        variables.set(node.name, node.position);
-
-        if (node.children && node.children.length > 0) {
-            // Set variable from initialiser.
-            output.push(`store ${node.position}`);
-        }
-    }
-    else if (node.nodeType === "access-variable") {
-        const position = variables.get(node.name);
-        if (position === undefined) {
-            throw new Error(`Variable ${node.name} is not declared!`);
-        }
-
-        // Get variable from scratch.
-        output.push(`load ${position}`);
-    }
-    else {
+    const nodeHandler = nodeHandlers[node.nodeType];
+    if (nodeHandler === undefined) {
         throw new Error(`Unexpected node type ${node.nodeType}`);
     }
+
+    nodeHandlers[node.nodeType](node, output, variables);
 }
