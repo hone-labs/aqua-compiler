@@ -3,6 +3,7 @@ export interface IStack<T> {
   pop: () => T
   length: () => number
   debug: (depth: number) => T[]
+  peek (): T;
 }
 
 export class Stack<T> implements IStack<T> {
@@ -26,6 +27,10 @@ export class Stack<T> implements IStack<T> {
       throw new Error("pop from empty stack");
     }
     return this._store.pop() as T;
+  }
+
+  peek (): T {
+    return this._store[this._store.length-1];
   }
 
   /**

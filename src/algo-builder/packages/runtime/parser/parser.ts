@@ -10,7 +10,7 @@ import {
   EqualTo, Err, GetAssetDef, GetAssetHolding, GetBit, GetByte, Global, GreaterThan,
   GreaterThanEqualTo, Gtxn, Gtxna, Gtxns, Gtxnsa, Int, Intc, Intcblock, Itob,
   Keccak256, Label, Len, LessThan, LessThanEqualTo, Load, MinBalance, Mod,
-  Mul, Mulw, Not, NotEqualTo, Or, Pop, Pragma, PushBytes, PushInt, Return, Select, SetBit, SetByte, Sha256,
+  Mul, Mulw, Not, NotEqualTo, Or, Pop, Pragma, Print, PushBytes, PushInt, Return, Select, SetBit, SetByte, Sha256,
   Sha512_256, Store, Sub, Substring, Substring3, Swap, Txn, Txna
 } from "../interpreter/opcode-list";
 import { LogicSigMaxCost, LogicSigMaxSize, MaxAppProgramCost, MaxAppProgramLen, OpGasCost } from "../lib/constants";
@@ -80,7 +80,9 @@ const opCodeMap: { [key: number]: {[key: string]: any} } = { // tealVersion => o
     // Transaction Opcodes
     txn: Txn,
     gtxn: Gtxn,
-    global: Global
+    global: Global,
+
+    print: Print,
   }
 };
 
@@ -309,7 +311,7 @@ export function opcodeFromSentence (words: string[], counter: number, interprete
   if (interpreterReqList.has(opCode)) {
     return new opCodeMap[tealVersion][opCode](words, counter, interpreter);
   }
-  return new opCodeMap[tealVersion][opCode](words, counter);
+  return new opCodeMap[tealVersion][opCode](words, counter, interpreter);
 }
 
 // verify max cost of TEAL code is within consensus parameters

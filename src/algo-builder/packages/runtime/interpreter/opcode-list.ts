@@ -1577,6 +1577,32 @@ export class Global extends Op {
   }
 }
 
+// 
+// Prints the value on the stack.
+//
+export class Print extends Op {
+    readonly interpreter: Interpreter;
+    readonly line: number;
+  
+    /**
+     * Prints the value on the stack.
+     * @param args Expected arguments: [field] // Ex: ["GroupSize"]
+     * @param line line number in TEAL file
+     * @param interpreter interpreter object
+     */
+    constructor (args: string[], line: number, interpreter: Interpreter) {
+      super();
+      assertLen(args.length, 0, line);
+  
+      this.interpreter = interpreter;
+      this.line = line;
+    }
+  
+    execute (stack: TEALStack): void {
+      console.log(stack.peek());
+    }
+  }
+  
 // check if account specified by Txn.Accounts[A] opted in for the application B => {0 or 1}
 // params: account index, application id (top of the stack on opcode entry).
 // push to stack [...stack, 1] if opted in
