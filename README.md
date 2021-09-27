@@ -4,10 +4,10 @@ A TEAL compiler and REPL.
 
 ## Quick setup
 
-This is a [meta repo](https://www.npmjs.com/package/meta) so clone like this:
+Clone the repo:
 
 ```bash
-meta git clone git@github.com:sovereign-labs/aqua-compiler.git
+git clone git@github.com:sovereign-labs/aqua-compiler.git
 ```
 
 Install dependencies:
@@ -47,12 +47,8 @@ aqua test.aqua
 Or:
 
 ```bash
-npx ts-node -T src/cli.ts test.aqua
+npx ts-node src/cli.ts test.aqua
 ```
-
-**Note** the use of `-T` with `ts-node`. There's an issue with `ts-node` and TypeScript project references and enabling "transpile only" ignores the error.
-
-If you want to compile and check for compiler errors please used `npm run build`.
 
 ## Executing a file
 
@@ -63,7 +59,7 @@ aqua exec test.aqua
 Or:
 
 ```bash
-npx ts-node -T src/cli.ts exec test.aqua
+npx ts-node src/cli.ts exec test.aqua
 ```
 
 ## Run the REPL
