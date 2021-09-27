@@ -165,4 +165,26 @@ describe("code generator", () => {
             `load 5`
         ]);
     });
+
+    it("can generate code for print", () => {
+
+        const node = {
+            nodeType: "print-statement",
+            children: [
+                {
+                    nodeType: "literal",
+                    opcode: "int",
+                    value: 3,        
+                },
+            ],
+        };
+
+        const output: string[] = [];
+        genCode(node, output, new Map<string, number>());
+        
+        expect(output).toEqual([
+            `int 3`,
+            `print`
+        ]);
+    });        
 });

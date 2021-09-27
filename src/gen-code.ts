@@ -31,6 +31,9 @@ export function genCode(node: any, output: string[], variables: Map<string, numb
     else if (node.nodeType === "return-statement") {
         output.push(`return`);
     }
+    else if (node.nodeType === "print-statement") {
+        output.push(`print`);
+    }
     else if (node.nodeType === "declare-variable") {
         if (variables.has(node.name)) {
             throw new Error(`Variable ${node.name} is already declared!`);

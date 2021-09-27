@@ -44,6 +44,18 @@ describe("statement", () => {
         );
     });
 
+    it("can compile a print statement", ()  => {
+
+        check(
+            "print 5 ;",
+            dedent(`
+                #pragma version 3   
+                int 5
+                print
+            `)
+        );
+    });
+
     it("can compile multiple statements", ()  => {
 
         check(
