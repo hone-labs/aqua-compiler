@@ -17,7 +17,7 @@
 //
 
 import { compile } from ".";
-import { Runtime, types, Interpreter } from "../algo-builder/packages/runtime";
+import { Runtime, types, Interpreter } from "./algo-builder/packages/runtime";
 
 const fs = require("fs/promises");
 const minimist = require("minimist");

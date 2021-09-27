@@ -56,12 +56,6 @@
   "exclude": [
       "node_modules",
       "build",
-      "jest.config.js",
-      "algo-builder",
-  ],
-  "references": [
-      {
-          "path": "./algo-builder/packages/runtime"
-      }
+      "jest.config.js"
   ]
 }
