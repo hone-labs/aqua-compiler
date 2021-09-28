@@ -51,7 +51,10 @@ async function main() {
 
             // Execute the file directly.
             console.log(`\r\n== EVALUATION ==`);
-            execute(teal);
+            const result = execute(teal);
+
+            console.log(`\r\n== RESULT ==`);
+            console.log(result);
         }
         else {
             // Print compiled output.
@@ -85,8 +88,8 @@ main()
 //
 // Execute the input TEAL code in the interpreter.
 //
-function execute(teal: string) {
+function execute(teal: string): any {
     const runtime = new Runtime([]);
     const interpreter = new Interpreter();
-    interpreter.execute(teal, types.ExecutionMode.APPLICATION, runtime);
+    return interpreter.execute(teal, types.ExecutionMode.APPLICATION, runtime, undefined);
 }

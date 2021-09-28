@@ -171,7 +171,7 @@ export class Interpreter {
    * @param debugStack: if passed then TEAL Stack is logged to console after
    * each opcode execution (upto depth = debugStack)
    */
-  execute (program: string, mode: ExecutionMode, runtime: Runtime, debugStack?: number): void {
+  execute (program: string, mode: ExecutionMode, runtime: Runtime, debugStack?: number): bigint | Uint8Array | undefined {
     this.runtime = runtime;
     this.instructions = parser(program, mode, this);
 
@@ -183,11 +183,11 @@ export class Interpreter {
       this.instructionIndex++;
     }
 
-    if (this.stack.length() === 1) {
-      const s = this.stack.pop();
-
-      if (!(s instanceof Uint8Array) && s > 0n) { return; }
+    if (this.stack.length() > 0) {
+        return this.stack.peek();
     }
-    throw new RuntimeError(RUNTIME_ERRORS.TEAL.REJECTED_BY_LOGIC);
+    else {
+        return undefined;
+    }
   }
 }
