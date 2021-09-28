@@ -2,7 +2,7 @@
   "name": "aqua-compiler",
   "version": "0.0.1",
   "description": "A TEAL compiler and REPL.",
-  "main": "index.js",
+  "main": "build/cli.js",
   "scripts": {
     "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
     "start": "npm run build-parser && ts-node ./src/cli.ts exec test.aqua",
