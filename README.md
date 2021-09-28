@@ -108,3 +108,28 @@ Or
 ```bash
 npm run test:watch
 ```
+
+## Build the binary executables
+
+Make sure to have use Node.js v12.15.0 which is known to work with Nexe.
+
+Use `nvm` to install and swap between different versions of Node.js:
+
+```bash
+nvm install 12.15.0
+nvm use 12.15.0
+```
+
+Build for each platform:
+
+```bash
+npm run build-macos
+npm run build-linux
+npm run build-win
+```
+
+Or 
+
+```bash
+npm run build-all
+```

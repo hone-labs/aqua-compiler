@@ -1,6 +1,6 @@
 {
   "name": "aqua-compiler",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A TEAL compiler and REPL.",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "s": "npm run start",
     "start:dev": "npm run build-parser && nodemon",
     "c": "npm run clean",
-    "clean": "rm -rf build/*",
+    "clean": "rm -rf build/* && rm -rf tsconfig.tsbuildinfo",
     "b": "npm run build",
     "build": "tsc --incremental",
     "bw": "npm run build:watch",
@@ -19,7 +19,11 @@
     "t": "npm run test",
     "test": "npm run build-parser && jest",
     "tw": "npm run test:watch",
-    "test:watch": "npm run build-parser && jest --watch --runInBand"
+    "test:watch": "npm run build-parser && jest --watch --runInBand",
+    "build-win": "npm run prepublishOnly  && nexe build/cli.js -t windows-x64-12.16.2 -n aqua",
+    "build-mac": "npm run prepublishOnly && nexe build/cli.js -t mac-x64-12.16.2 -n aqua-mac",
+    "build-linux": "npm run prepublishOnly && nexe build/cli.js -t linux-x64-12.16.2 -n aqua-linux",
+    "build-all": "npm run build-win && npm run build-mac && npm run build-linux"
   },
   "keywords": [],
   "author": "ashley@codecapers.com.au",
@@ -47,6 +51,7 @@
     "source-map-support": "0.5.20",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.2",
+    "nexe": "^4.0.0-beta.18"
   }
 }

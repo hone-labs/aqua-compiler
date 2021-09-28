@@ -2,3 +2,6 @@ node_modules/
 build/
 tsconfig.tsbuildinfo
 src/parser.js
+aqua.exe
+aqua-linux
+aqua-mac
