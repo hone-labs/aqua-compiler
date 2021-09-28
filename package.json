@@ -20,9 +20,9 @@
     "test": "npm run build-parser && jest",
     "tw": "npm run test:watch",
     "test:watch": "npm run build-parser && jest --watch --runInBand",
-    "build-win": "npm run prepublishOnly  && nexe build/cli.js -t windows-x64-12.16.2 -n aqua",
-    "build-mac": "npm run prepublishOnly && nexe build/cli.js -t mac-x64-12.16.2 -n aqua-mac",
-    "build-linux": "npm run prepublishOnly && nexe build/cli.js -t linux-x64-12.16.2 -n aqua-linux",
+    "build-win": "npm run prepublishOnly  && nexe build/cli.js -t windows-x64-14.15.3 -n aqua",
+    "build-mac": "npm run prepublishOnly && nexe build/cli.js -t mac-x64-14.15.3 -n aqua-mac",
+    "build-linux": "npm run prepublishOnly && nexe build/cli.js -t linux-x64-14.15.3 -n aqua-linux",
     "build-all": "npm run build-win && npm run build-mac && npm run build-linux"
   },
   "keywords": [],
@@ -52,6 +52,6 @@
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.2",
-    "nexe": "^4.0.0-beta.18"
+    "nexe": "^4.0.0-beta.19"
   }
 }
