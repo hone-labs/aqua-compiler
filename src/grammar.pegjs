@@ -90,12 +90,26 @@
             name: name,
         };
     }
+
+    //
+    // Makes an if statement.
+    //
+    function makeIfStmt(condition, ifBlock, elseBlock) {
+        return {
+            nodeType: "if-statement",
+            children: [
+                condition,
+            ],
+            ifBlock: ifBlock,
+            elseBlock: elseBlock,
+        };
+    }
 }
 
 start
-    = program
+    = statements
 
-program
+statements
     = stmts:((whitespace statement)*) { return makeStmt("block-statement", stmts.map(stmt => stmt[1])); }
 
 statement
@@ -103,6 +117,11 @@ statement
     / "print" whitespace expr:expression whitespace ";" { return makeStmt("print-statement", [ expr ])}
     / "var" whitespace name:identifier expr:(whitespace "=" whitespace expression)? whitespace ";" { return declareVariable(name, expr && expr[3] || undefined); }
     / "return" whitespace expr:expression whitespace ";" { return makeStmt("return-statement", [ expr ]); }
+    / "if" whitespace "(" whitespace condition:expression whitespace ")" whitespace 
+        "{" whitespace ifBlock:statements whitespace "}" 
+        elseBlock:( whitespace "else" whitespace "{" whitespace statements whitespace "}" )? {
+            return makeIfStmt(condition, ifBlock, elseBlock && elseBlock[5]);
+        }
 
 expression
     = logical

@@ -10,6 +10,9 @@ interface INodeHandlerMap {
     [index: string]: NodeHandler;
 }
 
+//TODO: Having this state should now really encapsulate this code in a class.
+let ifStatementId = 0;
+
 //
 // Lookup table for funtions that handle code generation for each node.
 //
@@ -42,7 +45,25 @@ const nodeHandlers: INodeHandlerMap = {
 
         // Get variable from scratch.
         output.push(`load ${position}`);
-    }
+    },
+    "if-statement": (node, output, variables) => {
+        
+        ifStatementId += 1;
+
+        output.push(`bz else-${ifStatementId}`);
+
+        genCode(node.ifBlock, output, variables);
+
+        output.push(`b end-${ifStatementId}`);
+
+        output.push(`else-${ifStatementId}:`);
+
+        if (node.elseBlock) {
+            genCode(node.elseBlock, output, variables);
+        }
+
+        output.push(`end-${ifStatementId}:`);
+    },
 };
 
 
