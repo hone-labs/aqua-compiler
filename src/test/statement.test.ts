@@ -89,4 +89,55 @@ describe("statement", () => {
             `)
         );
     });
+
+    it("can compile if statement", () => {
+
+        check(
+            dedent(`
+                if (2 > 1) {
+                    return 5;
+                }
+                else {
+                    return 10;
+                }
+            `),
+            dedent(`
+                #pragma version 3
+                int 2
+                int 1
+                >
+                bz else-1
+                int 5
+                return
+                b end-1
+                else-1:
+                int 10
+                return
+                end-1:            
+            `)
+        );
+    });
+
+    it("can compile if statement with no else block", () => {
+
+        check(
+            dedent(`
+                if (2 > 1) {
+                    return 5;
+                }
+            `),
+            dedent(`
+                #pragma version 3
+                int 2
+                int 1
+                >
+                bz else-2
+                int 5
+                return
+                b end-2
+                else-2:
+                end-2:            
+            `)
+        );
+    });
 });

@@ -187,4 +187,87 @@ describe("code generator", () => {
             `print`
         ]);
     });        
+
+    it("can generate code for if statement", () => {
+
+        const node = {
+            nodeType: "if-statement",
+            children: [
+                {
+                    nodeType: "literal",
+                    opcode: "int",
+                    value: 4,
+                },
+            ],
+            ifBlock: {
+                nodeType: "block-statement",
+                children: [
+                    {
+                        nodeType: "literal",
+                        opcode: "int",
+                        value: 5,
+                    },
+                ],
+            },
+            elseBlock: {
+                nodeType: "block-statement",
+                children: [
+                    {
+                        nodeType: "literal",
+                        opcode: "int",
+                        value: 6,
+                    },   
+                ],
+            },
+        };
+
+        const output: string[] = [];
+        genCode(node, output, new Map<string, number>());
+        
+        expect(output).toEqual([
+            "int 4",
+            "bz else-1",
+            "int 5",
+            "b end-1",
+            "else-1:",
+            "int 6",
+            "end-1:",
+        ]);
+    });
+
+    it("can generate code for if statement with no else block", () => {
+
+        const node = {
+            nodeType: "if-statement",
+            children: [
+                {
+                    nodeType: "literal",
+                    opcode: "int",
+                    value: 4,
+                },
+            ],
+            ifBlock: {
+                nodeType: "block-statement",
+                children: [
+                    {
+                        nodeType: "literal",
+                        opcode: "int",
+                        value: 5,
+                    },
+                ],
+            },
+        };
+
+        const output: string[] = [];
+        genCode(node, output, new Map<string, number>());
+        
+        expect(output).toEqual([
+            "int 4",
+            "bz else-2",
+            "int 5",
+            "b end-2",
+            "else-2:",
+            "end-2:",
+        ]);
+    });
 });

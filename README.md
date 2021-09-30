@@ -133,3 +133,5 @@ Or
 ```bash
 npm run build-all
 ```
+
+**NOTE:** Linux and MacOS builds should be built on Linux.
