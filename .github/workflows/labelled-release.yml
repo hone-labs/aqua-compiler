@@ -29,7 +29,7 @@ jobs:
     needs: get_version
     runs-on: ubuntu-latest # Can build for all platforms on Linux.
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - uses: actions/setup-node@v2
         with:
