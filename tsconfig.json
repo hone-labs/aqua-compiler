@@ -57,6 +57,7 @@
   "exclude": [
       "node_modules",
       "build",
-      "jest.config.js"
+      "jest.config.js",
+      "check-version.js"
   ]
 }
