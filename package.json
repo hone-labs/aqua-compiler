@@ -9,6 +9,7 @@
     "start:repl": "npm run build-parser && ts-node ./src/cli.ts",
     "s": "npm run start",
     "start:dev": "npm run build-parser && nodemon",
+    "sd": "npm run start:dev",
     "c": "npm run clean",
     "clean": "rm -rf build/* && rm -rf tsconfig.tsbuildinfo",
     "b": "npm run build",

@@ -100,6 +100,20 @@ export class CodeGenerator {
 
             output.push(`end-${this.ifStatementId}:`);
         },
+        "assignment-statement": (node, output, variables) => {
+
+            if (node.assignee.nodeType !== "access-variable") {
+                throw new Error(`Expected assignee to be an lvalue.`);
+            }
+
+            const position = variables.get(node.assignee.name);
+            if (position === undefined) {
+                throw new Error(`Variable ${node.assignee.name} is not declared!`);
+            }
+
+            // Store variable to scratch.
+            output.push(`store ${position}`);
+        },
     };
 
 }

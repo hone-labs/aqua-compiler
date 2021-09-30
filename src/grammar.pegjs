@@ -104,6 +104,19 @@
             elseBlock: elseBlock,
         };
     }
+
+    //
+    // Makes an assignment statement.
+    //
+    function makeAssignment(assignee, initializer) {
+        return {
+            nodeType: "assignment-statement",
+            assignee: assignee,
+            children: [
+                initializer,
+            ],
+        };
+    }
 }
 
 start
@@ -124,7 +137,16 @@ statement
         }
 
 expression
-    = logical
+    = assignment
+
+assignment
+    = assignee:logical initializer:(whitespace "=" whitespace assignment)? {
+        if (!initializer) {
+            return assignee;
+        }
+
+        return makeAssignment(assignee, initializer[3]);
+    }
 
 logical
     = head:equality tail:(whitespace ("&&" / "||") whitespace equality)* { return makeExpression(head, tail); }
