@@ -131,12 +131,12 @@ describe("statement", () => {
                 int 2
                 int 1
                 >
-                bz else-2
+                bz else-1
                 int 5
                 return
-                b end-2
-                else-2:
-                end-2:            
+                b end-1
+                else-1:
+                end-1:            
             `)
         );
     });

@@ -1,4 +1,4 @@
-import { genCode } from "../gen-code";
+import { CodeGenerator } from "../code-generator";
 
 describe("code generator", () => {
 
@@ -21,9 +21,9 @@ describe("code generator", () => {
                 child2,
             ],
         };
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             `${opcode}-child-1`,
             `${opcode}-child-2`,
@@ -38,9 +38,9 @@ describe("code generator", () => {
             nodeType: "operator",
             opcode: opcode,
         };
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             opcode,
         ]);
@@ -55,9 +55,9 @@ describe("code generator", () => {
             opcode: opcode,
             value: value,
         };
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             `${opcode} ${value}`,
         ]);
@@ -70,9 +70,8 @@ describe("code generator", () => {
             children: [],
         };
 
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([]);
     });    
 
@@ -89,9 +88,8 @@ describe("code generator", () => {
             ],
         };
 
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             `int 1`,
             `return`,
@@ -105,9 +103,8 @@ describe("code generator", () => {
             children: [],
         };
 
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([]);
     });    
 
@@ -119,9 +116,8 @@ describe("code generator", () => {
             position: 2,
         };
 
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([]); // Nothing generated for an uninitialised variable.
     });
 
@@ -140,9 +136,8 @@ describe("code generator", () => {
             ],
         };
 
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             `int 3`,
             `store 2`,
@@ -152,16 +147,32 @@ describe("code generator", () => {
     it("can access variable", () => {
 
         const node = {
-            nodeType: "access-variable",
-            name: "myVar",
+            nodeType: "block-statement",
+            children: [
+                {
+                    nodeType: "declare-variable",
+                    name: "myVar",
+                    position: 5,
+                    children: [
+                        {
+                            nodeType: "literal",
+                            opcode: "int",
+                            value: 3,        
+                        },
+                    ],
+                },
+                {
+                    nodeType: "access-variable",
+                    name: "myVar",
+                },       
+            ],
         };
 
-        const output: string[] = [];
-        const variables = new Map<string, number>();
-        variables.set("myVar", 5)
-        genCode(node, output, variables);
-        
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
+            `int 3`,
+            `store 5`,
             `load 5`
         ]);
     });
@@ -179,9 +190,8 @@ describe("code generator", () => {
             ],
         };
 
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             `int 3`,
             `print`
@@ -221,9 +231,8 @@ describe("code generator", () => {
             },
         };
 
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             "int 4",
             "bz else-1",
@@ -258,9 +267,8 @@ describe("code generator", () => {
             },
         };
 
-        const output: string[] = [];
-        genCode(node, output, new Map<string, number>());
-        
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             "int 4",
             "bz else-2",

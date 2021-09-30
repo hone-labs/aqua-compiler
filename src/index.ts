@@ -1,4 +1,4 @@
-import { genCode } from "./gen-code";
+import { CodeGenerator } from "./code-generator";
 
 const parser = require("./parser");
 
@@ -7,11 +7,8 @@ const parser = require("./parser");
 //
 export function compile(input: string): string {
     const ast = parser.parse(input);
-
-    const output: string[] = [];
-    const variables = new Map<string, number>();
-    genCode(ast, output, variables);
-
+    const codeGenerator = new CodeGenerator();
+    const output = codeGenerator.generateCode(ast);
     return `#pragma version 3\r\n` + output.join("\r\n");
 }
 
@@ -20,11 +17,8 @@ export function compile(input: string): string {
 //
 export function compileExpression(input: string): string {
     const ast = parser.parse(input, { startRule: "expression" });
-
-    const output: string[] = [];
-    const variables = new Map<string, number>();
-    genCode(ast, output, variables);
-
+    const codeGenerator = new CodeGenerator();
+    const output = codeGenerator.generateCode(ast);
     return output.join("\r\n");
 }
 
