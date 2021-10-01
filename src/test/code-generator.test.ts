@@ -271,11 +271,13 @@ describe("code generator", () => {
         const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             "int 4",
-            "bz else-2",
+            "bz else-1",
             "int 5",
-            "b end-2",
-            "else-2:",
-            "end-2:",
+            "b end-1",
+            "else-1:",
+            "end-1:",
+        ]);
+    });
         ]);
     });
 });
