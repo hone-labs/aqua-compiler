@@ -7,6 +7,7 @@
     "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
     "start": "npm run build-parser && ts-node ./src/cli.ts exec test.aqua",
     "start:repl": "npm run build-parser && ts-node ./src/cli.ts",
+    "start:ast": "npm run build-parser && ts-node ./src/cli.ts ast test.aqua",
     "s": "npm run start",
     "start:dev": "npm run build-parser && nodemon",
     "sd": "npm run start:dev",
@@ -32,6 +33,7 @@
   "dependencies": {
     "@nodelib/fs.walk": "^1.2.8",
     "algosdk": "scale-it/js-algorand-sdk.git#0f9d09e8d0bddc37145013e538b3ddfd001d364f",
+    "color-json": "^2.0.1",
     "lodash.clonedeep": "^4.5.0",
     "minimist": "^1.2.5",
     "pegjs": "^0.10.0",

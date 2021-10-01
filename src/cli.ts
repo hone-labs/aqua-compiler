@@ -16,7 +16,7 @@
 //      npx ts-node -T ./src/cli.js                    => Runs the REPL.
 //
 
-import { compile } from ".";
+import { compile, parse } from ".";
 import { Runtime, types, Interpreter } from "./algo-builder/packages/runtime";
 
 const fs = require("fs/promises");
@@ -29,24 +29,20 @@ async function main() {
     const numArgs = argv._.length;
 
     if (numArgs > 0) {
-        let filePath: string;
-        const exec = argv._[0] === "exec";
-        if (exec) {
+        const command = recogniseCommand(argv._);
+        if (command !== null) {
             if (numArgs.length === 1) {
-                throw new Error(`Not enough arguments, please specify file to execute.`);
+                throw new Error(`Not enough arguments, please specify Aqua file.`);
             }
-
-            filePath = argv._[1];
         }
-        else {
-            filePath = argv._[0];
-        }
+        
+        const filePath = argv._.shift();
 
         // Compile a file.
         const fileData = await fs.readFile(filePath, "utf8");
-        const teal = compile(fileData);
-        if (exec) {
+        if (command === "exec") {
             console.log(`== TEAL ==`);
+            const teal = compile(fileData);
             console.log(teal);
 
             // Execute the file directly.
@@ -56,9 +52,15 @@ async function main() {
             console.log(`\r\n== RESULT ==`);
             console.log(result);
         }
+        else if (command === "ast") {
+            // Parse and dump AST.
+            console.log(`== AST ==`);
+            const ast = parse(fileData);
+            console.log(JSON.stringify(ast, null, 4));
+        }
         else {
             // Print compiled output.
-            console.log(teal);
+            console.log(compile(fileData));
         }
     }
     else {
@@ -84,6 +86,17 @@ main()
         console.error("An error occurred:");
         console.error(err && err.stack || err);
     });
+
+//
+// Gets a command if one is found in the arguments.
+//
+function recogniseCommand(args: string[]): string | undefined {
+    if (args[0] === "exec" || args[0] === "ast") {
+        return args.shift();
+    }
+
+    return undefined;
+}
 
 //
 // Execute the input TEAL code in the interpreter.

@@ -96,6 +96,11 @@ Trying entering expressions at the REPL prompt:
 - `"a string" == txn Something;`
 - `return 1+2;`
 
+## Visualise the AST
+
+```bash
+npm run start:ast
+```
 
 ## Run tests
 
