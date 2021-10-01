@@ -66,8 +66,6 @@
         };
     }
 
-    let nextVariablePosition = 0;
-
     //
     // Makes an AST node that defines a variable.
     //
@@ -75,7 +73,6 @@
         return {
             nodeType: "declare-variable",
             name: name,
-            position: nextVariablePosition++,
             children: initialiser && [ initialiser ] || undefined,
         };
     }

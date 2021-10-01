@@ -113,7 +113,6 @@ describe("code generator", () => {
         const node = {
             nodeType: "declare-variable",
             name: "myVar",
-            position: 2,
         };
 
         const codeGenerator = new CodeGenerator();
@@ -126,7 +125,6 @@ describe("code generator", () => {
         const node = {
             nodeType: "declare-variable",
             name: "myVar",
-            position: 2,
             children: [
                 {
                     nodeType: "literal",
@@ -140,7 +138,38 @@ describe("code generator", () => {
         const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             `int 3`,
-            `store 2`,
+            `store 0`,
+        ]);
+    });
+
+    it("second variable is allocated at the next position in scratch memory", () => {
+
+        const node = {
+            nodeType: "block-statement",
+            children: [
+                {
+                    nodeType: "declare-variable",
+                    name: "myVar1",
+                },                
+                {
+                    nodeType: "declare-variable",
+                    name: "myVar2",
+                    children: [
+                        {
+                            nodeType: "literal",
+                            opcode: "int",
+                            value: 6,
+                        },
+                    ],
+                },                
+            ],
+        };
+
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
+        expect(output).toEqual([
+            `int 6`,
+            `store 1`,
         ]);
     });
 
@@ -152,7 +181,6 @@ describe("code generator", () => {
                 {
                     nodeType: "declare-variable",
                     name: "myVar",
-                    position: 5,
                     children: [
                         {
                             nodeType: "literal",
@@ -172,8 +200,8 @@ describe("code generator", () => {
         const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
             `int 3`,
-            `store 5`,
-            `load 5`
+            `store 0`,
+            `load 0`
         ]);
     });
 

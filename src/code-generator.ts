@@ -21,6 +21,11 @@ export class CodeGenerator {
     private ifStatementId = 0;
 
     //
+    // Position for the next scratch variable.
+    //
+    private nextVariablePosition = 0;
+
+    //
     // Generates code from an AST representation of an Aqua script.
     //
     generateCode(node: any): string[] {
@@ -66,11 +71,16 @@ export class CodeGenerator {
                 throw new Error(`Variable ${node.name} is already declared!`);
             }
 
-            variables.set(node.name, node.position);
+            //
+            // Allocate a position for the variable in scratch.
+            //
+            const position = this.nextVariablePosition++;
+
+            variables.set(node.name, position);
 
             if (node.children && node.children.length > 0) {
                 // Set variable from initialiser.
-                output.push(`store ${node.position}`);
+                output.push(`store ${position}`);
             }
         },
         "access-variable": (node, output, variables) => {
