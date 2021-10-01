@@ -306,6 +306,4 @@ describe("code generator", () => {
             "end-1:",
         ]);
     });
-        ]);
-    });
 });
