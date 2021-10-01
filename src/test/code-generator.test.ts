@@ -306,4 +306,38 @@ describe("code generator", () => {
             "end-1:",
         ]);
     });
+
+    it("can generate code for assignment", () => {
+        const node = {
+            nodeType: "block-statement",
+            children: [
+                {
+                    nodeType: "declare-variable",
+                    name: "myVar",
+                },
+                {
+                    nodeType: "assignment-statement",
+                    children: [
+                        {
+                            nodeType: "literal",
+                            opcode: "int",
+                            value: 2,
+                        },
+                    ],
+                    assignee: {
+                        nodeType: "access-variable",
+                        name: "myVar",
+                    },
+                },       
+            ],
+        };
+
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
+        expect(output).toEqual([
+            `int 2`,
+            `store 0`,
+        ]);
+
+    });
 });

@@ -140,4 +140,19 @@ describe("statement", () => {
             `)
         );
     });
+
+    it("can compile an assignment", () => {
+        check(
+            dedent(`
+                var a;
+                a = 3;
+            `),
+            dedent(`
+                #pragma version 3
+                int 3
+                store 0
+            `)
+        );
+    });
+
 });
