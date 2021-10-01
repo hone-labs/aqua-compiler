@@ -68,4 +68,49 @@ jobs:
         run: |
           npm run build-mac
 
+      # https://github.com/actions/create-release
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false        
 
+      # https://github.com/actions/upload-release-asset
+      - name: Upload Windows release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # Pulls from the URL form the preceding step.
+          asset_path: ./aqua.exe
+          asset_name: aqua.exe
+          asset_content_type: application/octet-stream
+
+      - name: Upload Linux release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # Pulls from the URL form the preceding step.
+          asset_path: ./aqua-linux
+          asset_name: aqua-linux
+          asset_content_type: application/octet-stream
+
+      - name: Upload Mac release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # Pulls from the URL form the preceding step.
+          asset_path: ./aqua-mac
+          asset_name: aqua-mac
+          asset_content_type: application/octet-stream
