@@ -22,6 +22,7 @@ import { Runtime, types, Interpreter } from "./algo-builder/packages/runtime";
 const fs = require("fs/promises");
 const minimist = require("minimist");
 const readline = require('readline');
+const colorJson = require('color-json');
 
 async function main() {
 
@@ -56,7 +57,7 @@ async function main() {
             // Parse and dump AST.
             console.log(`== AST ==`);
             const ast = parse(fileData);
-            console.log(JSON.stringify(ast, null, 4));
+            console.log(colorJson(ast));
         }
         else {
             // Print compiled output.
