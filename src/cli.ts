@@ -77,6 +77,9 @@ async function main() {
         repl.on('line', (text: string) => {
             text = text.trim();
 
+            if (text === "exit" || text === "quit") {
+                process.exit(0);
+            }
             
             //
             // Compiles and prints the line of code.
