@@ -17,7 +17,7 @@
 //
 
 import { compile, parse } from ".";
-import { Runtime, types, Interpreter } from "./algo-builder/packages/runtime";
+import { Runtime, types, Interpreter } from "@algo-builder/runtime";
 
 const fs = require("fs/promises");
 const minimist = require("minimist");
@@ -117,5 +117,6 @@ function recogniseCommand(args: string[]): string | undefined {
 function execute(teal: string): any {
     const runtime = new Runtime([]);
     const interpreter = new Interpreter();
+    //TODO: This no longer works. Need to submit a PR so that I can retrieve the result of the exec.
     return interpreter.execute(teal, types.ExecutionMode.APPLICATION, runtime, undefined);
 }
