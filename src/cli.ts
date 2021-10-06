@@ -75,7 +75,16 @@ async function main() {
         process.stdout.write("% ");
         
         repl.on('line', (text: string) => {
-            console.log(compile(text.trim()));
+            text = text.trim();
+
+            
+            //
+            // Compiles and prints the line of code.
+            //
+            // Automatically adds a semi-colon so the user doesn't need to add one.
+            // Double semi-colons (i.e. empty statements) are handled by the parser.
+            //
+            console.log(compile(text + ";")); 
 
             process.stdout.write("% ");
         });        
