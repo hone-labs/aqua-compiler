@@ -5,7 +5,10 @@ import dedent from "dedent";
 // Normalize whitespace so we don't have to consider it when testing.
 //
 function normalize(input: string): string {
-    return input.split("\n").map(line => line.trim()).join("\n");
+    return input.split("\n")
+        .map(line => line.trim())
+        .filter(line => line.length > 0)
+        .join("\n");
 }
 
 describe("statement", () => {
@@ -16,6 +19,9 @@ describe("statement", () => {
     function check(input: string, expected: string): void {
         const teal = normalize(compile(input));
         const expectedTeal = normalize(expected);
+        if (teal !== expectedTeal) {
+            console.log(`Compiled:\r\n"${teal}"\r\nExpected:\r\n"${expectedTeal}"`);
+        }
         expect(teal).toEqual(expectedTeal);
     }
 
@@ -139,6 +145,18 @@ describe("statement", () => {
                 #pragma version 3
                 int 3
                 store 0
+            `)
+        );
+    });
+
+    it("empty statements are allowed", () => {
+        check(
+            dedent(`
+                ;
+                  ;  
+            `),
+            dedent(`
+                #pragma version 3
             `)
         );
     });
