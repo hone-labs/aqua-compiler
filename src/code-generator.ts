@@ -65,7 +65,6 @@ export class CodeGenerator {
         "block-statement": (node, output, variables) => {},
         "expr-statement": (node, output, variables) => {},
         "return-statement": (node, output, variables) => output.push(`return`),
-        "print-statement": (node, output, variables) => output.push(`print`),
         "declare-variable": (node, output, variables) => {
             if (variables.has(node.name)) {
                 throw new Error(`Variable ${node.name} is already declared!`);

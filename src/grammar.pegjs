@@ -124,7 +124,6 @@ statements
 
 statement
     = expr:expression whitespace ";" { return makeStmt("expr-statement", [ expr ]); }
-    / "print" whitespace expr:expression whitespace ";" { return makeStmt("print-statement", [ expr ])}
     / "var" whitespace name:identifier expr:(whitespace "=" whitespace expression)? whitespace ";" { return declareVariable(name, expr && expr[3] || undefined); }
     / "return" whitespace expr:expression whitespace ";" { return makeStmt("return-statement", [ expr ]); }
     / "if" whitespace "(" whitespace condition:expression whitespace ")" whitespace 

@@ -205,27 +205,6 @@ describe("code generator", () => {
         ]);
     });
 
-    it("can generate code for print", () => {
-
-        const node = {
-            nodeType: "print-statement",
-            children: [
-                {
-                    nodeType: "literal",
-                    opcode: "int",
-                    value: 3,        
-                },
-            ],
-        };
-
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
-            `int 3`,
-            `print`
-        ]);
-    });        
-
     it("can generate code for if statement", () => {
 
         const node = {
