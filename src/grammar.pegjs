@@ -123,7 +123,8 @@ statements
     = stmts:((whitespace statement)*) { return makeStmt("block-statement", stmts.map(stmt => stmt[1])); }
 
 statement
-    = expr:expression whitespace ";" { return makeStmt("expr-statement", [ expr ]); }
+    = whitespace ";" { return makeStmt("block-statement", []); }
+    / expr:expression whitespace ";" { return makeStmt("expr-statement", [ expr ]); }
     / "var" whitespace name:identifier expr:(whitespace "=" whitespace expression)? whitespace ";" { return declareVariable(name, expr && expr[3] || undefined); }
     / "return" whitespace expr:expression whitespace ";" { return makeStmt("return-statement", [ expr ]); }
     / "if" whitespace "(" whitespace condition:expression whitespace ")" whitespace 
