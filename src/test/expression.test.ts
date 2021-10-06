@@ -112,12 +112,12 @@ describe("expression", () => {
     });
 
     it("can get txn field", () => {
-        check("txn Amount", "txn Amount");
+        check("txn.Amount", "txn Amount");
     });
 
     it("can use txn field in expression", () => {
         check(
-            "txn Amount >= 1000", 
+            "txn.Amount >= 1000", 
             dedent(`
                 txn Amount
                 int 1000
@@ -127,12 +127,12 @@ describe("expression", () => {
     });
 
     it("can get arg", () => {
-        check("arg 2", "arg 2");
+        check("arg[2]", "arg 2");
     });
 
     it("can use arg in expression", () => {
         check(
-            "arg 3 >= 1000", 
+            "arg[3] >= 1000", 
             dedent(`
                 arg 3
                 int 1000

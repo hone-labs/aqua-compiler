@@ -61,6 +61,7 @@ export class CodeGenerator {
         operator: (node, output, variables) => output.push(node.opcode),
         literal: (node, output, variables) => output.push(`${node.opcode} ${node.value}`),
         txn: (node, output, variables) => output.push(`txn ${node.fieldName}`),
+        gtxn: (node, output, variables) => output.push(`gtxn ${node.transactionIndex} ${node.fieldName}`),
         arg: (node, output, variables) => output.push(`arg ${node.argIndex}`),
         "block-statement": (node, output, variables) => {},
         "expr-statement": (node, output, variables) => {},

@@ -47,6 +47,17 @@
     }
 
     //
+    // Makes an AST node for a gtxn operation.
+    //
+    function makeGTxn(index, name) {
+        return {
+            nodeType: "gtxn",
+            transactionIndex: index,
+            fieldName: name,
+        };
+    }    
+
+    //
     // Makes an AST node an arg operation.
     //
     function makeArg(argIndex) {
@@ -166,8 +177,9 @@ unary
 
 primary
   = integerLiteral
-  / "txn" whitespace id:identifier { return makeTxn(id); }
-  / "arg" whitespace value:integer { return makeArg(value); }
+  / "txn" whitespace "." whitespace id:identifier { return makeTxn(id); }
+  / "gtxn" whitespace "[" whitespace index:integer whitespace "]" whitespace "." whitespace id:identifier { return makeGTxn(index, id); }
+  / "arg" whitespace "[" whitespace index:integer whitespace "]" { return makeArg(index); }
   / "addr" whitespace value:addr { return makeLiteral("addr", "addr", value); }
   / '"' value:stringCharacters '"' { return makeLiteral("byte", "byte", `"${value}"`); }
   / "(" whitespace node:expression whitespace ")" { return node; }
