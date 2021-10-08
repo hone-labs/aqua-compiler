@@ -169,4 +169,13 @@ describe("statement", () => {
         expect(() => compile("a = 1;")).toThrow();
     });
 
+    it("can't redefine variable", () => {
+        expect(() => {
+            compile(`
+                var a;
+                var a;
+            `)
+        }).toThrow();
+    });
+
 });
