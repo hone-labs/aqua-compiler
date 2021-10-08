@@ -210,4 +210,17 @@ stringCharacters "byte string"
     = (!('"') .)* { return text(); }
 
 whitespace "whitespace"
-  = [ \t\n\r]*    
+    = (whitespaceCharacter / comment)*
+
+whitespaceCharacter "whitespace character"
+    = [ \t\r\n]
+
+comment
+    = singleLineComment
+    / multiLineComment
+
+singleLineComment "single-line comment"
+  = "//" (!"\n" .)*
+
+multiLineComment "multi-line comment"
+  = "/*" (!"*/" .)* "*/"

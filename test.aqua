@@ -1,8 +1,9 @@
-var a;
-a = arg[3];
-var x = txn.Something;
-var y = gtxn[2].Another;
-
+let a; 
+a = 3;
+const x = 5;
+const y = 8;
+// Now have comments!
+/* Both types */
 if (x + y < 5) {
     return x + y;
 }
