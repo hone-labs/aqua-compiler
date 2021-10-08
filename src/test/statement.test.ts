@@ -69,7 +69,7 @@ describe("statement", () => {
 
         check(
             dedent(`
-                var x = 2;
+                let x = 2;
                 return x > 3;
             `),
             dedent(`
@@ -138,7 +138,7 @@ describe("statement", () => {
     it("can compile an assignment", () => {
         check(
             dedent(`
-                var a;
+                let a;
                 a = 3;
             `),
             dedent(`
