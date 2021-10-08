@@ -178,4 +178,36 @@ describe("statement", () => {
         }).toThrow();
     });
 
+    it("can declare and use a constant", ()  => {
+
+        check(
+            dedent(`
+                const x = 2;
+                return x > 3;
+            `),
+            dedent(`
+                #pragma version 3
+                int 2
+                store 0
+                load 0
+                int 3
+                >
+                return
+            `)
+        );
+    });
+
+    it("must initialize a constant", () => {
+        expect(() => compile("const a;")).toThrow();
+    });
+
+    it("can't redefine a constant", () => {
+        expect(() => {
+            compile(`
+                const a = 1;
+                a = 2;
+            `)
+        }).toThrow();
+    });
+
 });

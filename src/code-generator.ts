@@ -1,7 +1,41 @@
 //
+// Sets the type of a symbol.
+//
+enum SymbolType {
+    Variable,
+    Constant,
+}
+
+//
+// Represents a symbol (e.g. variable, constant or function).
+//
+export interface ISymbol {
+
+    //
+    // The name of the symbol.
+    //
+    readonly name: string;
+
+    //
+    // The type of the symbol.
+    //
+    readonly type: SymbolType;
+
+    //
+    // Position of the symbol in scratch memory.
+    //
+    readonly position: number;
+}
+
+//
+// A lookup table for symbols.
+//
+type SymbolTable = Map<string, ISymbol>;
+
+//
 // Defines a function that can generate code for a node.
 //
-type NodeHandler = (node: any, output: string[], variables: Map<string, number>) => void;
+type NodeHandler = (node: any, output: string[], symbolTable: SymbolTable) => void;
 
 //
 // Lookup table for funtions that handle code generation for each node.
@@ -30,19 +64,19 @@ export class CodeGenerator {
     //
     generateCode(node: any): string[] {
         const output: string[] = [];
-        const variables = new Map<string, number>();
-        this.internalGenerateCode(node, output, variables);
+        const symbolTable = new Map<string, ISymbol>();
+        this.internalGenerateCode(node, output, symbolTable);
         return output;
     }
 
     //
     // Generates code from an AST representation of an Aqua script.
     //
-    private internalGenerateCode(node: any, output: string[], variables: Map<string, number>): void {
+    private internalGenerateCode(node: any, output: string[], symbolTable: SymbolTable): void {
 
         if (node.children) {
             for (const child of node.children) {
-                this.internalGenerateCode(child, output, variables);
+                this.internalGenerateCode(child, output, symbolTable);
             }
         }
 
@@ -51,23 +85,23 @@ export class CodeGenerator {
             throw new Error(`Unexpected node type ${node.nodeType}`);
         }
 
-        this.nodeHandlers[node.nodeType](node, output, variables);
+        this.nodeHandlers[node.nodeType](node, output, symbolTable);
     }
 
     //
     // Lookup table for funtions that handle code generation for each node.
     //
     nodeHandlers: INodeHandlerMap = {
-        operator: (node, output, variables) => output.push(node.opcode),
-        literal: (node, output, variables) => output.push(`${node.opcode} ${node.value}`),
-        txn: (node, output, variables) => output.push(`txn ${node.fieldName}`),
-        gtxn: (node, output, variables) => output.push(`gtxn ${node.transactionIndex} ${node.fieldName}`),
-        arg: (node, output, variables) => output.push(`arg ${node.argIndex}`),
-        "block-statement": (node, output, variables) => {},
-        "expr-statement": (node, output, variables) => {},
-        "return-statement": (node, output, variables) => output.push(`return`),
-        "declare-variable": (node, output, variables) => {
-            if (variables.has(node.name)) {
+        operator: (node, output, symbolTable) => output.push(node.opcode),
+        literal: (node, output, symbolTable) => output.push(`${node.opcode} ${node.value}`),
+        txn: (node, output, symbolTable) => output.push(`txn ${node.fieldName}`),
+        gtxn: (node, output, symbolTable) => output.push(`gtxn ${node.transactionIndex} ${node.fieldName}`),
+        arg: (node, output, symbolTable) => output.push(`arg ${node.argIndex}`),
+        "block-statement": (node, output, symbolTable) => {},
+        "expr-statement": (node, output, symbolTable) => {},
+        "return-statement": (node, output, symbolTable) => output.push(`return`),
+        "declare-variable": (node, output, symbolTable) => {
+            if (symbolTable.has(node.name)) {
                 throw new Error(`Variable ${node.name} is already declared!`);
             }
 
@@ -76,53 +110,82 @@ export class CodeGenerator {
             //
             const position = this.nextVariablePosition++;
 
-            variables.set(node.name, position);
+            symbolTable.set(node.name, {
+                name: node.name,
+                type: SymbolType.Variable,
+                position: position,
+            });
 
             if (node.children && node.children.length > 0) {
                 // Set variable from initialiser.
                 output.push(`store ${position}`);
             }
         },
-        "access-variable": (node, output, variables) => {
-            const position = variables.get(node.name);
-            if (position === undefined) {
+        "declare-constant": (node, output, symbolTable) => {
+            if (symbolTable.has(node.name)) {
+                throw new Error(`Variable ${node.name} is already declared!`);
+            }
+
+            //
+            // Allocate a position for the variable in scratch.
+            //
+            const position = this.nextVariablePosition++;
+
+            symbolTable.set(node.name, {
+                name: node.name,
+                type: SymbolType.Constant,
+                position: position,
+            });
+
+            if (node.children && node.children.length > 0) {
+                // Set variable from initialiser.
+                output.push(`store ${position}`);
+            }
+        },
+        "access-variable": (node, output, symbolTable) => {
+            const symbol = symbolTable.get(node.name);
+            if (symbol === undefined) {
                 throw new Error(`Variable ${node.name} is not declared!`);
             }
 
             // Get variable from scratch.
-            output.push(`load ${position}`);
+            output.push(`load ${symbol.position}`);
         },
-        "if-statement": (node, output, variables) => {
+        "if-statement": (node, output, symbolTable) => {
             
             this.ifStatementId += 1;
 
             output.push(`bz else-${this.ifStatementId}`);
 
-            this.internalGenerateCode(node.ifBlock, output, variables);
+            this.internalGenerateCode(node.ifBlock, output, symbolTable);
 
             output.push(`b end-${this.ifStatementId}`);
 
             output.push(`else-${this.ifStatementId}:`);
 
             if (node.elseBlock) {
-                this.internalGenerateCode(node.elseBlock, output, variables);
+                this.internalGenerateCode(node.elseBlock, output, symbolTable);
             }
 
             output.push(`end-${this.ifStatementId}:`);
         },
-        "assignment-statement": (node, output, variables) => {
+        "assignment-statement": (node, output, symbolTable) => {
 
             if (node.assignee.nodeType !== "access-variable") {
                 throw new Error(`Expected assignee to be an lvalue.`);
             }
 
-            const position = variables.get(node.assignee.name);
-            if (position === undefined) {
+            const symbol = symbolTable.get(node.assignee.name);
+            if (symbol === undefined) {
                 throw new Error(`Variable ${node.assignee.name} is not declared!`);
             }
 
+            if (symbol.type !== SymbolType.Variable) {
+                throw new Error(`Can't set ${symbol.name} because it is not a variable.`);
+            }
+
             // Store variable to scratch.
-            output.push(`store ${position}`);
+            output.push(`store ${symbol.position}`);
         },
     };
 

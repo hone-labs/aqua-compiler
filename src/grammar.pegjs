@@ -88,6 +88,14 @@
         };
     }
 
+    function declareConstant(name, initialiser) {
+        return {
+            nodeType: "declare-constant",
+            name: name,
+            children: initialiser && [ initialiser ] || undefined,
+        };
+    }
+
     //
     // Makes an AST node that represents a variable.
     // Represents a variable.
@@ -137,6 +145,7 @@ statement
     = whitespace ";" { return makeStmt("block-statement", []); }
     / expr:expression whitespace ";" { return makeStmt("expr-statement", [ expr ]); }
     / "let" whitespace name:identifier expr:(whitespace "=" whitespace expression)? whitespace ";" { return declareVariable(name, expr && expr[3] || undefined); }
+    / "const" whitespace name:identifier whitespace "=" whitespace expr:expression whitespace ";" { return declareConstant(name, expr); }
     / "return" whitespace expr:expression whitespace ";" { return makeStmt("return-statement", [ expr ]); }
     / "if" whitespace "(" whitespace condition:expression whitespace ")" whitespace 
         "{" whitespace ifBlock:statements whitespace "}" 
