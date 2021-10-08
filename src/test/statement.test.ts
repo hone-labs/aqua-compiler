@@ -165,4 +165,8 @@ describe("statement", () => {
         expect(() => compile("1=1;")).toThrow();
     });
 
+    it("can't access undefined variable", () => {
+        expect(() => compile("a = 1;")).toThrow();
+    });
+
 });
