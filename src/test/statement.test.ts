@@ -161,4 +161,8 @@ describe("statement", () => {
         );
     });
 
+    it("can't assign to a number", () => {
+        expect(() => compile("1=1;")).toThrow();
+    });
+
 });
