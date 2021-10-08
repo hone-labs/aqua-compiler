@@ -87,7 +87,13 @@ async function main() {
             // Automatically adds a semi-colon so the user doesn't need to add one.
             // Double semi-colons (i.e. empty statements) are handled by the parser.
             //
-            console.log(compile(text + ";")); 
+            try {
+                const tealCode = compile(text + ";");
+                console.log(tealCode); 
+            }
+            catch (err: any) {
+                console.error(err.message);
+            }
 
             process.stdout.write("% ");
         });        
