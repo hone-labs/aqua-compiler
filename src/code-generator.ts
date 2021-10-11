@@ -60,12 +60,37 @@ export class CodeGenerator {
     private nextVariablePosition = 0;
 
     //
+    // A list of functions to be output at the end.
+    //
+    private functions: any[] = [];
+
+    //
     // Generates code from an AST representation of an Aqua script.
     //
     generateCode(node: any): string[] {
         const output: string[] = [];
         const symbolTable = new Map<string, ISymbol>();
         this.internalGenerateCode(node, output, symbolTable);
+
+        if (this.functions.length > 0) {
+            //
+            // Ensures the code for functions is never executed unless we specifically call the function.
+            //
+            output.push(`b program-end`); 
+
+            for (const functionNode of this.functions) {
+                //
+                // Generate code for functions at the end.
+                //            
+                output.push(`fn-${functionNode.name}:`);
+        
+                this.internalGenerateCode(functionNode.body, output, symbolTable);
+            }    
+
+            output.push(`program-end:`);
+        }
+
+
         return output;
     }
 
@@ -191,10 +216,8 @@ export class CodeGenerator {
             output.push(`callsub fn-${node.name}`);
         },
         "function-declaration": (node, output, symbolTable) => {
-            output.push(`fn-${node.name}:`);
-
-            this.internalGenerateCode(node.body, output, symbolTable);
-        }
+            this.functions.push(node);
+        },
     };
 
 }
