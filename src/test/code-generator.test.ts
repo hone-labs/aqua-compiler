@@ -384,9 +384,11 @@ describe("code generator", () => {
         const codeGenerator = new CodeGenerator();
         const output = codeGenerator.generateCode(node);
         expect(output).toEqual([
+            `b program-end`,
             `fn-myFunction:`,
             `int 1`,
             `return`,
+            `program-end:`,
         ]);
 
     });

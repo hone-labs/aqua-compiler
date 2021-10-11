@@ -219,9 +219,11 @@ describe("statement", () => {
             `),
             dedent(`
                 #pragma version 4
+                b program-end
                 fn-myFunction:
                 int 1
                 return
+                program-end:
             `)
         );
     });
@@ -235,9 +237,11 @@ describe("statement", () => {
             `),
             dedent(`
                 #pragma version 4
+                b program-end
                 fn-myFunction:
                 int 1
                 return
+                program-end:
             `)
         );
     });
@@ -251,10 +255,37 @@ describe("statement", () => {
             `),
             dedent(`
                 #pragma version 4
+                b program-end
                 fn-myFunction:
                 int 1
                 return
+                program-end:
             `)
         );
     });
+
+    it("code for functions is moved to the end", () => {
+        check(
+            dedent(`
+                const a = 1;
+                function myFunction(a, b, c) {
+                    return 1;
+                }
+                const b = 2;
+            `),
+            dedent(`
+                #pragma version 4
+                int 1
+                store 0
+                int 2
+                store 1
+                b program-end
+                fn-myFunction:
+                int 1
+                return
+                program-end:
+            `)
+        );
+    });
+
 });
