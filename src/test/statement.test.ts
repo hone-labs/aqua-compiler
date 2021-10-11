@@ -30,7 +30,7 @@ describe("statement", () => {
         check(
             "1 + 1 ;",
             dedent(`
-                #pragma version 3
+                #pragma version 4
                 int 1
                 int 1
                 +
@@ -43,7 +43,7 @@ describe("statement", () => {
         check(
             "return 1 ;",
             dedent(`
-                #pragma version 3   
+                #pragma version 4   
                 int 1
                 return
             `)
@@ -55,7 +55,7 @@ describe("statement", () => {
         check(
             "1 + 2 ; return 3 ;",
             dedent(`
-                #pragma version 3
+                #pragma version 4
                 int 1
                 int 2
                 +
@@ -73,7 +73,7 @@ describe("statement", () => {
                 return x > 3;
             `),
             dedent(`
-                #pragma version 3
+                #pragma version 4
                 int 2
                 store 0
                 load 0
@@ -96,7 +96,7 @@ describe("statement", () => {
                 }
             `),
             dedent(`
-                #pragma version 3
+                #pragma version 4
                 int 2
                 int 1
                 >
@@ -121,7 +121,7 @@ describe("statement", () => {
                 }
             `),
             dedent(`
-                #pragma version 3
+                #pragma version 4
                 int 2
                 int 1
                 >
@@ -142,7 +142,7 @@ describe("statement", () => {
                 a = 3;
             `),
             dedent(`
-                #pragma version 3
+                #pragma version 4
                 int 3
                 store 0
             `)
@@ -156,7 +156,7 @@ describe("statement", () => {
                   ;  
             `),
             dedent(`
-                #pragma version 3
+                #pragma version 4
             `)
         );
     });
@@ -186,7 +186,7 @@ describe("statement", () => {
                 return x > 3;
             `),
             dedent(`
-                #pragma version 3
+                #pragma version 4
                 int 2
                 store 0
                 load 0

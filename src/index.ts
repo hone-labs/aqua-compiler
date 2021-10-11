@@ -16,7 +16,7 @@ export function compile(input: string): string {
     const ast = parse(input);
     const codeGenerator = new CodeGenerator();
     const output = codeGenerator.generateCode(ast);
-    return `#pragma version 3\r\n` + output.join("\r\n");
+    return `#pragma version 4\r\n` + output.join("\r\n");
 }
 
 //
