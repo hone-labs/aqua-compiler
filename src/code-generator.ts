@@ -187,6 +187,9 @@ export class CodeGenerator {
             // Store variable to scratch.
             output.push(`store ${symbol.position}`);
         },
+        "function-call": (node, output, symolTable) => {
+            output.push(`callsub ${node.name}`);
+        }
     };
 
 }

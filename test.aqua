@@ -2,6 +2,7 @@ let a;
 a = 3;
 const x = 5;
 const y = 8;
+a = myFunction(1,2,3);
 // Now have comments!
 /* Both types */
 if (x + y < 5) {

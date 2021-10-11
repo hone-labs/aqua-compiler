@@ -133,6 +133,17 @@
             ],
         };
     }
+
+    //
+    // Makes a function call.
+    //
+    function makeFunctionCall(name, args) {
+        return {
+            nodeType: "function-call",
+            name: name,
+            children: args,
+        };
+    }
 }
 
 start
@@ -192,7 +203,13 @@ primary
   / "addr" whitespace value:addr { return makeLiteral("addr", "addr", value); }
   / '"' value:stringCharacters '"' { return makeLiteral("byte", "byte", `"${value}"`); }
   / "(" whitespace node:expression whitespace ")" { return node; }
-  / id:identifier { return useVariable(id); }
+  / id:identifier args:(whitespace "(" (whitespace arguments whitespace)? ")")? {
+      if (!args) {
+          return useVariable(id);
+      }
+
+      return makeFunctionCall(id, args[2] && args[2][1] || []);
+  }
 
 integerLiteral "integer"
     = value:integer { return makeLiteral("int", "integer", value); }
@@ -224,3 +241,8 @@ singleLineComment "single-line comment"
 
 multiLineComment "multi-line comment"
   = "/*" (!"*/" .)* "*/"
+
+arguments 
+    = head:expression tail:(whitespace "," whitespace expression)* {
+        return [head].concat(tail.map(expr => expr[3]));
+    }
