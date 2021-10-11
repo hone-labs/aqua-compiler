@@ -65,9 +65,20 @@ export class CodeGenerator {
     private functions: any[] = [];
 
     //
+    // Tracks if we generating code within a function (or otherwise global code).
+    //
+    private inFunction: boolean = false;
+
+    //
     // Generates code from an AST representation of an Aqua script.
     //
     generateCode(node: any): string[] {
+
+        //
+        // To start with we generate global code.
+        //
+        this.inFunction = false;
+
         const output: string[] = [];
         const symbolTable = new Map<string, ISymbol>();
         this.internalGenerateCode(node, output, symbolTable);
@@ -77,6 +88,11 @@ export class CodeGenerator {
             // Ensures the code for functions is never executed unless we specifically call the function.
             //
             output.push(`b program-end`); 
+
+            //
+            // Now generating code within functions.
+            //
+            this.inFunction = true;
 
             for (const functionNode of this.functions) {
                 //
@@ -124,7 +140,20 @@ export class CodeGenerator {
         arg: (node, output, symbolTable) => output.push(`arg ${node.argIndex}`),
         "block-statement": (node, output, symbolTable) => {},
         "expr-statement": (node, output, symbolTable) => {},
-        "return-statement": (node, output, symbolTable) => output.push(`return`),
+        "return-statement": (node, output, symbolTable) => {
+            if (this.inFunction) {
+                //
+                // Code in a function executes the "retsub" opcode to return from the function.
+                //
+                output.push(`retsub`);
+            }
+            else {
+                //
+                // Global code executes the "return" opcode to finish the entire program.
+                //
+                output.push(`return`);
+            }
+        },
         "declare-variable": (node, output, symbolTable) => {
             if (symbolTable.has(node.name)) {
                 throw new Error(`Variable ${node.name} is already declared!`);
