@@ -188,7 +188,12 @@ export class CodeGenerator {
             output.push(`store ${symbol.position}`);
         },
         "function-call": (node, output, symolTable) => {
-            output.push(`callsub ${node.name}`);
+            output.push(`callsub fn-${node.name}`);
+        },
+        "function-declaration": (node, output, symbolTable) => {
+            output.push(`fn-${node.name}:`);
+
+            this.internalGenerateCode(node.body, output, symbolTable);
         }
     };
 

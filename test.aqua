@@ -11,3 +11,7 @@ if (x + y < 5) {
 else {
     return x * y;
 }
+
+function myFunction() {
+    return 5;
+}

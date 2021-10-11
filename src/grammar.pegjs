@@ -147,7 +147,31 @@
 }
 
 start
-    = statements
+    = declarations
+
+declarations
+    = stmts:((whitespace declaration)*) { return makeStmt("block-statement", stmts.map(stmt => stmt[1])); }
+
+declaration
+    = "function" whitespace fn:function {
+        return fn;
+    }
+    / statement
+
+function 
+    = id:identifier "(" whitespace params:parameters? whitespace ")" whitespace "{" whitespace body:statements whitespace "}" {
+        return {
+            nodeType: "function-declaration",
+            name: id,
+            params: params,
+            body: body,
+        };
+    }
+
+parameters
+    = head:identifier tail:(whitespace "," whitespace identifier)* {
+        return [head].concat(tail.map(expr => expr[3]));
+    }
 
 statements
     = stmts:((whitespace statement)*) { return makeStmt("block-statement", stmts.map(stmt => stmt[1])); }
