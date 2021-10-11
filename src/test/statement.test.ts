@@ -288,4 +288,27 @@ describe("statement", () => {
         );
     });
 
+    it("can declare multiple functions", () => {
+        check(
+            dedent(`
+                function fn1() {
+                    return 1;
+                }
+                function fn2() {
+                    return 2;
+                }
+            `),
+            dedent(`
+                #pragma version 4
+                b program-end
+                fn-fn1:
+                int 1
+                retsub
+                fn-fn2:
+                int 2
+                retsub
+                program-end:
+            `)
+        );
+    });
 });
