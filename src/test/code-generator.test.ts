@@ -75,7 +75,7 @@ describe("code generator", () => {
         expect(output).toEqual([]);
     });    
 
-    it("can generate code for return statement", () => {
+    it("can generate code for global return statement", () => {
 
         const node = {
             nodeType: "return-statement",
@@ -387,7 +387,7 @@ describe("code generator", () => {
             `b program-end`,
             `fn-myFunction:`,
             `int 1`,
-            `return`,
+            `retsub`,
             `program-end:`,
         ]);
 
