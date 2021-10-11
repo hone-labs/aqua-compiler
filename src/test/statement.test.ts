@@ -210,4 +210,51 @@ describe("statement", () => {
         }).toThrow();
     });
 
+    it("can declare a function with zero args", () => {
+        check(
+            dedent(`
+                function myFunction() {
+                    return 1;
+                }
+            `),
+            dedent(`
+                #pragma version 4
+                fn-myFunction:
+                int 1
+                return
+            `)
+        );
+    });
+
+    it("can declare a function with one arg", () => {
+        check(
+            dedent(`
+                function myFunction(a) {
+                    return 1;
+                }
+            `),
+            dedent(`
+                #pragma version 4
+                fn-myFunction:
+                int 1
+                return
+            `)
+        );
+    });
+
+    it("can declare a function with multiple args", () => {
+        check(
+            dedent(`
+                function myFunction(a, b, c) {
+                    return 1;
+                }
+            `),
+            dedent(`
+                #pragma version 4
+                fn-myFunction:
+                int 1
+                return
+            `)
+        );
+    });
 });

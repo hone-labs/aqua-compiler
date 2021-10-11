@@ -363,4 +363,31 @@ describe("code generator", () => {
             `callsub fn-myFunction`,
         ]);
     });
+
+    it("can declare a function", () => {
+        const node = {
+            nodeType: "function-declaration",
+            name: "myFunction",
+            params: [],
+            body: {
+                nodeType: "return-statement",
+                children: [
+                    {
+                        nodeType: "literal",
+                        opcode: "int",
+                        value: 1,
+                    },        
+                ],
+            },
+        };
+
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
+        expect(output).toEqual([
+            `fn-myFunction:`,
+            `int 1`,
+            `return`,
+        ]);
+
+    });
 });
