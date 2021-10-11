@@ -159,4 +159,35 @@ describe("expression", () => {
         );
     });
 
+    it("can call function with zero args", () => {
+        check(
+            'myFunction()',
+            dedent(`
+                callsub fn-myFunction
+            `)
+        );
+    });
+
+    it("can call function with one args", () => {
+        check(
+            'myFunction(1)',
+            dedent(`
+                int 1
+                callsub fn-myFunction
+            `)
+        );
+    });
+
+    it("can call function with multiple args", () => {
+        check(
+            'myFunction(1, 2, 3)',
+            dedent(`
+                int 1
+                int 2
+                int 3
+                callsub fn-myFunction
+            `)
+        );
+    });
 });
+

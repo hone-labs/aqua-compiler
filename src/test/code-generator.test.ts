@@ -319,4 +319,48 @@ describe("code generator", () => {
         ]);
 
     });
+
+    it("can call function with zero args", () => {
+
+        const node = {
+            nodeType: "function-call",
+            name: "myFunction",
+            children: [
+            ],
+        };
+
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
+        expect(output).toEqual([
+            `callsub fn-myFunction`,
+        ]);
+    });
+
+    it("can call function with args", () => {
+
+        const node = {
+            nodeType: "function-call",
+            name: "myFunction",
+            children: [
+                {
+                    nodeType: "literal",
+                    opcode: "int",
+                    value: 1,
+                },
+                {
+                    nodeType: "literal",
+                    opcode: "int",
+                    value: 2,
+                },
+            ],
+        };
+
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
+        expect(output).toEqual([
+            `int 1`,
+            `int 2`,
+            `callsub fn-myFunction`,
+        ]);
+    });
 });
