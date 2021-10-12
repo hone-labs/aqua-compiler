@@ -1,9 +1,10 @@
+import { ASTNode } from "./ast";
 import { ISymbolTable, SymbolTable, SymbolType } from "./symbol-table";
 
 //
 // Defines a function that can resolve symbols for an AST node.
 //
-type NodeHandler = (node: any, symbolTable: ISymbolTable) => void;
+type NodeHandler = (node: ASTNode, symbolTable: ISymbolTable) => void;
 
 //
 // Lookup table for funtions that handle code generation for each node.
@@ -21,19 +22,19 @@ export class SymbolResolution {
     // Resolve symbols, annotates the AST and binds variables (etc) to their symbol table entries.
     // Computes space required by functions for local variables.
     //
-    resolveSymbols(node: any): void {
+    resolveSymbols(ast: ASTNode): void {
 
         //
         // Resolve symbols for the AST and compute storage space.
         //
         const globalSymbolTable = new SymbolTable(0);
-        this.internalResolveSymbols(node, globalSymbolTable);
+        this.internalResolveSymbols(ast, globalSymbolTable);
     }
 
     //
     // Resolves symbols and allocates space for variables.
     //
-    private internalResolveSymbols(node: any, symbolTable: ISymbolTable): void {
+    private internalResolveSymbols(node: ASTNode, symbolTable: ISymbolTable): void {
 
         if (node.children) {
             for (const child of node.children) {
@@ -55,20 +56,20 @@ export class SymbolResolution {
             const localSymbolTable = new SymbolTable(0, symbolTable);
             node.scope = localSymbolTable;
         
-            this.internalResolveSymbols(node.body, localSymbolTable);
+            this.internalResolveSymbols(node.body!, localSymbolTable);
         },
         "declare-variable": (node, symbolTable) => {
-            if (symbolTable.isDefinedLocally(node.name)) {
+            if (symbolTable.isDefinedLocally(node.name!)) {
                 throw new Error(`${node.name} is already declared!`);
             }
         
             //
             // Allocate a position for the variable in scratch.
             //
-            node.symbol = symbolTable.define(node.name, node.symbolType);
+            node.symbol = symbolTable.define(node.name!, node.symbolType!);
         },
         "access-variable": (node, symbolTable) => {
-            const symbol = symbolTable.get(node.name);
+            const symbol = symbolTable.get(node.name!);
             if (symbol === undefined) {
                 throw new Error(`Variable ${node.name} is not declared!`);
             }
@@ -77,13 +78,13 @@ export class SymbolResolution {
         },
         "assignment-statement": (node, symbolTable) => {
         
-            if (node.assignee.nodeType !== "access-variable") {
+            if (node.assignee!.nodeType !== "access-variable") {
                 throw new Error(`Expected assignee to be an lvalue.`);
             }
         
-            const symbol = symbolTable.get(node.assignee.name);
+            const symbol = symbolTable.get(node.assignee!.name!);
             if (symbol === undefined) {
-                throw new Error(`Variable ${node.assignee.name} is not declared!`);
+                throw new Error(`Variable ${node.assignee!.name} is not declared!`);
             }
         
             if (symbol.type !== SymbolType.Variable) {
@@ -95,7 +96,7 @@ export class SymbolResolution {
         "if-statement": (node, symbolTable) => {
             //TODO: if statements should have their own symbol tables.
         
-            this.internalResolveSymbols(node.ifBlock, symbolTable);
+            this.internalResolveSymbols(node.ifBlock!, symbolTable);
         
             if (node.elseBlock) {
                 this.internalResolveSymbols(node.elseBlock, symbolTable);                

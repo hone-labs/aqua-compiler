@@ -42,7 +42,7 @@
     function makeTxn(name) {
         return {
             nodeType: "txn",
-            fieldName: name,
+            name: name,
         };
     }
 
@@ -52,8 +52,8 @@
     function makeGTxn(index, name) {
         return {
             nodeType: "gtxn",
-            transactionIndex: index,
-            fieldName: name,
+            name: name,
+            value: index,
         };
     }    
 
@@ -63,7 +63,7 @@
     function makeArg(argIndex) {
         return {
             nodeType: "arg",
-            argIndex: argIndex,
+            value: argIndex,
         };
     }
 

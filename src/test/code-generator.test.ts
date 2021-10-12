@@ -1,12 +1,14 @@
+import { ASTNode } from "../ast";
 import { CodeGenerator } from "../code-generator";
 import { SymbolResolution } from "../symbol-resolution";
+import { SymbolType } from "../symbol-table";
 
 describe("code generator", () => {
 
     //
     // Generates code from an AST.
     //
-    function generateCode(ast: any): string[] {
+    function generateCode(ast: ASTNode): string[] {
         const codeGenerator = new CodeGenerator();
         return codeGenerator.generateCode(ast);
     }
@@ -117,10 +119,12 @@ describe("code generator", () => {
 
     it("can declare variable with initialiser", () => {
 
-        const node = {
+        const node: ASTNode = {
             nodeType: "declare-variable",
             name: "myVar",
             symbol: {
+                name: "myVar",
+                type: SymbolType.Variable,
                 position: 4,
             },
             children: [
@@ -140,12 +144,14 @@ describe("code generator", () => {
 
     it("can access variable", () => {
 
-        const node = {
-                    nodeType: "access-variable",
-                    name: "myVar",
+        const node: ASTNode = {
+            nodeType: "access-variable",
+            name: "myVar",
             symbol: {
+                name: "myVar",
+                type: SymbolType.Variable,
                 position: 2,
-                },       
+            },
         };
 
         expect(generateCode(node)).toEqual([
@@ -155,7 +161,7 @@ describe("code generator", () => {
 
     it("can generate code for if statement", () => {
 
-        const node = {
+        const node: ASTNode = {
             nodeType: "if-statement",
             children: [
                 {
@@ -199,7 +205,7 @@ describe("code generator", () => {
 
     it("can generate code for if statement with no else block", () => {
 
-        const node = {
+        const node: ASTNode = {
             nodeType: "if-statement",
             children: [
                 {
@@ -231,7 +237,7 @@ describe("code generator", () => {
     });
 
     it("can generate code for assignment", () => {
-        const node = {
+        const node: ASTNode = {
             nodeType: "block-statement",
             children: [
                 {
@@ -241,6 +247,8 @@ describe("code generator", () => {
                 {
                     nodeType: "assignment-statement",
                     symbol: {
+                        name: "myVar",
+                        type: SymbolType.Variable,
                         position: 3,
                     },
                     children: [
@@ -266,7 +274,7 @@ describe("code generator", () => {
 
     it("can call function with zero args", () => {
 
-        const node = {
+        const node: ASTNode = {
             nodeType: "function-call",
             name: "myFunction",
             children: [
@@ -280,7 +288,7 @@ describe("code generator", () => {
 
     it("can call function with args", () => {
 
-        const node = {
+        const node: ASTNode = {
             nodeType: "function-call",
             name: "myFunction",
             children: [
@@ -305,7 +313,7 @@ describe("code generator", () => {
     });
 
     it("can declare a function", () => {
-        const node = {
+        const node: ASTNode = {
             nodeType: "function-declaration",
             name: "myFunction",
             params: [],
@@ -333,7 +341,7 @@ describe("code generator", () => {
     });
 
     it("function return is synthesized when not explicit", () => {
-        const node = {
+        const node: ASTNode = {
             nodeType: "function-declaration",
             name: "myFunction",
             params: [],

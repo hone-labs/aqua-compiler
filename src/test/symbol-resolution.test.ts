@@ -1,18 +1,20 @@
+import { ASTNode } from "../ast";
 import { SymbolResolution } from "../symbol-resolution";
+import { SymbolType } from "../symbol-table";
 
 describe("symbol resolution", () => {
 
     //
     // Resolves symbols for an AST.
     //
-    function resolveSymbols(ast: any): void {
+    function resolveSymbols(ast: ASTNode): void {
         const symbolResolution = new SymbolResolution();
         symbolResolution.resolveSymbols(ast);
     }
 
     it("symbol is resolved for variable declaration", () => {
 
-        const ast: any = {
+        const ast: ASTNode = {
             nodeType: "declare-variable",
             name: "myVar2",
         };
@@ -24,7 +26,7 @@ describe("symbol resolution", () => {
 
     it("symbol is resolved for variable access", () => {
 
-        const variableAccess: any = {
+        const variableAccess: ASTNode = {
             nodeType: "access-variable",
             name: "myVar",
         };
@@ -47,9 +49,11 @@ describe("symbol resolution", () => {
 
     it("symbol is resolved for variable assignment", () => {
 
-        const variableAssignment: any = {
+        const variableAssignment: ASTNode = {
             nodeType: "assignment-statement",
             symbol: {
+                name: "myVar",
+                type: SymbolType.Variable,
                 position: 3,
             },
             children: [
@@ -82,19 +86,19 @@ describe("symbol resolution", () => {
 
     it("first variable is allocated at the first position in scratch memory", () => {
 
-        const ast: any = {
+        const ast: ASTNode = {
             nodeType: "declare-variable",
             name: "myVar2",
         };
 
         resolveSymbols(ast);
 
-        expect(ast.symbol.position).toEqual(0);
+        expect(ast.symbol!.position).toEqual(0);
     });
 
     it("second variable is allocated at the next position in scratch memory", () => {
 
-        const declareSecondVariable: any = {
+        const declareSecondVariable: ASTNode = {
             nodeType: "declare-variable",
             name: "myVar2",
         };
@@ -112,7 +116,7 @@ describe("symbol resolution", () => {
 
         resolveSymbols(ast);
 
-        expect(declareSecondVariable.symbol.position).toEqual(1);
+        expect(declareSecondVariable.symbol!.position).toEqual(1);
     });
 
 });

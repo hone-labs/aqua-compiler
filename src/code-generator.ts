@@ -1,7 +1,10 @@
 //
 // Defines a function that can generate code for a node.
+
+import { ASTNode } from "./ast";
+
 //
-type NodeHandler = (node: any, output: string[]) => void;
+type NodeHandler = (node: ASTNode, output: string[]) => void;
 
 //
 // Lookup table for funtions that handle code generation for each node.
@@ -23,7 +26,7 @@ export class CodeGenerator {
     //
     // A list of functions to be output at the end.
     //
-    private functions: any[] = [];
+    private functions: ASTNode[] = [];
 
     //
     // Tracks if we generating code within a function (or otherwise global code).
@@ -33,7 +36,7 @@ export class CodeGenerator {
     //
     // Generates code from an AST representation of an Aqua script.
     //
-    generateCode(node: any): string[] {
+    generateCode(ast: ASTNode): string[] {
 
         //
         // To start with we generate global code.
@@ -41,7 +44,7 @@ export class CodeGenerator {
         this.inFunction = false;
 
         const output: string[] = [];
-        this.internalGenerateCode(node, output);
+        this.internalGenerateCode(ast, output);
 
         if (this.functions.length > 0) {
             //
@@ -71,10 +74,10 @@ export class CodeGenerator {
     //
     // Generates the code for a function.
     //
-    private generateFunctionCode(output: string[], functionNode: any) {
+    private generateFunctionCode(output: string[], functionNode: ASTNode) {
         output.push(`fn-${functionNode.name}:`);
 
-        this.internalGenerateCode(functionNode.body, output);
+        this.internalGenerateCode(functionNode.body!, output);
 
         output.push(`retsub`);
     }
@@ -82,7 +85,7 @@ export class CodeGenerator {
     //
     // Generates code from an AST representation of an Aqua script.
     //
-    private internalGenerateCode(node: any, output: string[]): void {
+    private internalGenerateCode(node: ASTNode, output: string[]): void {
 
         if (node.children) {
             for (const child of node.children) {
@@ -102,11 +105,11 @@ export class CodeGenerator {
     // Lookup table for funtions that handle code generation for each node.
     //
     nodeHandlers: INodeHandlerMap = {
-        operator: (node, output) => output.push(node.opcode),
+        operator: (node, output) => output.push(node.opcode!),
         literal: (node, output) => output.push(`${node.opcode} ${node.value}`),
-        txn: (node, output) => output.push(`txn ${node.fieldName}`),
-        gtxn: (node, output) => output.push(`gtxn ${node.transactionIndex} ${node.fieldName}`),
-        arg: (node, output) => output.push(`arg ${node.argIndex}`),
+        txn: (node, output) => output.push(`txn ${node.name}`),
+        gtxn: (node, output) => output.push(`gtxn ${node.value} ${node.name}`),
+        arg: (node, output) => output.push(`arg ${node.value}`),
         "block-statement": (node, output) => {},
         "expr-statement": (node, output) => {},
         "return-statement": (node, output) => {
@@ -126,12 +129,12 @@ export class CodeGenerator {
         "declare-variable": (node, output) => {
             if (node.children && node.children.length > 0) {
                 // Set variable from initialiser.
-                output.push(`store ${node.symbol.position}`);
+                output.push(`store ${node.symbol!.position}`);
             }
         },
         "access-variable": (node, output) => {
             // Get variable from scratch.
-            output.push(`load ${node.symbol.position}`);
+            output.push(`load ${node.symbol!.position}`);
         },
         "if-statement": (node, output) => {
             
@@ -139,7 +142,7 @@ export class CodeGenerator {
 
             output.push(`bz else-${this.ifStatementId}`);
 
-            this.internalGenerateCode(node.ifBlock, output);
+            this.internalGenerateCode(node.ifBlock!, output);
 
             output.push(`b end-${this.ifStatementId}`);
 
@@ -153,7 +156,7 @@ export class CodeGenerator {
         },
         "assignment-statement": (node, output) => {
             // Store variable to scratch.
-            output.push(`store ${node.symbol.position}`);
+            output.push(`store ${node.symbol!.position}`);
         },
         "function-call": (node, output) => {
             output.push(`callsub fn-${node.name}`);
