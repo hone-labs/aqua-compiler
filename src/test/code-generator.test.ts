@@ -7,9 +7,6 @@ describe("code generator", () => {
     // Generates code from an AST.
     //
     function generateCode(ast: any): string[] {
-        const symbolResolution = new SymbolResolution();
-        symbolResolution.resolveSymbols(ast);
-
         const codeGenerator = new CodeGenerator();
         return codeGenerator.generateCode(ast);
     }
@@ -123,6 +120,9 @@ describe("code generator", () => {
         const node = {
             nodeType: "declare-variable",
             name: "myVar",
+            symbol: {
+                position: 4,
+            },
             children: [
                 {
                     nodeType: "literal",
@@ -134,66 +134,22 @@ describe("code generator", () => {
 
         expect(generateCode(node)).toEqual([
             `int 3`,
-            `store 0`,
-        ]);
-    });
-
-    it("second variable is allocated at the next position in scratch memory", () => {
-
-        const node = {
-            nodeType: "block-statement",
-            children: [
-                {
-                    nodeType: "declare-variable",
-                    name: "myVar1",
-                },                
-                {
-                    nodeType: "declare-variable",
-                    name: "myVar2",
-                    children: [
-                        {
-                            nodeType: "literal",
-                            opcode: "int",
-                            value: 6,
-                        },
-                    ],
-                },                
-            ],
-        };
-
-        expect(generateCode(node)).toEqual([
-            `int 6`,
-            `store 1`,
+            `store 4`,
         ]);
     });
 
     it("can access variable", () => {
 
         const node = {
-            nodeType: "block-statement",
-            children: [
-                {
-                    nodeType: "declare-variable",
-                    name: "myVar",
-                    children: [
-                        {
-                            nodeType: "literal",
-                            opcode: "int",
-                            value: 3,        
-                        },
-                    ],
-                },
-                {
                     nodeType: "access-variable",
                     name: "myVar",
+            symbol: {
+                position: 2,
                 },       
-            ],
         };
 
         expect(generateCode(node)).toEqual([
-            `int 3`,
-            `store 0`,
-            `load 0`
+            `load 2`
         ]);
     });
 
@@ -284,6 +240,9 @@ describe("code generator", () => {
                 },
                 {
                     nodeType: "assignment-statement",
+                    symbol: {
+                        position: 3,
+                    },
                     children: [
                         {
                             nodeType: "literal",
@@ -301,7 +260,7 @@ describe("code generator", () => {
 
         expect(generateCode(node)).toEqual([
             `int 2`,
-            `store 0`,
+            `store 3`,
         ]);
     });
 
