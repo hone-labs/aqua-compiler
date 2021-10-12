@@ -1,6 +1,18 @@
 import { CodeGenerator } from "../code-generator";
+import { SymbolResolution } from "../symbol-resolution";
 
 describe("code generator", () => {
+
+    //
+    // Generates code from an AST.
+    //
+    function generateCode(ast: any): string[] {
+        const symbolResolution = new SymbolResolution();
+        symbolResolution.resolveSymbols(ast);
+
+        const codeGenerator = new CodeGenerator();
+        return codeGenerator.generateCode(ast);
+    }
 
     it("can generate code for children", () => {
 
@@ -22,9 +34,7 @@ describe("code generator", () => {
             ],
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `${opcode}-child-1`,
             `${opcode}-child-2`,
             `${opcode}-parent`,
@@ -39,9 +49,7 @@ describe("code generator", () => {
             opcode: opcode,
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             opcode,
         ]);
     });
@@ -56,9 +64,7 @@ describe("code generator", () => {
             value: value,
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `${opcode} ${value}`,
         ]);
     });    
@@ -70,9 +76,7 @@ describe("code generator", () => {
             children: [],
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([]);
+        expect(generateCode(node)).toEqual([]);
     });    
 
     it("can generate code for global return statement", () => {
@@ -88,9 +92,7 @@ describe("code generator", () => {
             ],
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `int 1`,
             `return`,
         ]);
@@ -103,9 +105,7 @@ describe("code generator", () => {
             children: [],
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([]);
+        expect(generateCode(node)).toEqual([]);
     });    
 
     it("can declare variable", () => {
@@ -115,9 +115,7 @@ describe("code generator", () => {
             name: "myVar",
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([]); // Nothing generated for an uninitialised variable.
+        expect(generateCode(node)).toEqual([]); // Nothing generated for an uninitialised variable.
     });
 
     it("can declare variable with initialiser", () => {
@@ -134,9 +132,7 @@ describe("code generator", () => {
             ],
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `int 3`,
             `store 0`,
         ]);
@@ -165,9 +161,7 @@ describe("code generator", () => {
             ],
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `int 6`,
             `store 1`,
         ]);
@@ -196,9 +190,7 @@ describe("code generator", () => {
             ],
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `int 3`,
             `store 0`,
             `load 0`
@@ -238,9 +230,7 @@ describe("code generator", () => {
             },
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             "int 4",
             "bz else-1",
             "int 5",
@@ -274,9 +264,7 @@ describe("code generator", () => {
             },
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             "int 4",
             "bz else-1",
             "int 5",
@@ -311,9 +299,7 @@ describe("code generator", () => {
             ],
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `int 2`,
             `store 0`,
         ]);
@@ -328,9 +314,7 @@ describe("code generator", () => {
             ],
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `callsub fn-myFunction`,
         ]);
     });
@@ -354,9 +338,7 @@ describe("code generator", () => {
             ],
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `int 1`,
             `int 2`,
             `callsub fn-myFunction`,
@@ -380,9 +362,7 @@ describe("code generator", () => {
             },
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `b program-end`,
             `fn-myFunction:`,
             `int 1`,
@@ -405,9 +385,7 @@ describe("code generator", () => {
             },
         };
 
-        const codeGenerator = new CodeGenerator();
-        const output = codeGenerator.generateCode(node);
-        expect(output).toEqual([
+        expect(generateCode(node)).toEqual([
             `b program-end`,
             `fn-myFunction:`,
             `int 1`,

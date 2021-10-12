@@ -1,5 +1,3 @@
-import { ISymbolTable, SymbolTable, SymbolType } from "./symbol-table";
-
 //
 // Defines a function that can generate code for a node.
 //
@@ -38,12 +36,6 @@ export class CodeGenerator {
     generateCode(node: any): string[] {
 
         //
-        // Resolve symbols for the AST and compute storage space.
-        //
-        const globalSymbolTable = new SymbolTable(0);
-        this.resolveSymbols(node, globalSymbolTable);
-
-        //
         // To start with we generate global code.
         //
         this.inFunction = false;
@@ -78,80 +70,6 @@ export class CodeGenerator {
 
 
         return output;
-    }
-
-    //
-    // Resolves symbols and allocates space for variables.
-    //
-    private resolveSymbols(node: any, symbolTable: ISymbolTable): void {
-
-        if (node.children) {
-            for (const child of node.children) {
-                this.resolveSymbols(child, symbolTable);
-            }
-        }
-
-        if (node.nodeType === "function-declaration") {
-            const localSymbolTable = new SymbolTable(0, symbolTable);
-            node.scope = localSymbolTable;
-
-            this.resolveSymbols(node.body, localSymbolTable);
-        }
-        else if (node.nodeType === "declare-variable") {
-            if (symbolTable.isDefinedLocally(node.name)) {
-                throw new Error(`${node.name} is already declared!`);
-            }
-
-            //
-            // Allocate a position for the variable in scratch.
-            //
-            node.symbol = symbolTable.define(node.name, SymbolType.Variable);
-        }
-        else if (node.nodeType === "declare-constant") {
-            if (symbolTable.isDefinedLocally(node.name)) {
-                throw new Error(`${node.name} is already declared!`);
-            }
-
-            //
-            // Allocate a position for the variable in scratch.
-            //
-            node.symbol = symbolTable.define(node.name, SymbolType.Constant);
-            
-        }
-        else if (node.nodeType === "access-variable") {
-            const symbol = symbolTable.get(node.name);
-            if (symbol === undefined) {
-                throw new Error(`Variable ${node.name} is not declared!`);
-            }
-
-            node.symbol = symbol;
-        }
-        else if (node.nodeType === "assignment-statement") {
-
-            if (node.assignee.nodeType !== "access-variable") {
-                throw new Error(`Expected assignee to be an lvalue.`);
-            }
-
-            const symbol = symbolTable.get(node.assignee.name);
-            if (symbol === undefined) {
-                throw new Error(`Variable ${node.assignee.name} is not declared!`);
-            }
-
-            if (symbol.type !== SymbolType.Variable) {
-                throw new Error(`Can't set ${symbol.name} because it is not a variable.`);
-            }
-
-            node.symbol = symbol;
-        }
-        else if (node.nodeType === "if-statement") {
-            //TODO: if statements should have their own symbol tables.
-
-            this.resolveSymbols(node.ifBlock, symbolTable);
-
-            if (node.elseBlock) {
-                this.resolveSymbols(node.elseBlock, symbolTable);                
-            }
-        }
     }
 
     //
