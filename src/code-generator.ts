@@ -1,41 +1,9 @@
-//
-// Sets the type of a symbol.
-//
-enum SymbolType {
-    Variable,
-    Constant,
-}
-
-//
-// Represents a symbol (e.g. variable, constant or function).
-//
-export interface ISymbol {
-
-    //
-    // The name of the symbol.
-    //
-    readonly name: string;
-
-    //
-    // The type of the symbol.
-    //
-    readonly type: SymbolType;
-
-    //
-    // Position of the symbol in scratch memory.
-    //
-    readonly position: number;
-}
-
-//
-// A lookup table for symbols.
-//
-type SymbolTable = Map<string, ISymbol>;
+import { ISymbolTable, SymbolTable, SymbolType } from "./symbol-table";
 
 //
 // Defines a function that can generate code for a node.
 //
-type NodeHandler = (node: any, output: string[], symbolTable: SymbolTable) => void;
+type NodeHandler = (node: any, output: string[], symbolTable: ISymbolTable) => void;
 
 //
 // Lookup table for funtions that handle code generation for each node.
@@ -80,7 +48,7 @@ export class CodeGenerator {
         this.inFunction = false;
 
         const output: string[] = [];
-        const symbolTable = new Map<string, ISymbol>();
+        const symbolTable = new SymbolTable();
         this.internalGenerateCode(node, output, symbolTable);
 
         if (this.functions.length > 0) {
@@ -113,7 +81,7 @@ export class CodeGenerator {
     //
     // Generates code from an AST representation of an Aqua script.
     //
-    private internalGenerateCode(node: any, output: string[], symbolTable: SymbolTable): void {
+    private internalGenerateCode(node: any, output: string[], symbolTable: ISymbolTable): void {
 
         if (node.children) {
             for (const child of node.children) {
@@ -155,7 +123,7 @@ export class CodeGenerator {
             }
         },
         "declare-variable": (node, output, symbolTable) => {
-            if (symbolTable.has(node.name)) {
+            if (symbolTable.isDefined(node.name)) {
                 throw new Error(`Variable ${node.name} is already declared!`);
             }
 
@@ -163,12 +131,7 @@ export class CodeGenerator {
             // Allocate a position for the variable in scratch.
             //
             const position = this.nextVariablePosition++;
-
-            symbolTable.set(node.name, {
-                name: node.name,
-                type: SymbolType.Variable,
-                position: position,
-            });
+            symbolTable.define(node.name, SymbolType.Variable, position);
 
             if (node.children && node.children.length > 0) {
                 // Set variable from initialiser.
@@ -176,7 +139,7 @@ export class CodeGenerator {
             }
         },
         "declare-constant": (node, output, symbolTable) => {
-            if (symbolTable.has(node.name)) {
+            if (symbolTable.isDefined(node.name)) {
                 throw new Error(`Variable ${node.name} is already declared!`);
             }
 
@@ -184,12 +147,7 @@ export class CodeGenerator {
             // Allocate a position for the variable in scratch.
             //
             const position = this.nextVariablePosition++;
-
-            symbolTable.set(node.name, {
-                name: node.name,
-                type: SymbolType.Constant,
-                position: position,
-            });
+            symbolTable.define(node.name, SymbolType.Constant, position);
 
             if (node.children && node.children.length > 0) {
                 // Set variable from initialiser.
