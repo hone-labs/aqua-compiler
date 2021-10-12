@@ -317,7 +317,6 @@ describe("code generator", () => {
             `int 2`,
             `store 0`,
         ]);
-
     });
 
     it("can call function with zero args", () => {

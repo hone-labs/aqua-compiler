@@ -45,7 +45,7 @@ export interface ISymbolTable {
     //
     // Defines a symbol.
     //
-    define(name: string, type: SymbolType, position: number): void;
+    define(name: string, type: SymbolType): ISymbol;
 }
 
 //
@@ -56,15 +56,21 @@ export class SymbolTable implements ISymbolTable {
     //
     // Lookup table.
     //
-    symbols = new Map<string, ISymbol>();
+    private symbols = new Map<string, ISymbol>();
 
     //
     // The parent symbol table.
     // E.g. the global symbol table is the parent table for a function.
     //
-    parent?: ISymbolTable;
+    private parent?: ISymbolTable;
 
-    constructor(parent?: ISymbolTable) {
+    //
+    // Position for the next scratch variable.
+    //
+    private nextVariablePosition;
+
+    constructor(startingVariablePosition: number, parent?: ISymbolTable) {
+        this.nextVariablePosition = startingVariablePosition;
         this.parent = parent;
     }
 
@@ -100,12 +106,17 @@ export class SymbolTable implements ISymbolTable {
     //
     // Defines a symbol.
     //
-    define(name: string, type: SymbolType, position: number): void {
-        this.symbols.set(name, {
+    define(name: string, type: SymbolType): ISymbol {
+        const symbol = {
             name: name,
             type: type,
-            position: position,
-        });
+            position: this.nextVariablePosition,
+        };
+        this.symbols.set(name, symbol);
+
+        this.nextVariablePosition += 1;
+
+        return symbol;
     }
 
 }
