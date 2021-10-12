@@ -125,7 +125,7 @@ export class CodeGenerator {
             }
         },
         "declare-variable": (node, output, symbolTable) => {
-            if (symbolTable.isDefined(node.name)) {
+            if (symbolTable.isDefinedLocally(node.name)) {
                 throw new Error(`Variable ${node.name} is already declared!`);
             }
 
@@ -141,7 +141,7 @@ export class CodeGenerator {
             }
         },
         "declare-constant": (node, output, symbolTable) => {
-            if (symbolTable.isDefined(node.name)) {
+            if (symbolTable.isDefinedLocally(node.name)) {
                 throw new Error(`Variable ${node.name} is already declared!`);
             }
 

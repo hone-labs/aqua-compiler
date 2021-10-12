@@ -35,7 +35,7 @@ export interface ISymbolTable {
     //
     // Returns true if a symbol is defined.
     //
-    isDefined(name: string): boolean;
+    isDefinedLocally(name: string): boolean;
 
     //
     // Gets a symbol by name, returns undefined if the symbol is not defined.
@@ -51,7 +51,7 @@ export interface ISymbolTable {
 //
 // A lookup table for symbols.
 //
-export class SymbolTable {
+export class SymbolTable implements ISymbolTable {
 
     //
     // Lookup table.
@@ -59,9 +59,19 @@ export class SymbolTable {
     symbols = new Map<string, ISymbol>();
 
     //
+    // The parent symbol table.
+    // E.g. the global symbol table is the parent table for a function.
+    //
+    parent?: ISymbolTable;
+
+    constructor(parent?: ISymbolTable) {
+        this.parent = parent;
+    }
+
+    //
     // Returns true if a symbol is defined.
     //
-    isDefined(name: string): boolean {
+    isDefinedLocally(name: string): boolean {
         return this.symbols.has(name);
     }
 
@@ -69,7 +79,22 @@ export class SymbolTable {
     // Gets a symbol by name, returns undefined if the symbol is not defined.
     //
     get(name: string): ISymbol | undefined {
-        return this.symbols.get(name);
+        //
+        // Search in the local scope.
+        //
+        const localSymbol = this.symbols.get(name);
+        if (localSymbol) {
+            return localSymbol;
+        }
+
+        if (this.parent) {
+            //
+            // Search in the next scope up.
+            //
+            return this.parent.get(name);
+        }
+
+        return undefined;
     }
 
     //
