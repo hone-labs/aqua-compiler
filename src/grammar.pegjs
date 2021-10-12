@@ -84,14 +84,16 @@
         return {
             nodeType: "declare-variable",
             name: name,
+            symbolType: 0, // 0 == variable
             children: initialiser && [ initialiser ] || undefined,
         };
     }
 
     function declareConstant(name, initialiser) {
         return {
-            nodeType: "declare-constant",
+            nodeType: "declare-variable",
             name: name,
+            symbolType: 1, // 1 == constant
             children: initialiser && [ initialiser ] || undefined,
         };
     }

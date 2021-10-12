@@ -129,11 +129,6 @@ export class CodeGenerator {
                 output.push(`store ${node.symbol.position}`);
             }
         },
-        "declare-constant": (node, output) => {
-            if (node.children && node.children.length > 0) {
-                output.push(`store ${node.symbol.position}`);
-            }
-        },
         "access-variable": (node, output) => {
             // Get variable from scratch.
             output.push(`load ${node.symbol.position}`);

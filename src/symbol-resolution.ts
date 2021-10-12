@@ -65,18 +65,7 @@ export class SymbolResolution {
             //
             // Allocate a position for the variable in scratch.
             //
-            node.symbol = symbolTable.define(node.name, SymbolType.Variable);
-        },
-        "declare-constant": (node, symbolTable) => {
-            if (symbolTable.isDefinedLocally(node.name)) {
-                throw new Error(`${node.name} is already declared!`);
-            }
-        
-            //
-            // Allocate a position for the variable in scratch.
-            //
-            node.symbol = symbolTable.define(node.name, SymbolType.Constant);
-            
+            node.symbol = symbolTable.define(node.name, node.symbolType);
         },
         "access-variable": (node, symbolTable) => {
             const symbol = symbolTable.get(node.name);

@@ -2,8 +2,8 @@
 // Sets the type of a symbol.
 //
 export enum SymbolType {
-    Variable,
-    Constant,
+    Variable = 0,
+    Constant = 1,
 }
 
 //
