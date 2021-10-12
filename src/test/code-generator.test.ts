@@ -388,6 +388,31 @@ describe("code generator", () => {
             `fn-myFunction:`,
             `int 1`,
             `retsub`,
+            `retsub`,
+            `program-end:`,
+        ]);
+
+    });
+
+    it("function return is synthesized when not explicit", () => {
+        const node = {
+            nodeType: "function-declaration",
+            name: "myFunction",
+            params: [],
+            body: {
+                nodeType: "literal",
+                opcode: "int",
+                value: 1,
+            },
+        };
+
+        const codeGenerator = new CodeGenerator();
+        const output = codeGenerator.generateCode(node);
+        expect(output).toEqual([
+            `b program-end`,
+            `fn-myFunction:`,
+            `int 1`,
+            `retsub`,
             `program-end:`,
         ]);
 

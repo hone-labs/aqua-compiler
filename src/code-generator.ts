@@ -69,6 +69,8 @@ export class CodeGenerator {
                 output.push(`fn-${functionNode.name}:`);
         
                 this.internalGenerateCode(functionNode.body, output, symbolTable);
+
+                output.push(`retsub`);
             }    
 
             output.push(`program-end:`);

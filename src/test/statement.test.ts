@@ -223,6 +223,7 @@ describe("statement", () => {
                 fn-myFunction:
                 int 1
                 retsub
+                retsub
                 program-end:
             `)
         );
@@ -241,6 +242,7 @@ describe("statement", () => {
                 fn-myFunction:
                 int 1
                 retsub
+                retsub
                 program-end:
             `)
         );
@@ -258,6 +260,7 @@ describe("statement", () => {
                 b program-end
                 fn-myFunction:
                 int 1
+                retsub
                 retsub
                 program-end:
             `)
@@ -283,6 +286,7 @@ describe("statement", () => {
                 fn-myFunction:
                 int 1
                 retsub
+                retsub
                 program-end:
             `)
         );
@@ -304,8 +308,10 @@ describe("statement", () => {
                 fn-fn1:
                 int 1
                 retsub
+                retsub
                 fn-fn2:
                 int 2
+                retsub
                 retsub
                 program-end:
             `)
