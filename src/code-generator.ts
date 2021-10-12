@@ -58,11 +58,7 @@ export class CodeGenerator {
                 //
                 // Generate code for functions at the end.
                 //            
-                output.push(`fn-${functionNode.name}:`);
-        
-                this.internalGenerateCode(functionNode.body, output);
-
-                output.push(`retsub`);
+                this.generateFunctionCode(output, functionNode);
             }    
 
             output.push(`program-end:`);
@@ -70,6 +66,17 @@ export class CodeGenerator {
 
 
         return output;
+    }
+
+    //
+    // Generates the code for a function.
+    //
+    private generateFunctionCode(output: string[], functionNode: any) {
+        output.push(`fn-${functionNode.name}:`);
+
+        this.internalGenerateCode(functionNode.body, output);
+
+        output.push(`retsub`);
     }
 
     //
