@@ -39,4 +39,17 @@ describe("symbol table", () => {
         expect(nestedSymbolTable.get("myVar")).toBeDefined();
         expect(nestedSymbolTable.get("myVar")?.name).toEqual("myVar");
     });
+
+    it("variable positions are allocated", () => {
+
+        const symbolTable = new SymbolTable(0);
+        expect(symbolTable.define("myVar1", SymbolType.Variable).position).toBe(0)
+        expect(symbolTable.define("myVar2", SymbolType.Variable).position).toBe(1)
+    }) 
+
+    it("can set starting position for variables", () => {
+
+        const symbolTable = new SymbolTable(10);
+        expect(symbolTable.define("myVar", SymbolType.Variable).position).toBe(10)
+    }) 
 });
