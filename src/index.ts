@@ -1,3 +1,4 @@
+import { CodeEmitter } from "./code-emitter";
 import { CodeGenerator } from "./code-generator";
 import { SymbolResolution } from "./symbol-resolution";
 
@@ -19,9 +20,10 @@ export function compile(input: string): string {
     const symbolResolution = new SymbolResolution();
     symbolResolution.resolveSymbols(ast);
 
-    const codeGenerator = new CodeGenerator();
+    const codeEmitter = new CodeEmitter(false);
+    const codeGenerator = new CodeGenerator(codeEmitter);
     const output = codeGenerator.generateCode(ast);
-    return `#pragma version 4\r\n` + output.join("\r\n");
+    return `#pragma version 4\r\n` + codeEmitter.getOutput().join("\r\n");
 }
 
 //
@@ -33,8 +35,9 @@ export function compileExpression(input: string): string {
     const symbolResolution = new SymbolResolution();
     symbolResolution.resolveSymbols(ast);
 
-    const codeGenerator = new CodeGenerator();
+    const codeEmitter = new CodeEmitter(true);
+    const codeGenerator = new CodeGenerator(codeEmitter);
     const output = codeGenerator.generateCode(ast);
-    return output.join("\r\n");
+    return codeEmitter.getOutput().join("\r\n");
 }
 

@@ -1,10 +1,11 @@
 import { ASTNode } from "./ast";
+import { ICodeEmitter } from "./code-emitter";
 import { MAX_SCRATCH } from "./config";
 
 //
 // Defines a function that can generate code for a node.
 //
-type NodeHandler = (node: ASTNode, output: string[]) => void;
+type NodeHandler = (node: ASTNode) => void;
 
 //
 // Lookup table for funtions that handle code generation for each node.
@@ -33,33 +34,34 @@ export class CodeGenerator {
     //
     private inFunction: boolean = false;
 
+    constructor(private codeEmitter: ICodeEmitter) {
+    }
+
     //
     // Generates code from an AST representation of an Aqua script.
     //
-    generateCode(ast: ASTNode): string[] {
+    generateCode(ast: ASTNode): void {
 
         //
         // To start with we generate global code.
         //
         this.inFunction = false;
 
-        const output: string[] = [];
-
         //
         // Setup the initial stack pointer to the end of the scratch space.
         //
-        output.push(`\t\t\t// Program setup.`)
-        output.push(`int ${MAX_SCRATCH}\t\t// Initial stack pointer`);
-        output.push(`store 0\t\t// Set stack_pointer`);
-        output.push(``);
+        this.codeEmitter.add(``, `Program setup.`);
+        this.codeEmitter.add(`int ${MAX_SCRATCH}`, `Initial stack pointer.`);
+        this.codeEmitter.add(`store 0`, `Set stack_pointer`);
+        this.codeEmitter.add(``);
 
-        this.internalGenerateCode(ast, output);
+        this.internalGenerateCode(ast);
 
         if (this.functions.length > 0) {
             //
             // Ensures the code for functions is never executed unless we specifically call the function.
             //
-            output.push(`b program-end`); 
+            this.codeEmitter.add(`b program-end`); 
 
             //
             // Now generating code within functions.
@@ -70,100 +72,97 @@ export class CodeGenerator {
                 //
                 // Generate code for functions at the end.
                 //            
-                this.generateFunctionCode(output, functionNode);
+                this.generateFunctionCode(functionNode);
             }    
 
-            output.push(``);
-            output.push(`program-end:`);
+            this.codeEmitter.add(``);
+            this.codeEmitter.add(`program-end:`);
         }
-
-
-        return output;
     }
 
     //
     // Generates the code for a function.
     //
-    private generateFunctionCode(output: string[], functionNode: ASTNode) {
-        output.push(``);
-        output.push(`fn-${functionNode.name}:`);
+    private generateFunctionCode(functionNode: ASTNode) {
+        this.codeEmitter.add(``);
+        this.codeEmitter.add(`fn-${functionNode.name}:`);
 
-        output.push(`\t\t\t// Function setup.`)
+        this.codeEmitter.add(``, `Function setup.`)
 
-        output.push(`load 0\t\t// Take copy of current stack_pointer on stack so that we can save it as the "previous stack pointer" in the new stack frame.`);
+        this.codeEmitter.add(`load 0`, `Take copy of current stack_pointer on stack so that we can save it as the "previous stack pointer" in the new stack frame.`);
 
         // 
         // Decrement the stack pointer by the amount of variables used by the function.
         //
-        output.push(`\t\t\t// Allocate stack frame for the function being called and update the stack_pointer.`);
-        output.push(`\t\t\t// stack_pointer = stack_pointer - (num_locals+1)`)
-        output.push(`load 0\t\t// stack_pointer`);
-        output.push(`int ${functionNode.scope!.getNumSymbols()+1}\t\t// num_locals+1`); // Amount used by this function + 1 for saved stack_pointer.
-        output.push(`-\t\t\t// stack_pointer - (num_locals+1)`); // stack_pointer - (num_locals+1)
-        output.push(`store 0\t\t// stack_pointer = stack_pointer - (num_locals+1)`); // stack_pointer = stack_pointer - (num_locals+1)
+        this.codeEmitter.add(``, `Allocate stack frame for the function being called and update the stack_pointer.`);
+        this.codeEmitter.add(``, `stack_pointer = stack_pointer - (num_locals+1)`)
+        this.codeEmitter.add(`load 0`, `stack_pointer`);
+        this.codeEmitter.add(`int ${functionNode.scope!.getNumSymbols()+1}`, `num_locals+1`); // Amount used by this function + 1 for saved stack_pointer.
+        this.codeEmitter.add(`-`, `stack_pointer - (num_locals+1)`); // stack_pointer - (num_locals+1)
+        this.codeEmitter.add(`store 0`, `stack_pointer = stack_pointer - (num_locals+1)`); // stack_pointer = stack_pointer - (num_locals+1)
 
         //
         // Store previous stack pointer at position one in the new stack frame 
         // (so that the previous stack frame can be restored after this function has returned).
         //
-        output.push(`load 0\t\t// Loads the stack_pointer for the new stack frame, this is where we'll store the previous stack pointer.`); // Loads the stack_pointer for the new stack frame, this is where we'll store the previous stack pointer.
-        output.push(`swap\t\t// The values on the compute stack are in the wrong order, swap so they are in the right order.`); // The values on the compute stack are in the wrong order, swap so they are in the right order.
-        output.push(`stores\t\t// Stores previous stack pointer at the first position in the new stack frame.`); // Stores previous stack pointer at the first position in the new stack frame.
-        output.push(``);
+        this.codeEmitter.add(`load 0`, `Loads the stack_pointer for the new stack frame, this is where we'll store the previous stack pointer.`); // Loads the stack_pointer for the new stack frame, this is where we'll store the previous stack pointer.
+        this.codeEmitter.add(`swap`, `The values on the compute stack are in the wrong order, swap so they are in the right order.`); // The values on the compute stack are in the wrong order, swap so they are in the right order.
+        this.codeEmitter.add(`stores`, `Stores previous stack pointer at the first position in the new stack frame.`); // Stores previous stack pointer at the first position in the new stack frame.
+        this.codeEmitter.add(``);
 
         if (functionNode.params) {
-            output.push(`\t\t\t// Setup arguments.`);
+            this.codeEmitter.add(``, `Setup arguments.`);
 
             for (const param of functionNode.params) {
                 const symbol = functionNode.scope!.get(param); 
-                output.push(`int ${symbol!.position}`); // Variable position within stack frame.                    
-                output.push(`load 0`); // stack_pointer
-                output.push(`+`); // stack_pointer + variable_position
-                output.push(`stores\t\t// Stores "${param}".`);
+                this.codeEmitter.add(`int ${symbol!.position}`); // Variable position within stack frame.                    
+                this.codeEmitter.add(`load 0`); // stack_pointer
+                this.codeEmitter.add(`+`); // stack_pointer + variable_position
+                this.codeEmitter.add(`stores`, `Stores "${param}".`);
             }
         }
 
-        output.push(`\t\t\t// Function body.`)
+        this.codeEmitter.add(``, `Function body.`)
 
         //
         // Now we can generate code for the function.
         //
-        this.internalGenerateCode(functionNode.body!, output);
+        this.internalGenerateCode(functionNode.body!);
 
-        output.push(`\t\t\t// Function cleanup. Restores the previous stack frame.`)
+        this.codeEmitter.add(``, `Function cleanup. Restores the previous stack frame.`)
 
         // 
         // Restore the original stack pointer.
         //
-        output.push(`load 0\t\t// stack_pointer`);
-        output.push(`loads\t\t// previous_stack_pointer`);
-        output.push(`save 0\t\t// stack_pointer = previous_stack_pointer`); // Restore stack_pointer to previous_stack_pointer.
+        this.codeEmitter.add(`load 0`, `stack_pointer`);
+        this.codeEmitter.add(`loads`, `previous_stack_pointer`);
+        this.codeEmitter.add(`save 0`, `stack_pointer = previous_stack_pointer`); // Restore stack_pointer to previous_stack_pointer.
 
         //
         // Return from the function if not already done so explicitly.
         //
-        output.push(`retsub\t\t// Catch all return.`);
+        this.codeEmitter.add(`retsub`, `Catch all return.`);
     }
 
     //
     // Generates code from an AST representation of an Aqua script.
     //
-    private internalGenerateCode(node: ASTNode, output: string[]): void {
+    private internalGenerateCode(node: ASTNode): void {
 
         const pre = this.pre[node.nodeType];
         if (pre) {
-            pre(node, output);
+            pre(node);
         }
 
         if (node.children) {
             for (const child of node.children) {
-                this.internalGenerateCode(child, output);
+                this.internalGenerateCode(child);
             }
         }
 
         const post = this.post[node.nodeType];
         if (post) {
-            post(node, output);
+            post(node);
         }
     }
 
@@ -172,28 +171,28 @@ export class CodeGenerator {
     //
     pre: INodeHandlerMap = {
 
-        "declare-variable": (node, output) => {
+        "declare-variable": (node) => {
             if (node.children && node.children.length > 0) {
                 if (!node.symbol!.isGlobal) {                    
                     // 
                     // Prepare a reference to the stack frame location for the variable being assigned.
                     //
-                    output.push(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
-                    output.push(`load 0`); // stack_pointer
-                    output.push(`+`); // stack_pointer + variable_position.
+                    this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
+                    this.codeEmitter.add(`load 0`); // stack_pointer
+                    this.codeEmitter.add(`+`); // stack_pointer + variable_position.
                 }                
             }
         },
 
-        "assignment-statement": (node, output) => {
+        "assignment-statement": (node) => {
 
             if (!node.symbol!.isGlobal) {
                 // 
                 // Prepare a reference to the stack frame location for the variable being assigned.
                 //
-                output.push(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
-                output.push(`load 0`); // stack_pointer
-                output.push(`+`); // stack_pointer + variable_position
+                this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
+                this.codeEmitter.add(`load 0`); // stack_pointer
+                this.codeEmitter.add(`+`); // stack_pointer + variable_position
             }
         },
     };
@@ -202,86 +201,86 @@ export class CodeGenerator {
     // Code to be invoked for each type of node after generating code for children.
     //
     post: INodeHandlerMap = {
-        "operator": (node, output) => output.push(node.opcode!),
-        "literal": (node, output) => output.push(`${node.opcode} ${node.value}`),
-        "txn": (node, output) => output.push(`txn ${node.name}`),
-        "gtxn": (node, output) => output.push(`gtxn ${node.value} ${node.name}`),
-        "arg": (node, output) => output.push(`arg ${node.value}`),
-        "return-statement": (node, output) => {
+        "operator": (node) => this.codeEmitter.add(node.opcode!),
+        "literal": (node) => this.codeEmitter.add(`${node.opcode} ${node.value}`),
+        "txn": (node) => this.codeEmitter.add(`txn ${node.name}`),
+        "gtxn": (node) => this.codeEmitter.add(`gtxn ${node.value} ${node.name}`),
+        "arg": (node) => this.codeEmitter.add(`arg ${node.value}`),
+        "return-statement": (node) => {
             if (this.inFunction) {
                 //
                 // Code in a function executes the "retsub" opcode to return from the function.
                 //
-                output.push(`retsub`);
+                this.codeEmitter.add(`retsub`);
             }
             else {
                 //
                 // Global code executes the "return" opcode to finish the entire program.
                 //
-                output.push(`return`);
+                this.codeEmitter.add(`return`);
             }
         },
 
         // Sets variable from initialiser.
-        "declare-variable": (node, output) => {
+        "declare-variable": (node) => {
             if (node.children && node.children.length > 0) {
                 if (node.symbol!.isGlobal) {                    
-                    output.push(`store ${node.symbol!.position}`);
+                    this.codeEmitter.add(`store ${node.symbol!.position}`);
                 }
                 else {
-                    output.push(`stores`);
+                    this.codeEmitter.add(`stores`);
                 }                
             }
         },
 
         // Get variable from scratch.
-        "access-variable": (node, output) => {
+        "access-variable": (node) => {
             if (node.symbol!.isGlobal) {                    
-                output.push(`load ${node.symbol!.position}`);
+                this.codeEmitter.add(`load ${node.symbol!.position}`);
             }
             else {
-                output.push(`load 0`); // stack_pointer
-                output.push(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
-                output.push(`+`); // stack_pointer + variable_position
-                output.push(`loads`); // Loads variable onto stack.
+                this.codeEmitter.add(`load 0`); // stack_pointer
+                this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
+                this.codeEmitter.add(`+`); // stack_pointer + variable_position
+                this.codeEmitter.add(`loads`); // Loads variable onto stack.
             }
         },
 
-        "if-statement": (node, output) => {
+        "if-statement": (node) => {
             
             this.ifStatementId += 1;
 
-            output.push(`bz else-${this.ifStatementId}`);
+            this.codeEmitter.add(`bz else-${this.ifStatementId}`);
 
-            this.internalGenerateCode(node.ifBlock!, output);
+            this.internalGenerateCode(node.ifBlock!);
 
-            output.push(`b end-${this.ifStatementId}`);
+            this.codeEmitter.add(`b end-${this.ifStatementId}`);
 
-            output.push(`else-${this.ifStatementId}:`);
+            this.codeEmitter.add(`else-${this.ifStatementId}:`);
 
             if (node.elseBlock) {
-                this.internalGenerateCode(node.elseBlock, output);
+                this.internalGenerateCode(node.elseBlock);
             }
 
-            output.push(`end-${this.ifStatementId}:`);
+            this.codeEmitter.add(`end-${this.ifStatementId}:`);
         },
 
         // Store variable to scratch.
-        "assignment-statement": (node, output) => {
+        "assignment-statement": (node) => {
 
             if (node.symbol!.isGlobal) {
-                output.push(`store ${node.symbol!.position}`);
+                this.codeEmitter.add(`store ${node.symbol!.position}`);
             }
             else {
-                output.push(`stores`);
+                this.codeEmitter.add(`stores`);
             }
         },
 
-        "function-call": (node, output) => {
-            output.push(`callsub fn-${node.name}`);
+        "function-call": (node) => {
+            this.codeEmitter.add(`callsub fn-${node.name}`);
         },
 
-        "function-declaration": (node, output) => {
+        "function-declaration": (node) => {
             this.functions.push(node); // Collect functions so their code can be generated in a second pass.
         },
     };
