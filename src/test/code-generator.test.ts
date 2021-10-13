@@ -1,4 +1,5 @@
 import { ASTNode } from "../ast";
+import { CodeEmitter } from "../code-emitter";
 import { CodeGenerator } from "../code-generator";
 import { SymbolResolution } from "../symbol-resolution";
 import { SymbolType } from "../symbol-table";
@@ -9,8 +10,10 @@ describe("code generator", () => {
     // Generates code from an AST.
     //
     function generateCode(ast: ASTNode): string[] {
-        const codeGenerator = new CodeGenerator();
-        return codeGenerator.generateCode(ast);
+        const codeEmitter = new CodeEmitter(false);
+        const codeGenerator = new CodeGenerator(codeEmitter);
+        codeGenerator.generateCode(ast);
+        return codeEmitter.getOutput();
     }
 
     it("can generate code for children", () => {
