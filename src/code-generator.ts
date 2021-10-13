@@ -214,8 +214,8 @@ export class CodeGenerator {
         "declare-variable": (node, output) => {
             if (node.children && node.children.length > 0) {
                 if (node.symbol!.isGlobal) {                    
-                output.push(`store ${node.symbol!.position}`);
-            }
+                    output.push(`store ${node.symbol!.position}`);
+                }
                 else {
                     output.push(`stores`);
                 }                
@@ -225,7 +225,7 @@ export class CodeGenerator {
         // Get variable from scratch.
         "access-variable": (node, output) => {
             if (node.symbol!.isGlobal) {                    
-            output.push(`load ${node.symbol!.position}`);
+                output.push(`load ${node.symbol!.position}`);
             }
             else {
                 output.push(`load 0`); // stack_pointer
