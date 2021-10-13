@@ -1,0 +1,7 @@
+const x = myFunction(2, 3);
+return x;
+
+function myFunction(b, c) {
+    const a = 3;
+    return a + b + c;
+}

@@ -1,0 +1,7 @@
+const x = myFunction();
+return x;
+
+function myFunction() {
+    const a = 3;
+    return a;
+}

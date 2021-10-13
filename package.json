@@ -5,9 +5,11 @@
   "main": "build/cli.js",
   "scripts": {
     "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
-    "start": "npm run build-parser && ts-node ./src/cli.ts exec test.aqua",
+    "start": "npm run build-parser && ts-node ./src/cli.ts exec examples/test.aqua",
+    "start1": "npm run build-parser && ts-node ./src/cli.ts exec examples/function.aqua",
+    "start2": "npm run build-parser && ts-node ./src/cli.ts exec examples/function-with-args.aqua",
     "start:repl": "npm run build-parser && ts-node ./src/cli.ts",
-    "start:ast": "npm run build-parser && ts-node ./src/cli.ts ast test.aqua",
+    "start:ast": "npm run build-parser && ts-node ./src/cli.ts ast examples/test.aqua",
     "s": "npm run start",
     "start:dev": "npm run build-parser && nodemon",
     "sd": "npm run start:dev",
