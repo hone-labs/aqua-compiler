@@ -126,6 +126,7 @@ describe("code generator", () => {
                 name: "myVar",
                 type: SymbolType.Variable,
                 position: 4,
+                isGlobal: true,
             },
             children: [
                 {
@@ -151,6 +152,7 @@ describe("code generator", () => {
                 name: "myVar",
                 type: SymbolType.Variable,
                 position: 2,
+                isGlobal: true,
             },
         };
 
@@ -250,6 +252,7 @@ describe("code generator", () => {
                         name: "myVar",
                         type: SymbolType.Variable,
                         position: 3,
+                        isGlobal: true,
                     },
                     children: [
                         {

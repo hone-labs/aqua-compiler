@@ -25,6 +25,11 @@ export interface ISymbol {
     // Position of the symbol in scratch memory.
     //
     readonly position: number;
+
+    //
+    // Records if a symbol is a global.
+    //
+    readonly isGlobal: boolean;
 }
 
 //
@@ -46,6 +51,11 @@ export interface ISymbolTable {
     // Defines a symbol.
     //
     define(name: string, type: SymbolType): ISymbol;
+
+    //
+    // Get the number of symbols defined.
+    //
+    getNumSymbols(): number;
 }
 
 //
@@ -67,7 +77,7 @@ export class SymbolTable implements ISymbolTable {
     //
     // Position for the next scratch variable.
     //
-    private nextVariablePosition;
+    private nextVariablePosition: number;
 
     constructor(startingVariablePosition: number, parent?: ISymbolTable) {
         this.nextVariablePosition = startingVariablePosition;
@@ -111,12 +121,21 @@ export class SymbolTable implements ISymbolTable {
             name: name,
             type: type,
             position: this.nextVariablePosition,
+            isGlobal: this.parent === undefined,
         };
         this.symbols.set(name, symbol);
 
         this.nextVariablePosition += 1;
 
         return symbol;
+    }
+
+    
+    //
+    // Get the number of symbols defined.
+    //
+    getNumSymbols(): number {
+        return this.symbols.size;
     }
 
 }

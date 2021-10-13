@@ -27,7 +27,7 @@ export class SymbolResolution {
         //
         // Resolve symbols for the AST and compute storage space.
         //
-        const globalSymbolTable = new SymbolTable(0);
+        const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
         this.internalResolveSymbols(ast, globalSymbolTable);
     }
 
@@ -53,7 +53,7 @@ export class SymbolResolution {
     //
     nodeHandlers: INodeHandlerMap = {
         "function-declaration": (node, symbolTable) => {
-            const localSymbolTable = new SymbolTable(0, symbolTable);
+            const localSymbolTable = new SymbolTable(1, symbolTable); // The saved stack pointer occupies position 0, so local variables are occupated from position 1 in the functions stack frame.
             node.scope = localSymbolTable;
         
             this.internalResolveSymbols(node.body!, localSymbolTable);

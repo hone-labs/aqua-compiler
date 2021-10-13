@@ -55,6 +55,7 @@ describe("symbol resolution", () => {
                 name: "myVar",
                 type: SymbolType.Variable,
                 position: 3,
+                isGlobal: true,
             },
             children: [
                 {

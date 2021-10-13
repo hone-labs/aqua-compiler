@@ -44,7 +44,10 @@ async function main() {
         if (command === "exec") {
             console.log(`== TEAL ==`);
             const teal = compile(fileData);
-            console.log(teal);
+            console.log(teal.split("\n")
+                .map((line, index) => `${index+1}: ${line}`)
+                .join("\n")
+            );
 
             // Execute the file directly.
             console.log(`\r\n== EVALUATION ==`);
