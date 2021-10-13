@@ -25,9 +25,9 @@
     "test": "npm run build-parser && jest",
     "tw": "npm run test:watch",
     "test:watch": "npm run build-parser && jest --watch --runInBand",
-    "build-win": "npm run prepublishOnly  && nexe build/cli.js -t windows-x64-14.15.3 -n aqua",
-    "build-mac": "npm run prepublishOnly && nexe build/cli.js -t mac-x64-14.15.3 -n aqua-mac",
-    "build-linux": "npm run prepublishOnly && nexe build/cli.js -t linux-x64-14.15.3 -n aqua-linux",
+    "build-win": "nexe build/cli.js -t windows-x64-14.15.3 -n aqua",
+    "build-mac": "nexe build/cli.js -t mac-x64-14.15.3 -n aqua-mac",
+    "build-linux": "nexe build/cli.js -t linux-x64-14.15.3 -n aqua-linux",
     "build-all": "npm run build-win && npm run build-mac && npm run build-linux"
   },
   "keywords": [],
