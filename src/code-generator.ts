@@ -165,7 +165,7 @@ export class CodeGenerator {
         if (post) {
             post(node, output);
         }
-        }
+    }
 
     //
     // Code to be invoked for each type of node before generating code for children.
@@ -194,7 +194,7 @@ export class CodeGenerator {
                 output.push(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
                 output.push(`load 0`); // stack_pointer
                 output.push(`+`); // stack_pointer + variable_position
-    }
+            }
         },
     };
 
@@ -270,7 +270,7 @@ export class CodeGenerator {
         "assignment-statement": (node, output) => {
 
             if (node.symbol!.isGlobal) {
-            output.push(`store ${node.symbol!.position}`);
+                output.push(`store ${node.symbol!.position}`);
             }
             else {
                 output.push(`stores`);
