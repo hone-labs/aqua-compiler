@@ -39,7 +39,7 @@ export interface ASTNode {
     // 
     // If a function node, this is the array of parameters.
     //
-    params?: ASTNode[];
+    params?: string[];
 
     //
     // If a function node, this is the body of the function.

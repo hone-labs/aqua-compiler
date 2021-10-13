@@ -111,6 +111,18 @@ export class CodeGenerator {
         output.push(`stores\t\t// Stores previous stack pointer at the first position in the new stack frame.`); // Stores previous stack pointer at the first position in the new stack frame.
         output.push(``);
 
+        if (functionNode.params) {
+            output.push(`\t\t\t// Setup arguments.`);
+
+            for (const param of functionNode.params) {
+                const symbol = functionNode.scope!.get(param); 
+                output.push(`int ${symbol!.position}`); // Variable position within stack frame.                    
+                output.push(`load 0`); // stack_pointer
+                output.push(`+`); // stack_pointer + variable_position
+                output.push(`stores\t\t// Stores "${param}".`);
+            }
+        }
+
         output.push(`\t\t\t// Function body.`)
 
         //

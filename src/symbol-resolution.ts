@@ -55,7 +55,13 @@ export class SymbolResolution {
         "function-declaration": (node, symbolTable) => {
             const localSymbolTable = new SymbolTable(1, symbolTable); // The saved stack pointer occupies position 0, so local variables are occupated from position 1 in the functions stack frame.
             node.scope = localSymbolTable;
-        
+
+            if (node.params) {
+                for (const param of node.params) {
+                    localSymbolTable.define(param, SymbolType.Variable);
+                }
+            }
+       
             this.internalResolveSymbols(node.body!, localSymbolTable);
         },
         "declare-variable": (node, symbolTable) => {
