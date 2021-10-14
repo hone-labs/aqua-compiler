@@ -1,0 +1,19 @@
+let a;
+a = 3;
+const x = 5;
+const y = 8;
+
+if (x + y < 5) {
+    return add(x + y);
+}
+else {
+    return multiply(x, y);
+}
+
+function add(a, b) {
+    return a + b;
+}
+
+function multiply(a, b) {
+    return a * b;
+}
