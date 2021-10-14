@@ -94,7 +94,7 @@ describe("symbol resolution", () => {
 
         resolveSymbols(ast);
 
-        expect(ast.symbol!.position).toEqual(0);
+        expect(ast.symbol!.position).toEqual(1);
     });
 
     it("second variable is allocated at the next position in scratch memory", () => {
@@ -117,7 +117,7 @@ describe("symbol resolution", () => {
 
         resolveSymbols(ast);
 
-        expect(declareSecondVariable.symbol!.position).toEqual(1);
+        expect(declareSecondVariable.symbol!.position).toEqual(2);
     });
 
 });

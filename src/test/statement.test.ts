@@ -75,8 +75,8 @@ describe("statement", () => {
             dedent(`
                 #pragma version 4
                 int 2
-                store 0
-                load 0
+                store 1
+                load 1
                 int 3
                 >
                 return
@@ -144,7 +144,7 @@ describe("statement", () => {
             dedent(`
                 #pragma version 4
                 int 3
-                store 0
+                store 1
             `)
         );
     });
@@ -188,8 +188,8 @@ describe("statement", () => {
             dedent(`
                 #pragma version 4
                 int 2
-                store 0
-                load 0
+                store 1
+                load 1
                 int 3
                 >
                 return
