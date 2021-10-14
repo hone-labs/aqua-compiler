@@ -48,13 +48,24 @@ export class CodeGenerator {
         this.inFunction = false;
 
         //
+        // Collect functions so their code can be generated in a second pass.
+        //
+        this.functions = [];
+        this.collectFunctions(ast);
+
+        //
         // Setup the initial stack pointer to the end of the scratch space.
         //
-        this.codeEmitter.add(``, `Program setup.`);
-        this.codeEmitter.add(`int ${MAX_SCRATCH}`, `Initial stack pointer.`);
-        this.codeEmitter.add(`store 0`, `Set stack_pointer`);
-        this.codeEmitter.add(``);
+        if (this.functions.length > 0) {
+            this.codeEmitter.add(``, `Function data stack setup.`);
+            this.codeEmitter.add(`int ${MAX_SCRATCH}`, `Initial stack pointer.`);
+            this.codeEmitter.add(`store 0`, `Set stack_pointer`);
+            this.codeEmitter.add(``);
+        }
 
+        //
+        // Generate code for non functions.
+        //
         this.internalGenerateCode(ast);
 
         if (this.functions.length > 0) {
@@ -279,11 +290,23 @@ export class CodeGenerator {
         "function-call": (node) => {
             this.codeEmitter.add(`callsub fn-${node.name}`);
         },
-
-        "function-declaration": (node) => {
-            this.functions.push(node); // Collect functions so their code can be generated in a second pass.
-        },
     };
+
+    //
+    // Walk the tree and collection functions so there code can be generated in a second pass.
+    //
+    private collectFunctions(node: ASTNode): void {
+
+        if (node.children) {
+            for (const child of node.children) {
+                this.collectFunctions(child);
+            }
+        }
+
+        if (node.nodeType === "function-declaration") {
+            this.functions.push(node);
+        }
+    }
 
 }
 
