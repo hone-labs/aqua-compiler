@@ -12,6 +12,6 @@ else {
     return x * y;
 }
 
-function myFunction() {
-    return 5;
+function myFunction(a, b, c) {
+    return a + b + c;
 }
