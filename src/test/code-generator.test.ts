@@ -1,5 +1,5 @@
 import { ASTNode } from "../ast";
-import { CodeEmitter, ICodeBlock } from "../code-emitter";
+import { CodeEmitter } from "../code-emitter";
 import { CodeGenerator } from "../code-generator";
 import { SymbolType } from "../symbol-table";
 
