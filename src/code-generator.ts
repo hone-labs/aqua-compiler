@@ -131,7 +131,7 @@ export class CodeGenerator {
         if (functionNode.params) {
             this.codeEmitter.add(``, `Setup arguments.`);
 
-            for (const param of functionNode.params) {
+            for (const param of functionNode.params.reverse()) { // Parameters are popped from the stack in reverse order to what they are pushed.
                 const symbol = functionNode.scope!.get(param); 
                 this.codeEmitter.add(`int ${symbol!.position}`); // Variable position within stack frame.                    
                 this.codeEmitter.add(`load 0`); // stack_pointer

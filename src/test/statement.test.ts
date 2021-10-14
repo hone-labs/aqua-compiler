@@ -299,7 +299,7 @@ describe("statement", () => {
                 load 0
                 swap
                 stores
-                int 1
+                int 3
                 load 0
                 +
                 stores
@@ -307,7 +307,7 @@ describe("statement", () => {
                 load 0
                 +
                 stores
-                int 3
+                int 1
                 load 0
                 +
                 stores
@@ -326,7 +326,7 @@ describe("statement", () => {
         check(
             dedent(`
                 const a = 1;
-                function myFunction(a, b, c) {
+                function myFunction() {
                     return 1;
                 }
                 const b = 2;
@@ -343,23 +343,11 @@ describe("statement", () => {
                 myFunction:
                 load 0
                 load 0
-                int 4
+                int 1
                 -
                 store 0
                 load 0
                 swap
-                stores
-                int 1
-                load 0
-                +
-                stores
-                int 2
-                load 0
-                +
-                stores
-                int 3
-                load 0
-                +
                 stores
                 int 1
                 retsub
