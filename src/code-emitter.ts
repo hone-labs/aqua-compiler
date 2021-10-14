@@ -130,7 +130,7 @@ export class CodeEmitter implements ICodeEmitter {
     //
     // Retrieve blocks of generated code.
     //
-    getBlock(): ICodeBlock[] {
+    getBlocks(): ICodeBlock[] {
         return this.output;
     }
 

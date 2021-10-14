@@ -319,7 +319,7 @@ describe("code generator", () => {
     });
 
     it("can declare a function", () => {
-        const node: any = {
+        const ast: any = {
             nodeType: "function-declaration",
             name: "myFunction",
             params: [],
@@ -338,39 +338,20 @@ describe("code generator", () => {
             },
         };
 
-        expect(generateCode(node)).toEqual([
-            "",
-            "int 256",
-            "store 0",
-            "",
-            "b program-end",
-            "",
-            "fn-myFunction:",
-            "",
-            "load 0",
-            "",
-            "",
-            "load 0",
-            "int 1",
-            "-",
-            "store 0",
-            "load 0",
-            "swap",
-            "stores",
-            "",
-            "",
-            "",
-            "int 1",
-            "retsub",
-            "",
-            "load 0",
-            "loads",
-            "save 0",
-            "retsub",
-            "",
-            "program-end:"
-        ]);
+        const codeEmitter = new CodeEmitter(false);
+        const codeGenerator = new CodeGenerator(codeEmitter);
+        codeGenerator.generateCode(ast);
 
+        const output = codeEmitter.getBlocks()
+            .filter(block => block.tags.indexOf("setup") < 0) // Filter out setup blocks.
+            .flatMap(block => block.elements)
+            .map(element => element.code);
+
+        expect(output).toEqual([
+            "fn-myFunction:",
+            "int 1",
+            "retsub",
+        ]);
     });
 
     it("function return is synthesized when not explicit", () => {
@@ -394,7 +375,6 @@ describe("code generator", () => {
             "store 0",
             "",
             "b program-end",
-            "",
             "fn-myFunction:",
             "",
             "load 0",
