@@ -14,7 +14,7 @@ describe("test cases", () => {
 
     const testCaseFiles = glob.sync([`${__dirname.replace(/\\/g, "/")}/cases/**/input.aqua`]);
     for (const testCaseFile of testCaseFiles) {
-        const basename = path.basename(testCaseFile, ".aqua");
+        const basename = path.basename(path.dirname(testCaseFile));
         it(`can compile ${basename}`, async () => {
             const dirPath = path.dirname(testCaseFile);
             const tealFilePath = path.join(dirPath, "output.teal");
