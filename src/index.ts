@@ -20,7 +20,7 @@ export function compile(input: string): string {
     const symbolResolution = new SymbolResolution();
     symbolResolution.resolveSymbols(ast);
 
-    const codeEmitter = new CodeEmitter(false);
+    const codeEmitter = new CodeEmitter(true);
     const codeGenerator = new CodeGenerator(codeEmitter);
     const output = codeGenerator.generateCode(ast);
     return `#pragma version 4\r\n` + codeEmitter.getOutput().join("\r\n");

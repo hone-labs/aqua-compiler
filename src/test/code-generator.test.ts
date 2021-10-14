@@ -1,5 +1,5 @@
 import { ASTNode } from "../ast";
-import { CodeEmitter } from "../code-emitter";
+import { CodeEmitter, ICodeBlock } from "../code-emitter";
 import { CodeGenerator } from "../code-generator";
 import { SymbolType } from "../symbol-table";
 
@@ -12,7 +12,8 @@ describe("code generator", () => {
         const codeEmitter = new CodeEmitter(false);
         const codeGenerator = new CodeGenerator(codeEmitter);
         codeGenerator.generateCode(ast);
-        return codeEmitter.getOutput();
+        const output = codeEmitter.getOutput();
+        return output;
     }
 
     it("can generate code for children", () => {
