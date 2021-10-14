@@ -6,6 +6,7 @@
   "scripts": {
     "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
     "start": "npm run build-parser && ts-node ./src/cli.ts exec examples/test.aqua",
+    "start:file": "npm run build-parser && ts-node ./src/cli.ts examples/test.aqua > examples/test.teal",
     "start1": "npm run build-parser && ts-node ./src/cli.ts exec examples/function.aqua",
     "start2": "npm run build-parser && ts-node ./src/cli.ts exec examples/function-with-args.aqua",
     "start:template": "npm run build-parser && ts-node ./src/cli.ts exec examples/template.aqua",
