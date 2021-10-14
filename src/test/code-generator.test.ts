@@ -1,7 +1,6 @@
 import { ASTNode } from "../ast";
 import { CodeEmitter } from "../code-emitter";
 import { CodeGenerator } from "../code-generator";
-import { SymbolResolution } from "../symbol-resolution";
 import { SymbolType } from "../symbol-table";
 
 describe("code generator", () => {
@@ -319,7 +318,7 @@ describe("code generator", () => {
     });
 
     it("can declare a function", () => {
-        const node: ASTNode = {
+        const node: any = {
             nodeType: "function-declaration",
             name: "myFunction",
             params: [],
@@ -339,18 +338,42 @@ describe("code generator", () => {
         };
 
         expect(generateCode(node)).toEqual([
-            `b program-end`,
-            `fn-myFunction:`,
-            `int 1`,
-            `retsub`,
-            `retsub`,
-            `program-end:`,
+            "",
+            "int 256",
+            "store 0",
+            "",
+            "b program-end",
+            "",
+            "fn-myFunction:",
+            "",
+            "load 0",
+            "",
+            "",
+            "load 0",
+            "int 1",
+            "-",
+            "store 0",
+            "load 0",
+            "swap",
+            "stores",
+            "",
+            "",
+            "",
+            "int 1",
+            "retsub",
+            "",
+            "load 0",
+            "loads",
+            "save 0",
+            "retsub",
+            "",
+            "program-end:"
         ]);
 
     });
 
     it("function return is synthesized when not explicit", () => {
-        const node: ASTNode = {
+        const node: any = {
             nodeType: "function-declaration",
             name: "myFunction",
             params: [],
@@ -365,12 +388,35 @@ describe("code generator", () => {
         };
 
         expect(generateCode(node)).toEqual([
-            `b program-end`,
-            `fn-myFunction:`,
-            `int 1`,
-            `retsub`,
-            `program-end:`,
+            "",
+            "int 256",
+            "store 0",
+            "",
+            "b program-end",
+            "",
+            "fn-myFunction:",
+            "",
+            "load 0",
+            "",
+            "",
+            "load 0",
+            "int 1",
+            "-",
+            "store 0",
+            "load 0",
+            "swap",
+            "stores",
+            "",
+            "",
+            "",
+            "int 1",
+            "",
+            "load 0",
+            "loads",
+            "save 0",
+            "retsub",
+            "",
+            "program-end:"
         ]);
-
     });
 });

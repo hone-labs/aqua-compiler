@@ -219,10 +219,23 @@ describe("statement", () => {
             `),
             dedent(`
                 #pragma version 4
+                int 256
+                store 0
                 b program-end
                 fn-myFunction:
+                load 0
+                load 0
+                int 1
+                -
+                store 0
+                load 0
+                swap
+                stores
                 int 1
                 retsub
+                load 0
+                loads
+                save 0
                 retsub
                 program-end:
             `)
@@ -238,10 +251,27 @@ describe("statement", () => {
             `),
             dedent(`
                 #pragma version 4
+                int 256
+                store 0
                 b program-end
                 fn-myFunction:
+                load 0
+                load 0
+                int 2
+                -
+                store 0
+                load 0
+                swap
+                stores
+                int 1
+                load 0
+                +
+                stores
                 int 1
                 retsub
+                load 0
+                loads
+                save 0
                 retsub
                 program-end:
             `)
@@ -257,10 +287,35 @@ describe("statement", () => {
             `),
             dedent(`
                 #pragma version 4
+                int 256
+                store 0
                 b program-end
                 fn-myFunction:
+                load 0
+                load 0
+                int 4
+                -
+                store 0
+                load 0
+                swap
+                stores
+                int 1
+                load 0
+                +
+                stores
+                int 2
+                load 0
+                +
+                stores
+                int 3
+                load 0
+                +
+                stores
                 int 1
                 retsub
+                load 0
+                loads
+                save 0
                 retsub
                 program-end:
             `)
@@ -278,14 +333,39 @@ describe("statement", () => {
             `),
             dedent(`
                 #pragma version 4
-                int 1
+                int 256
                 store 0
-                int 2
+                int 1
                 store 1
+                int 2
+                store 2
                 b program-end
                 fn-myFunction:
+                load 0
+                load 0
+                int 4
+                -
+                store 0
+                load 0
+                swap
+                stores
+                int 1
+                load 0
+                +
+                stores
+                int 2
+                load 0
+                +
+                stores
+                int 3
+                load 0
+                +
+                stores
                 int 1
                 retsub
+                load 0
+                loads
+                save 0
                 retsub
                 program-end:
             `)
@@ -304,14 +384,38 @@ describe("statement", () => {
             `),
             dedent(`
                 #pragma version 4
+                int 256
+                store 0
                 b program-end
                 fn-fn1:
+                load 0
+                load 0
+                int 1
+                -
+                store 0
+                load 0
+                swap
+                stores
                 int 1
                 retsub
+                load 0
+                loads
+                save 0
                 retsub
                 fn-fn2:
+                load 0
+                load 0
+                int 1
+                -
+                store 0
+                load 0
+                swap
+                stores
                 int 2
                 retsub
+                load 0
+                loads
+                save 0
                 retsub
                 program-end:
             `)
