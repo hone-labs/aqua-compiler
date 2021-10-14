@@ -3,19 +3,26 @@ import * as fs from "fs";
 import { compile } from "..";
 import * as glob from "fast-glob";
 
+//
+// Normalize whitespace so we don't have to consider it when testing.
+//
+function normalize(input: string): string {
+    return input.split("\n").map(line => line.trim()).join("\n");
+}
+
 describe("test cases", () => {
 
-    const testCaseFiles = glob.sync(path.join(__dirname, "cases/**/input.aqua"));
+    const testCaseFiles = glob.sync([`${__dirname.replace(/\\/g, "/")}/cases/**/input.aqua`]);
     for (const testCaseFile of testCaseFiles) {
         const basename = path.basename(testCaseFile, ".aqua");
         it(`can compile ${basename}`, async () => {
             const dirPath = path.dirname(testCaseFile);
             const tealFilePath = path.join(dirPath, "output.teal");
             const input = await fs.promises.readFile(testCaseFile, "utf8");
-            const compiled = compile(input);
-            const expected = await fs.promises.readFile(tealFilePath, "utf8");
+            const compiled = normalize(compile(input));
+            const expected = normalize(await fs.promises.readFile(tealFilePath, "utf8"));
             if (compiled !== expected) {
-                console.log(`Compiled:\r\n"${compiled}"\r\nExpected:\r\n"${expected}"`);
+                console.log(`Compiled:\r\n"${compiled}"\r\n\r\nExpected:\r\n"${expected}"`);
             }
             expect(compiled).toEqual(expected);    
         });
