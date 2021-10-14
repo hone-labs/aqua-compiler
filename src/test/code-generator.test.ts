@@ -323,6 +323,9 @@ describe("code generator", () => {
             nodeType: "function-declaration",
             name: "myFunction",
             params: [],
+            scope: {
+                getNumSymbols: () => 0,
+            },
             body: {
                 nodeType: "return-statement",
                 children: [
@@ -351,6 +354,9 @@ describe("code generator", () => {
             nodeType: "function-declaration",
             name: "myFunction",
             params: [],
+            scope: {
+                getNumSymbols: () => 0,
+            },
             body: {
                 nodeType: "literal",
                 opcode: "int",
