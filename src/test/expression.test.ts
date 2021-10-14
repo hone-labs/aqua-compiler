@@ -163,7 +163,7 @@ describe("expression", () => {
         check(
             'myFunction()',
             dedent(`
-                callsub fn-myFunction
+                callsub myFunction
             `)
         );
     });
@@ -173,7 +173,7 @@ describe("expression", () => {
             'myFunction(1)',
             dedent(`
                 int 1
-                callsub fn-myFunction
+                callsub myFunction
             `)
         );
     });
@@ -185,7 +185,7 @@ describe("expression", () => {
                 int 1
                 int 2
                 int 3
-                callsub fn-myFunction
+                callsub myFunction
             `)
         );
     });

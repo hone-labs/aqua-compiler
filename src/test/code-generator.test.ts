@@ -199,12 +199,12 @@ describe("code generator", () => {
 
         expect(generateCode(node)).toEqual([
             "int 4",
-            "bz else-1",
+            "bz else_1",
             "int 5",
-            "b end-1",
-            "else-1:",
+            "b end_1",
+            "else_1:",
             "int 6",
-            "end-1:",
+            "end_1:",
         ]);
     });
 
@@ -233,11 +233,11 @@ describe("code generator", () => {
 
         expect(generateCode(node)).toEqual([
             "int 4",
-            "bz else-1",
+            "bz else_1",
             "int 5",
-            "b end-1",
-            "else-1:",
-            "end-1:",
+            "b end_1",
+            "else_1:",
+            "end_1:",
         ]);
     });
 
@@ -288,7 +288,7 @@ describe("code generator", () => {
         };
 
         expect(generateCode(node)).toEqual([
-            `callsub fn-myFunction`,
+            `callsub myFunction`,
         ]);
     });
 
@@ -314,7 +314,7 @@ describe("code generator", () => {
         expect(generateCode(node)).toEqual([
             `int 1`,
             `int 2`,
-            `callsub fn-myFunction`,
+            `callsub myFunction`,
         ]);
     });
 
@@ -348,7 +348,7 @@ describe("code generator", () => {
             .map(element => element.code);
 
         expect(output).toEqual([
-            "fn-myFunction:",
+            "myFunction:",
             "int 1",
             "retsub",
         ]);
@@ -374,8 +374,8 @@ describe("code generator", () => {
             "int 256",
             "store 0",
             "",
-            "b program-end",
-            "fn-myFunction:",
+            "b program_end",
+            "myFunction:",
             "",
             "load 0",
             "",
@@ -397,7 +397,7 @@ describe("code generator", () => {
             "save 0",
             "retsub",
             "",
-            "program-end:"
+            "program_end:"
         ]);
     });
 });

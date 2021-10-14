@@ -100,14 +100,14 @@ describe("statement", () => {
                 int 2
                 int 1
                 >
-                bz else-1
+                bz else_1
                 int 5
                 return
-                b end-1
-                else-1:
+                b end_1
+                else_1:
                 int 10
                 return
-                end-1:            
+                end_1:            
             `)
         );
     });
@@ -125,12 +125,12 @@ describe("statement", () => {
                 int 2
                 int 1
                 >
-                bz else-1
+                bz else_1
                 int 5
                 return
-                b end-1
-                else-1:
-                end-1:            
+                b end_1
+                else_1:
+                end_1:            
             `)
         );
     });
@@ -221,8 +221,8 @@ describe("statement", () => {
                 #pragma version 4
                 int 256
                 store 0
-                b program-end
-                fn-myFunction:
+                b program_end
+                myFunction:
                 load 0
                 load 0
                 int 1
@@ -237,7 +237,7 @@ describe("statement", () => {
                 loads
                 save 0
                 retsub
-                program-end:
+                program_end:
             `)
         );
     });
@@ -253,8 +253,8 @@ describe("statement", () => {
                 #pragma version 4
                 int 256
                 store 0
-                b program-end
-                fn-myFunction:
+                b program_end
+                myFunction:
                 load 0
                 load 0
                 int 2
@@ -273,7 +273,7 @@ describe("statement", () => {
                 loads
                 save 0
                 retsub
-                program-end:
+                program_end:
             `)
         );
     });
@@ -289,8 +289,8 @@ describe("statement", () => {
                 #pragma version 4
                 int 256
                 store 0
-                b program-end
-                fn-myFunction:
+                b program_end
+                myFunction:
                 load 0
                 load 0
                 int 4
@@ -317,7 +317,7 @@ describe("statement", () => {
                 loads
                 save 0
                 retsub
-                program-end:
+                program_end:
             `)
         );
     });
@@ -339,8 +339,8 @@ describe("statement", () => {
                 store 1
                 int 2
                 store 2
-                b program-end
-                fn-myFunction:
+                b program_end
+                myFunction:
                 load 0
                 load 0
                 int 4
@@ -367,7 +367,7 @@ describe("statement", () => {
                 loads
                 save 0
                 retsub
-                program-end:
+                program_end:
             `)
         );
     });
@@ -386,8 +386,8 @@ describe("statement", () => {
                 #pragma version 4
                 int 256
                 store 0
-                b program-end
-                fn-fn1:
+                b program_end
+                fn1:
                 load 0
                 load 0
                 int 1
@@ -402,7 +402,7 @@ describe("statement", () => {
                 loads
                 save 0
                 retsub
-                fn-fn2:
+                fn2:
                 load 0
                 load 0
                 int 1
@@ -417,7 +417,7 @@ describe("statement", () => {
                 loads
                 save 0
                 retsub
-                program-end:
+                program_end:
             `)
         );
     });

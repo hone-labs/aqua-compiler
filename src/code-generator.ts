@@ -75,7 +75,7 @@ export class CodeGenerator {
             // Ensures the code for functions is never executed unless we specifically call the function.
             //
             this.codeEmitter.startBlock("setup");
-            this.codeEmitter.add(`b program-end`); 
+            this.codeEmitter.add(`b program_end`); 
             this.codeEmitter.endBlock();
 
             //
@@ -92,7 +92,7 @@ export class CodeGenerator {
 
             this.codeEmitter.startBlock("setup");
             this.codeEmitter.add(``);
-            this.codeEmitter.add(`program-end:`);
+            this.codeEmitter.add(`program_end:`);
             this.codeEmitter.endBlock();
         }
     }
@@ -102,7 +102,7 @@ export class CodeGenerator {
     //
     private generateFunctionCode(functionNode: ASTNode) {
 
-        this.codeEmitter.add(`fn-${functionNode.name}:`);
+        this.codeEmitter.add(`${functionNode.name}:`);
 
         this.codeEmitter.startBlock("setup");
         this.codeEmitter.add(``, `Function setup.`)
@@ -271,19 +271,19 @@ export class CodeGenerator {
             
             this.ifStatementId += 1;
 
-            this.codeEmitter.add(`bz else-${this.ifStatementId}`);
+            this.codeEmitter.add(`bz else_${this.ifStatementId}`);
 
             this.internalGenerateCode(node.ifBlock!);
 
-            this.codeEmitter.add(`b end-${this.ifStatementId}`);
+            this.codeEmitter.add(`b end_${this.ifStatementId}`);
 
-            this.codeEmitter.add(`else-${this.ifStatementId}:`);
+            this.codeEmitter.add(`else_${this.ifStatementId}:`);
 
             if (node.elseBlock) {
                 this.internalGenerateCode(node.elseBlock);
             }
 
-            this.codeEmitter.add(`end-${this.ifStatementId}:`);
+            this.codeEmitter.add(`end_${this.ifStatementId}:`);
         },
 
         // Store variable to scratch.
@@ -298,7 +298,7 @@ export class CodeGenerator {
         },
 
         "function-call": (node) => {
-            this.codeEmitter.add(`callsub fn-${node.name}`);
+            this.codeEmitter.add(`callsub ${node.name}`);
         },
     };
 
