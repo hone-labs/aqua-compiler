@@ -107,8 +107,11 @@ export class SymbolResolution {
             if (node.elseBlock) {
                 this.internalResolveSymbols(node.elseBlock, symbolTable);                
             }
-        }
+        },
 
+        "while-statement": (node, symbolTable) => {
+            this.internalResolveSymbols(node.body!, symbolTable);
+        },
 
     };
 

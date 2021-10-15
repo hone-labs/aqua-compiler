@@ -71,4 +71,9 @@ export interface ASTNode {
     //
     value?: any;
 
+    //
+    // If this node is a control statement it is allocated an id to differentuate it from others.
+    //
+    controlStatementId?: number;
+
 }

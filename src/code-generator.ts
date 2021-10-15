@@ -20,9 +20,9 @@ interface INodeHandlerMap {
 export class CodeGenerator {
 
     //
-    // Used to generate unique IDs for if statements.
+    // Used to generate unique IDs for control statements.
     //
-    private ifStatementId = 0;
+    private controlStatementId = 0;
 
     //
     // A list of functions to be output at the end.
@@ -216,6 +216,13 @@ export class CodeGenerator {
                 this.codeEmitter.add(`+`); // stack_pointer + variable_position
             }
         },
+
+        "while-statement": (node) => {
+            this.controlStatementId += 1;
+            node.controlStatementId = this.controlStatementId;
+
+            this.codeEmitter.add(`loop_start_${node.controlStatementId}:`);
+        },
     };
 
     //
@@ -269,21 +276,21 @@ export class CodeGenerator {
 
         "if-statement": (node) => {
             
-            this.ifStatementId += 1;
+            this.controlStatementId += 1;
 
-            this.codeEmitter.add(`bz else_${this.ifStatementId}`);
+            this.codeEmitter.add(`bz else_${this.controlStatementId}`);
 
             this.internalGenerateCode(node.ifBlock!);
 
-            this.codeEmitter.add(`b end_${this.ifStatementId}`);
+            this.codeEmitter.add(`b end_${this.controlStatementId}`);
 
-            this.codeEmitter.add(`else_${this.ifStatementId}:`);
+            this.codeEmitter.add(`else_${this.controlStatementId}:`);
 
             if (node.elseBlock) {
                 this.internalGenerateCode(node.elseBlock);
             }
 
-            this.codeEmitter.add(`end_${this.ifStatementId}:`);
+            this.codeEmitter.add(`end_${this.controlStatementId}:`);
         },
 
         // Store variable to scratch.
@@ -300,6 +307,15 @@ export class CodeGenerator {
         "function-call": (node) => {
             this.codeEmitter.add(`callsub ${node.name}`);
         },
+
+        "while-statement": (node) => {
+            this.codeEmitter.add(`bz loop_end_${node.controlStatementId}`);
+
+            this.internalGenerateCode(node.body!);
+
+            this.codeEmitter.add(`b loop_start_${node.controlStatementId}`);
+            this.codeEmitter.add(`loop_end_${node.controlStatementId}:`)
+        }
     };
 
     //

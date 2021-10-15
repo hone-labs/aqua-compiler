@@ -146,6 +146,17 @@
             children: args,
         };
     }
+
+    //
+    // Makes a while loop.
+    //
+    function makeWhile(condition, body) {
+        return {
+            nodeType: "while-statement",
+            children: [ condition ],
+            body: body,
+        };
+    }
 }
 
 start
@@ -189,6 +200,13 @@ statement
         elseBlock:( whitespace "else" whitespace "{" whitespace statements whitespace "}" )? {
             return makeIfStmt(condition, ifBlock, elseBlock && elseBlock[5]);
         }
+    / "while" whitespace "(" whitespace condition:expression whitespace ")" whitespace stmts:block {
+        return makeWhile(condition, stmts);
+    }
+
+
+block 
+    = "{" whitespace stmts:statements whitespace "}" { return stmts; }
 
 expression
     = assignment
