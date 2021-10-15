@@ -156,7 +156,7 @@ export class CodeGenerator {
         //
         this.codeEmitter.add(`load 0`, `stack_pointer`);
         this.codeEmitter.add(`loads`, `previous_stack_pointer`);
-        this.codeEmitter.add(`save 0`, `stack_pointer = previous_stack_pointer`); // Restore stack_pointer to previous_stack_pointer.
+        this.codeEmitter.add(`store 0`, `stack_pointer = previous_stack_pointer`); // Restore stack_pointer to previous_stack_pointer.
 
         //
         // Return from the function if not already done so explicitly.

@@ -235,7 +235,7 @@ describe("statement", () => {
                 retsub
                 load 0
                 loads
-                save 0
+                store 0
                 retsub
                 program_end:
             `)
@@ -271,7 +271,7 @@ describe("statement", () => {
                 retsub
                 load 0
                 loads
-                save 0
+                store 0
                 retsub
                 program_end:
             `)
@@ -315,7 +315,7 @@ describe("statement", () => {
                 retsub
                 load 0
                 loads
-                save 0
+                store 0
                 retsub
                 program_end:
             `)
@@ -353,7 +353,7 @@ describe("statement", () => {
                 retsub
                 load 0
                 loads
-                save 0
+                store 0
                 retsub
                 program_end:
             `)
@@ -388,7 +388,7 @@ describe("statement", () => {
                 retsub
                 load 0
                 loads
-                save 0
+                store 0
                 retsub
                 fn2:
                 load 0
@@ -403,7 +403,7 @@ describe("statement", () => {
                 retsub
                 load 0
                 loads
-                save 0
+                store 0
                 retsub
                 program_end:
             `)

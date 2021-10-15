@@ -394,7 +394,7 @@ describe("code generator", () => {
             "",
             "load 0",
             "loads",
-            "save 0",
+            "store 0",
             "retsub",
             "",
             "program_end:"
