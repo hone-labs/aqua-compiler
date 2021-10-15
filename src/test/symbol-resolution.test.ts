@@ -197,5 +197,21 @@ describe("symbol resolution", () => {
 
     });
 
+    it("function arguments are defined as local variables", () => {
+
+        const ast: ASTNode = {
+            nodeType: "function-declaration",
+            params: ["a", "b"],
+            body: {
+                nodeType: "block-statement",
+                children: [],
+            },
+        };
+
+        resolveSymbols(ast);
+
+        expect(ast.scope!.isDefinedLocally("a"));
+        expect(ast.scope!.isDefinedLocally("b"));
+    });
 
 });
