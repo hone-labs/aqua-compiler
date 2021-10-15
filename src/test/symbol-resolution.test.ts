@@ -120,4 +120,82 @@ describe("symbol resolution", () => {
         expect(declareSecondVariable.symbol!.position).toEqual(2);
     });
 
+    it("symbols within function body are resolved", () => {
+
+        const declareVariable: ASTNode = {
+            nodeType: "declare-variable",
+            name: "myVar",
+        };
+
+        const ast = {
+            nodeType: "function-declaration",
+            body: declareVariable,
+        };
+
+        resolveSymbols(ast);
+
+        expect(declareVariable.symbol).toBeDefined();      
+        expect(declareVariable.symbol!.name).toBe("myVar");
+    });
+
+    it("symbols within if block are resolved", () => {
+
+        const declareVariable: ASTNode = {
+            nodeType: "declare-variable",
+            name: "myVar",
+        };
+
+        const ast = {
+            nodeType: "if-statement",
+            ifBlock: declareVariable,
+        };
+
+        resolveSymbols(ast);
+
+        expect(declareVariable.symbol).toBeDefined();      
+        expect(declareVariable.symbol!.name).toBe("myVar");
+    });
+
+    it("symbols within else block are resolved", () => {
+
+        const declareVariable: ASTNode = {
+            nodeType: "declare-variable",
+            name: "myVar",
+        };
+
+        const ast = {
+            nodeType: "if-statement",
+            ifBlock: {
+                nodeType: "block-statement",
+                children: [],
+            },
+            elseBlock: declareVariable,
+        };
+
+        resolveSymbols(ast);
+
+        expect(declareVariable.symbol).toBeDefined();      
+        expect(declareVariable.symbol!.name).toBe("myVar");
+
+    });
+
+    it("symbols within while body are resolved", () => {
+        const declareVariable: ASTNode = {
+            nodeType: "declare-variable",
+            name: "myVar",
+        };
+
+        const ast = {
+            nodeType: "while-statement",
+            body: declareVariable,
+        };
+
+        resolveSymbols(ast);
+
+        expect(declareVariable.symbol).toBeDefined();      
+        expect(declareVariable.symbol!.name).toBe("myVar");
+
+    });
+
+
 });
