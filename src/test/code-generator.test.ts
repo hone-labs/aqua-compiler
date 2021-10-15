@@ -241,6 +241,34 @@ describe("code generator", () => {
         ]);
     });
 
+    it("can generate code for while loop", () => {
+
+        const ast: ASTNode = {
+            nodeType: "while-statement",
+            children: [
+                {
+                    nodeType: "literal",
+                    opcode: "int",
+                    value: 4,
+                },
+            ],
+            body: {
+                nodeType: "literal",
+                opcode: "int",
+                value: 5,
+            },
+        };
+
+        expect(generateCode(ast)).toEqual([
+            "loop_start_1:",
+            "int 4",
+            "bz loop_end_1",
+            "int 5",
+            "b loop_start_1",
+            "loop_end_1:",            
+        ]);
+    });
+
     it("can generate code for assignment", () => {
         const node: ASTNode = {
             nodeType: "block-statement",
