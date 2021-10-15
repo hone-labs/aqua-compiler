@@ -1,6 +1,6 @@
 {
   "name": "aqua-compiler",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A TEAL compiler and REPL.",
   "main": "build/cli.js",
   "scripts": {
