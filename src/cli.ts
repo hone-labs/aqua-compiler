@@ -123,9 +123,11 @@ function recogniseCommand(args: string[]): string | undefined {
 //
 // Execute the input TEAL code in the interpreter.
 //
-function execute(teal: string): any {
+export function execute(teal: string): any {
     const runtime = new Runtime([]);
     const interpreter = new Interpreter();
-    //TODO: This no longer works. Need to submit a PR so that I can retrieve the result of the exec.
     return interpreter.execute(teal, types.ExecutionMode.APPLICATION, runtime, undefined);
+    
+    // TODO: Enable this code once PR is accepted with algo-builder/runtime.
+    //return interpreter.executeWithResult(teal, types.ExecutionMode.APPLICATION, runtime, undefined);
 }
