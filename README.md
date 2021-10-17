@@ -52,7 +52,7 @@ aqua test.aqua
 Or:
 
 ```bash
-npx ts-node src/cli.ts test.aqua
+npx ts-node src/cli.ts examples/test.aqua
 ```
 
 ## Executing a file
@@ -64,7 +64,7 @@ aqua exec test.aqua
 Or:
 
 ```bash
-npx ts-node src/cli.ts exec test.aqua
+npx ts-node src/cli.ts exec examples/test.aqua
 ```
 
 ## Run the REPL
