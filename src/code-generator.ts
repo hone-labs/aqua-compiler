@@ -3,15 +3,38 @@ import { ICodeEmitter } from "./code-emitter";
 import { MAX_SCRATCH } from "./config";
 
 //
-// Defines a function that can generate code for a node.
+// Defines a function that can visit nodes in the AST to generate code.
 //
-type NodeHandler = (node: ASTNode) => void;
+type NodeVisitorFn = (node: ASTNode) => void;
 
 //
 // Lookup table for funtions that handle code generation for each node.
 //
-interface INodeHandlerMap {
-    [index: string]: NodeHandler;
+//fio:
+// interface INodeHandlerMap {
+//     [index: string]: NodeHandler;
+// }
+
+//
+// Defines pre- and post- functions for visiting nodes of the AST.
+//
+interface INodeVisitor {
+    //
+    // Called before children of the node are visited.
+    //
+    pre?: NodeVisitorFn,
+
+    //
+    // Called after children of the node are visited.
+    //
+    post?: NodeVisitorFn,
+}
+
+//
+// Lookup table for AST node visitor functions.
+//
+interface INodeVisitorMap {
+    [index: string]: INodeVisitor;
 }
 
 //
@@ -170,9 +193,9 @@ export class CodeGenerator {
     //
     private internalGenerateCode(node: ASTNode): void {
 
-        const pre = this.pre[node.nodeType];
-        if (pre) {
-            pre(node);
+        const visitor = this.visitors[node.nodeType]
+        if (visitor && visitor.pre) {
+            visitor.pre(node);
         }
 
         if (node.children) {
@@ -181,142 +204,159 @@ export class CodeGenerator {
             }
         }
 
-        const post = this.post[node.nodeType];
-        if (post) {
-            post(node);
+        if (visitor && visitor.post) {
+            visitor.post(node);
         }
     }
 
     //
-    // Code to be invoked for each type of node before generating code for children.
+    // Code to be invoked to visit each node in the AST.
     //
-    pre: INodeHandlerMap = {
+    visitors: INodeVisitorMap = {
 
-        "declare-variable": (node) => {
-            if (node.children && node.children.length > 0) {
-                if (!node.symbol!.isGlobal) {                    
+        "operator": {
+            post: (node) => this.codeEmitter.add(node.opcode!),
+        },
+        "literal": {
+            post: (node) => this.codeEmitter.add(`${node.opcode} ${node.value}`),
+        },
+        "txn": {
+            post: (node) => this.codeEmitter.add(`txn ${node.name}`),
+        },
+        "gtxn": {
+            post: (node) => this.codeEmitter.add(`gtxn ${node.value} ${node.name}`),
+        },
+        "arg": {
+            post: (node) => this.codeEmitter.add(`arg ${node.value}`),
+        },
+        "return-statement": {
+            post: (node) => {
+                if (this.inFunction) {
+                    //
+                    // Code in a function executes the "retsub" opcode to return from the function.
+                    //
+                    this.codeEmitter.add(`retsub`);
+                }
+                else {
+                    //
+                    // Global code executes the "return" opcode to finish the entire program.
+                    //
+                    this.codeEmitter.add(`return`);
+                }
+            },
+        },
+        
+        "declare-variable": {
+            pre: (node) => {
+                if (node.children && node.children.length > 0) {
+                    if (!node.symbol!.isGlobal) {                    
+                        // 
+                        // Prepare a reference to the stack frame location for the variable being assigned.
+                        //
+                        this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
+                        this.codeEmitter.add(`load 0`); // stack_pointer
+                        this.codeEmitter.add(`+`); // stack_pointer + variable_position.
+                    }                
+                }
+            },
+
+            post: (node) => {
+                if (node.children && node.children.length > 0) {
+                    if (node.symbol!.isGlobal) {                    
+                        this.codeEmitter.add(`store ${node.symbol!.position}`);
+                    }
+                    else {
+                        this.codeEmitter.add(`stores`);
+                    }                
+                }
+            },
+        },
+
+        "access-variable": {
+            post: (node) => {
+                if (node.symbol!.isGlobal) {                    
+                    this.codeEmitter.add(`load ${node.symbol!.position}`);
+                }
+                else {
+                    this.codeEmitter.add(`load 0`); // stack_pointer
+                    this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
+                    this.codeEmitter.add(`+`); // stack_pointer + variable_position
+                    this.codeEmitter.add(`loads`); // Loads variable onto stack.
+                }
+            },
+        },
+
+
+        "assignment-statement": {
+            pre: (node) => {
+
+                if (!node.symbol!.isGlobal) {
                     // 
                     // Prepare a reference to the stack frame location for the variable being assigned.
                     //
                     this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
                     this.codeEmitter.add(`load 0`); // stack_pointer
-                    this.codeEmitter.add(`+`); // stack_pointer + variable_position.
-                }                
-            }
-        },
+                    this.codeEmitter.add(`+`); // stack_pointer + variable_position
+                }
+            },
 
-        "assignment-statement": (node) => {
+            post: (node) => {
 
-            if (!node.symbol!.isGlobal) {
-                // 
-                // Prepare a reference to the stack frame location for the variable being assigned.
-                //
-                this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
-                this.codeEmitter.add(`load 0`); // stack_pointer
-                this.codeEmitter.add(`+`); // stack_pointer + variable_position
-            }
-        },
-
-        "while-statement": (node) => {
-            this.controlStatementId += 1;
-            node.controlStatementId = this.controlStatementId;
-
-            this.codeEmitter.add(`loop_start_${node.controlStatementId}:`);
-        },
-    };
-
-    //
-    // Code to be invoked for each type of node after generating code for children.
-    //
-    post: INodeHandlerMap = {
-        "operator": (node) => this.codeEmitter.add(node.opcode!),
-        "literal": (node) => this.codeEmitter.add(`${node.opcode} ${node.value}`),
-        "txn": (node) => this.codeEmitter.add(`txn ${node.name}`),
-        "gtxn": (node) => this.codeEmitter.add(`gtxn ${node.value} ${node.name}`),
-        "arg": (node) => this.codeEmitter.add(`arg ${node.value}`),
-        "return-statement": (node) => {
-            if (this.inFunction) {
-                //
-                // Code in a function executes the "retsub" opcode to return from the function.
-                //
-                this.codeEmitter.add(`retsub`);
-            }
-            else {
-                //
-                // Global code executes the "return" opcode to finish the entire program.
-                //
-                this.codeEmitter.add(`return`);
-            }
-        },
-
-        // Sets variable from initialiser.
-        "declare-variable": (node) => {
-            if (node.children && node.children.length > 0) {
-                if (node.symbol!.isGlobal) {                    
+                if (node.symbol!.isGlobal) {
                     this.codeEmitter.add(`store ${node.symbol!.position}`);
                 }
                 else {
                     this.codeEmitter.add(`stores`);
-                }                
-            }
+                }
+            },
         },
 
-        // Get variable from scratch.
-        "access-variable": (node) => {
-            if (node.symbol!.isGlobal) {                    
-                this.codeEmitter.add(`load ${node.symbol!.position}`);
-            }
-            else {
-                this.codeEmitter.add(`load 0`); // stack_pointer
-                this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
-                this.codeEmitter.add(`+`); // stack_pointer + variable_position
-                this.codeEmitter.add(`loads`); // Loads variable onto stack.
-            }
+        "if-statement": {
+            post: (node) => {                
+                this.controlStatementId += 1;
+
+                this.codeEmitter.add(`bz else_${this.controlStatementId}`);
+
+                this.internalGenerateCode(node.ifBlock!);
+
+                this.codeEmitter.add(`b end_${this.controlStatementId}`);
+
+                this.codeEmitter.add(`else_${this.controlStatementId}:`);
+
+                if (node.elseBlock) {
+                    this.internalGenerateCode(node.elseBlock);
+                }
+
+                this.codeEmitter.add(`end_${this.controlStatementId}:`);
+            },
         },
 
-        "if-statement": (node) => {
-            
-            this.controlStatementId += 1;
 
-            this.codeEmitter.add(`bz else_${this.controlStatementId}`);
+        "while-statement": {
+            pre: (node) => {
+                this.controlStatementId += 1;
+                node.controlStatementId = this.controlStatementId;
 
-            this.internalGenerateCode(node.ifBlock!);
+                this.codeEmitter.add(`loop_start_${node.controlStatementId}:`);
+            },
 
-            this.codeEmitter.add(`b end_${this.controlStatementId}`);
-
-            this.codeEmitter.add(`else_${this.controlStatementId}:`);
-
-            if (node.elseBlock) {
-                this.internalGenerateCode(node.elseBlock);
-            }
-
-            this.codeEmitter.add(`end_${this.controlStatementId}:`);
+            post: (node) => {
+                this.codeEmitter.add(`bz loop_end_${node.controlStatementId}`);
+    
+                this.internalGenerateCode(node.body!);
+    
+                this.codeEmitter.add(`b loop_start_${node.controlStatementId}`);
+                this.codeEmitter.add(`loop_end_${node.controlStatementId}:`)
+            },
         },
 
-        // Store variable to scratch.
-        "assignment-statement": (node) => {
-
-            if (node.symbol!.isGlobal) {
-                this.codeEmitter.add(`store ${node.symbol!.position}`);
-            }
-            else {
-                this.codeEmitter.add(`stores`);
-            }
+        "function-call": {
+            post: (node) => {
+                this.codeEmitter.add(`callsub ${node.name}`);
+            },
         },
-
-        "function-call": (node) => {
-            this.codeEmitter.add(`callsub ${node.name}`);
-        },
-
-        "while-statement": (node) => {
-            this.codeEmitter.add(`bz loop_end_${node.controlStatementId}`);
-
-            this.internalGenerateCode(node.body!);
-
-            this.codeEmitter.add(`b loop_start_${node.controlStatementId}`);
-            this.codeEmitter.add(`loop_end_${node.controlStatementId}:`)
-        }
     };
+
 
     //
     // Walk the tree and collection functions so there code can be generated in a second pass.
