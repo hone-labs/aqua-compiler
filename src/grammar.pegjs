@@ -148,14 +148,48 @@
     }
 
     //
+    // Makes a block statement.
+    //
+    function makeBlock(stmts) {
+        if (!Array.isArray(stmts)) {
+            throw new Error(`Expected "stmts" to be an array.`);
+        }
+
+        return makeStmt("block-statment", stmts);
+    }
+
+    //
+    // Makes an empty statement.
+    //
+    function makeEmpty() {
+        return makeBlock([]);
+    }
+
+    //
     // Makes a while loop.
     //
-    function makeWhile(condition, body) {
+    function makeWhileLoop(condition, body) {
         return {
             nodeType: "while-statement",
             children: [ condition ],
             body: body,
         };
+    }
+
+    //
+    // Makes a for loop.
+    //
+    function makeForLoop(initializer, condition, increment, stmts) {
+        return makeBlock([
+            initializer || makeEmpty(),
+            makeWhileLoop(
+                condition || makeEmpty(),
+                makeBlock([
+                    stmts,
+                    increment || makeEmpty(),
+                ]),
+            ),
+        ]);
     }
 }
 
@@ -163,7 +197,7 @@ start
     = declarations
 
 declarations
-    = stmts:((whitespace declaration)*) { return makeStmt("block-statement", stmts.map(stmt => stmt[1])); }
+    = stmts:((whitespace declaration whitespace)*) { return makeBlock(stmts.map(stmt => stmt[1])); }
 
 declaration
     = "function" whitespace fn:function {
@@ -187,10 +221,10 @@ parameters
     }
 
 statements
-    = stmts:((whitespace statement)*) { return makeStmt("block-statement", stmts.map(stmt => stmt[1])); }
+    = stmts:((whitespace statement)*) { return makeBlock(stmts.map(stmt => stmt[1])); }
 
 statement
-    = whitespace ";" { return makeStmt("block-statement", []); }
+    = whitespace ";" { return makeEmpty(); }
     / expr:expression whitespace ";" { return makeStmt("expr-statement", [ expr ]); }
     / "let" whitespace name:identifier expr:(whitespace "=" whitespace expression)? whitespace ";" { return declareVariable(name, expr && expr[3] || undefined); }
     / "const" whitespace name:identifier whitespace "=" whitespace expr:expression whitespace ";" { return declareConstant(name, expr); }
@@ -201,9 +235,15 @@ statement
             return makeIfStmt(condition, ifBlock, elseBlock && elseBlock[5]);
         }
     / "while" whitespace "(" whitespace condition:expression whitespace ")" whitespace stmts:block {
-        return makeWhile(condition, stmts);
+        return makeWhileLoop(condition, stmts);
+    }
+    / "for" whitespace "(" initializer:(whitespace (variableDeclaration / expression))? whitespace ";" condition:(whitespace expression)? whitespace ";" increment:(whitespace expression)? whitespace ")" whitespace stmts:block {
+        return makeForLoop(initializer && initializer[1], condition && condition[1], increment && increment[1], stmts);
     }
 
+variableDeclaration
+    = "let" whitespace name:identifier expr:(whitespace "=" whitespace expression)? whitespace { return declareVariable(name, expr && expr[3] || undefined); }
+    / "const" whitespace name:identifier whitespace "=" whitespace expr:expression whitespace { return declareConstant(name, expr); }
 
 block 
     = "{" whitespace stmts:statements whitespace "}" { return stmts; }
@@ -247,7 +287,7 @@ primary
   / "addr" whitespace value:addr { return makeLiteral("addr", "addr", value); }
   / '"' value:stringCharacters '"' { return makeLiteral("byte", "byte", `"${value}"`); }
   / "(" whitespace node:expression whitespace ")" { return node; }
-  / id:identifier args:(whitespace "(" (whitespace arguments whitespace)? ")")? {
+  / id:identifier args:(whitespace "(" (whitespace arguments)? whitespace ")")? {
       if (!args) {
           return useVariable(id);
       }

@@ -1,0 +1,22 @@
+#pragma version 4
+int 0
+store 1
+int 3
+store 2
+loop_start_1:
+load 2
+int 5
+<
+bz loop_end_1
+load 1
+int 1
++
+store 1
+load 2
+int 1
++
+store 2
+b loop_start_1
+loop_end_1:
+load 1
+return
