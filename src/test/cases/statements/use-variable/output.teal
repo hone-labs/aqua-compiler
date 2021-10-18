@@ -1,0 +1,5 @@
+#pragma version 4
+int 2
+store 1
+load 1
+return
