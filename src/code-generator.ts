@@ -8,14 +8,6 @@ import { MAX_SCRATCH } from "./config";
 type NodeVisitorFn = (node: ASTNode) => void;
 
 //
-// Lookup table for funtions that handle code generation for each node.
-//
-//fio:
-// interface INodeHandlerMap {
-//     [index: string]: NodeHandler;
-// }
-
-//
 // Defines pre- and post- functions for visiting nodes of the AST.
 //
 interface INodeVisitor {
@@ -224,6 +216,17 @@ export class CodeGenerator {
             },
         },
 
+        "expr-statement": {
+            post: (node) => {
+                if (node.children) {
+                    // Assume each child has pushed a value on the stack that must be undone.
+                    for (const child of node.children) {
+                        this.codeEmitter.add(`pop`, `Clean the stack after expression statements.`);
+                    }
+                }
+            },
+        },
+
         "return-statement": {
             post: (node) => {
                 if (this.inFunction) {
@@ -280,7 +283,6 @@ export class CodeGenerator {
                 }
             },
         },
-
 
         "assignment-statement": {
             pre: (node) => {

@@ -12,6 +12,7 @@ load 1
 int 1
 +
 store 1
+pop
 load 2
 int 1
 +

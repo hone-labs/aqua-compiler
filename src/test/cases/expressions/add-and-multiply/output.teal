@@ -1,10 +1,9 @@
 #pragma version 4
-
 int 256
 store 0
-
 int 3
 store 1
+pop
 int 5
 store 2
 int 8
@@ -29,10 +28,7 @@ return
 end_1:
 b program_end
 add:
-
 load 0
-
-
 load 0
 int 3
 -
@@ -40,8 +36,6 @@ store 0
 load 0
 swap
 stores
-
-
 int 2
 load 0
 +
@@ -50,7 +44,6 @@ int 1
 load 0
 +
 stores
-
 load 0
 int 1
 +
@@ -61,16 +54,12 @@ int 2
 loads
 +
 retsub
-
 load 0
 loads
 store 0
 retsub
 multiply:
-
 load 0
-
-
 load 0
 int 3
 -
@@ -78,8 +67,6 @@ store 0
 load 0
 swap
 stores
-
-
 int 2
 load 0
 +
@@ -88,7 +75,6 @@ int 1
 load 0
 +
 stores
-
 load 0
 int 1
 +
@@ -99,10 +85,8 @@ int 2
 loads
 *
 retsub
-
 load 0
 loads
 store 0
 retsub
-
 program_end:

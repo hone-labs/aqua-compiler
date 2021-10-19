@@ -10,5 +10,6 @@ load 1
 int 1
 +
 store 1
+pop
 b loop_start_1
 loop_end_1:
