@@ -38,13 +38,6 @@
     }
 
     //
-    // Makes an AST node for a literal value.
-    //
-    function makeLiteral(opcode, type, value) {
-        return makeOperation(opcode, type, [ value ]);
-    }
-
-    //
     // Makes an AST node for a txn operation.
     //
     function makeTxn(name, index) {
@@ -54,34 +47,6 @@
         }
 
         return makeOperation("txn", undefined, args);
-    }
-
-    //
-    // Makes an AST node for a gtxn operation.
-    //
-    function makeGTxn(index, name) {
-        const args = [ name ];
-        if (index !== undefined && index !== null) {
-            args.push(index);
-        }
-
-        return makeOperation("gtxn", undefined, args);
-    }    
-
-    //
-    // Makes an AST node an arg operation.
-    //
-    function makeArg(argIndex) {
-        return makeOperation("arg", undefined, [argIndex ]);
-    }
-
-    //
-    // Make an access to a global field.
-    //
-    // https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/#global-f
-    //
-    function makeGlobal(name) {
-        return makeOperation("global", undefined, [ name ]);
     }
 
     //
@@ -301,11 +266,21 @@ primary
     / "txn" ___ "." ___ id:identifier index:(___ "[" ___ integer ___ "]")? { 
         return makeTxn(id, index && index[3]); 
     }
-    / "gtxn" ___ "[" ___ index:integer ___ "]" ___ "." ___ id:identifier { return makeGTxn(index, id); }
-    / "arg" ___ "[" ___ index:integer ___ "]" { return makeArg(index); }
-    / "addr" ___ value:addr { return makeLiteral("addr", "addr", value); }
-    / "global" ___ "." ___ id:identifier { return makeGlobal(id); }
-    / '"' value:stringCharacters '"' { return makeLiteral("byte", "byte", `"${value}"`); }
+    / "gtxn" ___ "[" ___ index:integer ___ "]" ___ "." ___ id:identifier { 
+        return makeOperation("gtxn", undefined, [ index, id ]); 
+    }
+    / "arg" ___ "[" ___ index:integer ___ "]" { 
+        return makeOperation("arg", undefined, [ index ]); 
+    }
+    / "addr" ___ value:addr { 
+        return makeOperation("addr", "addr", [ value ]);
+    }
+    / "global" ___ "." ___ id:identifier { 
+        return makeOperation("global", undefined, [ id ]);
+    }
+    / '"' value:stringCharacters '"' { 
+        return makeOperation("byte", "byte", [ `"${value}"` ]); 
+    }
     / "(" ___ node:expression ___ ")" { return node; }
     / id:identifier args:(___ "(" (___ arguments)? ___ ")")? {
         if (!args) {
@@ -316,7 +291,9 @@ primary
     }
 
 integerLiteral "integer"
-    = value:integer { return makeLiteral("int", "integer", value); }
+    = value:integer { 
+        return makeOperation("int", "integer", [ value ]); 
+    }
 
 integer "integer"
     = [0-9]+ { return parseInt(text(), 10); }
