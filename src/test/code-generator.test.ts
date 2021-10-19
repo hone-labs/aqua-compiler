@@ -18,45 +18,41 @@ describe("code generator", () => {
 
     it("can generate code for children", () => {
 
-        const opcode = "test-opcode";
-        const child1 = {
-            nodeType: "operation",
-            opcode: opcode + "-child-1",
-        };
-        const child2 = {
-            nodeType: "operation",
-            opcode: opcode + "-child-2",
-        };
         const node = {
             nodeType: "operation",
-            opcode: opcode + "-parent",
+            opcode: "op-parent",
             children: [
-                child1,
-                child2,
+                {
+            nodeType: "operation",
+                    opcode: "op-child-1",
+                },
+                {
+            nodeType: "operation",
+                    opcode: "op-child-2",
+                },
             ],
         };
 
         expect(generateCode(node)).toEqual([
-            `${opcode}-child-1`,
-            `${opcode}-child-2`,
-            `${opcode}-parent`,
+            `op-child-1`,
+            `op-child-2`,
+            `op-parent`,
         ]);
     });
 
-    it("can generate code for operator", () => {
+    it("can generate code for operation", () => {
 
-        const opcode = "test-opcode";
         const node = {
             nodeType: "operation",
-            opcode: opcode,
+            opcode: "op",
         };
 
         expect(generateCode(node)).toEqual([
-            opcode,
+            "op",
         ]);
     });
 
-    it("can generate code for literal", () => {
+    it("can generate code for operation with arg", () => {
 
         const opcode = "test-opcode";
         const value = "1234";
@@ -68,6 +64,19 @@ describe("code generator", () => {
 
         expect(generateCode(node)).toEqual([
             `${opcode} ${value}`,
+        ]);
+    });    
+
+    it("can generate code for operation with multiple args", () => {
+
+        const node = {
+            nodeType: "operation",
+            opcode: "op",
+            args: [ 1, 2, 3 ],
+        };
+
+        expect(generateCode(node)).toEqual([
+            `op 1 2 3`,
         ]);
     });    
 
