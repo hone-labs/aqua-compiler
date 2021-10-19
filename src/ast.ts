@@ -67,9 +67,9 @@ export interface ASTNode {
     opcode?: string;
 
     //
-    // For any nodes that reference a literal value, this is the value.
+    // Arguments for the TEAL opcode, if any.
     //
-    value?: any;
+    args?: any[];
 
     //
     // If this node is a control statement it is allocated an id to differentuate it from others.

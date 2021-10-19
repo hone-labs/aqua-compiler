@@ -59,9 +59,9 @@ describe("symbol resolution", () => {
             },
             children: [
                 {
-                    nodeType: "literal",
+                    nodeType: "operation",
                     opcode: "int",
-                    value: 2,
+                    args: [ 2 ],
                 },
             ],
             assignee: {

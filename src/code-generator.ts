@@ -214,33 +214,16 @@ export class CodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
-        "operator": {
-            post: (node) => this.codeEmitter.add(node.opcode!),
-        },
-        "literal": {
-            post: (node) => this.codeEmitter.add(`${node.opcode} ${node.value}`),
-        },
-        "txn": {
+        "operation": {
             post: (node) => {
-                if (node.value !== undefined) {
-                    this.codeEmitter.add(`txn ${node.name} ${node.value}`);
+                let output = node.opcode!;
+                if (node.args) {
+                    output += ` ${node.args && node.args.join(" ")}`;
                 }
-                else {
-                    this.codeEmitter.add(`txn ${node.name}`);
-                }
-            },                    
-        },
-        "gtxn": {
-            post: (node) => this.codeEmitter.add(`gtxn ${node.value} ${node.name}`),
-        },
-        "arg": {
-            post: (node) => this.codeEmitter.add(`arg ${node.value}`),
-        },
-        "global": {
-            post: (node) => {
-                this.codeEmitter.add(`global ${node.name}`);
+                this.codeEmitter.add(output);
             },
         },
+
         "return-statement": {
             post: (node) => {
                 if (this.inFunction) {

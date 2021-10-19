@@ -1,10 +1,23 @@
 {
     //
+    // Makes a TEAL operation with a particular type and arguments.
+    // It's just easier to setup some of these operations directly in the parser than in the code generator.
+    //
+    function makeOperation(opcode, type, args) {
+        return {
+            nodeType: "operation",
+            opcode: opcode,
+            type: type,
+            args: args,
+        };
+    }
+
+    //
     // Makes an AST node for an operator.
     //
     function makeOperator(opcode, type, children) {
         return {
-            nodeType: "operator",
+            nodeType: "operation",
             opcode: opcode,
             type: type,
             children: children, 
@@ -28,47 +41,38 @@
     // Makes an AST node for a literal value.
     //
     function makeLiteral(opcode, type, value) {
-        return {
-            nodeType: "literal",
-            type: type,
-            opcode: opcode,
-            value: value,
-        };
+        return makeOperation(opcode, type, [ value ]);
     }
 
     //
     // Makes an AST node for a txn operation.
     //
     function makeTxn(name, index) {
-        if (index === null) {
-            index = undefined;
+        const args = [ name ];
+        if (index !== undefined && index !== null) {
+            args.push(index);
         }
-        return {
-            nodeType: "txn",
-            name: name,
-            value: index,
-        };
+
+        return makeOperation("txn", undefined, args);
     }
 
     //
     // Makes an AST node for a gtxn operation.
     //
     function makeGTxn(index, name) {
-        return {
-            nodeType: "gtxn",
-            name: name,
-            value: index,
-        };
+        const args = [ name ];
+        if (index !== undefined && index !== null) {
+            args.push(index);
+        }
+
+        return makeOperation("gtxn", undefined, args);
     }    
 
     //
     // Makes an AST node an arg operation.
     //
     function makeArg(argIndex) {
-        return {
-            nodeType: "arg",
-            value: argIndex,
-        };
+        return makeOperation("arg", undefined, [argIndex ]);
     }
 
     //
@@ -77,10 +81,7 @@
     // https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/#global-f
     //
     function makeGlobal(name) {
-        return {
-            nodeType: "global",
-            name: name,
-        };
+        return makeOperation("global", undefined, [ name ]);
     }
 
     //

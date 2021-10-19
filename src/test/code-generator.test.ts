@@ -20,15 +20,15 @@ describe("code generator", () => {
 
         const opcode = "test-opcode";
         const child1 = {
-            nodeType: "operator",
+            nodeType: "operation",
             opcode: opcode + "-child-1",
         };
         const child2 = {
-            nodeType: "operator",
+            nodeType: "operation",
             opcode: opcode + "-child-2",
         };
         const node = {
-            nodeType: "operator",
+            nodeType: "operation",
             opcode: opcode + "-parent",
             children: [
                 child1,
@@ -47,7 +47,7 @@ describe("code generator", () => {
 
         const opcode = "test-opcode";
         const node = {
-            nodeType: "operator",
+            nodeType: "operation",
             opcode: opcode,
         };
 
@@ -61,9 +61,9 @@ describe("code generator", () => {
         const opcode = "test-opcode";
         const value = "1234";
         const node = {
-            nodeType: "literal",
+            nodeType: "operation",
             opcode: opcode,
-            value: value,
+            args: [ value ],
         };
 
         expect(generateCode(node)).toEqual([
@@ -87,9 +87,9 @@ describe("code generator", () => {
             nodeType: "return-statement",
             children: [
                 {
-                    nodeType: "literal",
+                    nodeType: "operation",
                     opcode: "int",
-                    value: 1,
+                    args: [ 1 ],
                 },
             ],
         };
@@ -133,9 +133,9 @@ describe("code generator", () => {
             },
             children: [
                 {
-                    nodeType: "literal",
+                    nodeType: "operation",
                     opcode: "int",
-                    value: 3,        
+                    args: [ 3 ],
                 },
             ],
         };
@@ -170,18 +170,18 @@ describe("code generator", () => {
             nodeType: "if-statement",
             children: [
                 {
-                    nodeType: "literal",
+                    nodeType: "operation",
                     opcode: "int",
-                    value: 4,
+                    args: [ 4 ],
                 },
             ],
             ifBlock: {
                 nodeType: "block-statement",
                 children: [
                     {
-                        nodeType: "literal",
+                        nodeType: "operation",
                         opcode: "int",
-                        value: 5,
+                        args: [ 5 ],
                     },
                 ],
             },
@@ -189,9 +189,9 @@ describe("code generator", () => {
                 nodeType: "block-statement",
                 children: [
                     {
-                        nodeType: "literal",
+                        nodeType: "operation",
                         opcode: "int",
-                        value: 6,
+                        args: [ 6 ],
                     },   
                 ],
             },
@@ -214,18 +214,18 @@ describe("code generator", () => {
             nodeType: "if-statement",
             children: [
                 {
-                    nodeType: "literal",
+                    nodeType: "operation",
                     opcode: "int",
-                    value: 4,
+                    args: [ 4 ],
                 },
             ],
             ifBlock: {
                 nodeType: "block-statement",
                 children: [
                     {
-                        nodeType: "literal",
+                        nodeType: "operation",
                         opcode: "int",
-                        value: 5,
+                        args: [ 5 ],
                     },
                 ],
             },
@@ -247,15 +247,15 @@ describe("code generator", () => {
             nodeType: "while-statement",
             children: [
                 {
-                    nodeType: "literal",
+                    nodeType: "operation",
                     opcode: "int",
-                    value: 4,
+                    args: [ 4 ],
                 },
             ],
             body: {
-                nodeType: "literal",
+                nodeType: "operation",
                 opcode: "int",
-                value: 5,
+                args: [ 5 ],
             },
         };
 
@@ -287,9 +287,9 @@ describe("code generator", () => {
                     },
                     children: [
                         {
-                            nodeType: "literal",
+                            nodeType: "operation",
                             opcode: "int",
-                            value: 2,
+                            args: [ 2 ],
                         },
                     ],
                     assignee: {
@@ -327,14 +327,14 @@ describe("code generator", () => {
             name: "myFunction",
             children: [
                 {
-                    nodeType: "literal",
+                    nodeType: "operation",
                     opcode: "int",
-                    value: 1,
+                    args: [ 1 ],
                 },
                 {
-                    nodeType: "literal",
+                    nodeType: "operation",
                     opcode: "int",
-                    value: 2,
+                    args: [ 2 ],
                 },
             ],
         };
@@ -358,9 +358,9 @@ describe("code generator", () => {
                 nodeType: "return-statement",
                 children: [
                     {
-                        nodeType: "literal",
+                        nodeType: "operation",
                         opcode: "int",
-                        value: 1,
+                        args: [ 1 ],
                     },        
                 ],
             },
@@ -391,9 +391,9 @@ describe("code generator", () => {
                 getNumSymbols: () => 0,
             },
             body: {
-                nodeType: "literal",
+                nodeType: "operation",
                 opcode: "int",
-                value: 1,
+                args: [ 1 ],
             },
         };
 
