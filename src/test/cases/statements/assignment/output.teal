@@ -1,4 +1,5 @@
 #pragma version 4
 int 3
+dup
 store 1
 pop

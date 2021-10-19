@@ -11,11 +11,13 @@ bz loop_end_1
 load 1
 int 1
 +
+dup
 store 1
 pop
 load 2
 int 1
 +
+dup
 store 2
 b loop_start_1
 loop_end_1:

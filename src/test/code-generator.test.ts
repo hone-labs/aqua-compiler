@@ -304,7 +304,7 @@ describe("code generator", () => {
         ]);
     });
 
-    it("can generate code for assignment", () => {
+    it("can generate code for assignment to global variable", () => {
         const node: ASTNode = {
             nodeType: "block-statement",
             children: [
@@ -337,7 +337,49 @@ describe("code generator", () => {
 
         expect(generateCode(node)).toEqual([
             `int 2`,
+            `dup`,
             `store 3`,
+        ]);
+    });
+
+    it("can generate code for assignment to local variable", () => {
+        const node: ASTNode = {
+            nodeType: "block-statement",
+            children: [
+                {
+                    nodeType: "declare-variable",
+                    name: "myVar",
+                },
+                {
+                    nodeType: "assignment-statement",
+                    symbol: {
+                        name: "myVar",
+                        type: SymbolType.Variable,
+                        position: 3,
+                        isGlobal: false,
+                    },
+                    children: [
+                        {
+                            nodeType: "operation",
+                            opcode: "int",
+                            args: [ 2 ],
+                        },
+                    ],
+                    assignee: {
+                        nodeType: "access-variable",
+                        name: "myVar",
+                    },
+                },       
+            ],
+        };
+
+        expect(generateCode(node)).toEqual([
+            `int 2`,
+            `int 3`,
+            `load 0`,
+            `+`,
+            `dig 1`,
+            `stores`,
         ]);
     });
 

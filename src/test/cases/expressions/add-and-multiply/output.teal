@@ -2,6 +2,7 @@
 int 256
 store 0
 int 3
+dup
 store 1
 pop
 int 5

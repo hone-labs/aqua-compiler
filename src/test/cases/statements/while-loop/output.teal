@@ -9,6 +9,7 @@ bz loop_end_1
 load 1
 int 1
 +
+dup
 store 1
 pop
 b loop_start_1

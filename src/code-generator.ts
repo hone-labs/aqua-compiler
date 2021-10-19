@@ -285,7 +285,7 @@ export class CodeGenerator {
         },
 
         "assignment-statement": {
-            pre: (node) => {
+            post: (node) => {
 
                 if (!node.symbol!.isGlobal) {
                     // 
@@ -294,16 +294,13 @@ export class CodeGenerator {
                     this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
                     this.codeEmitter.add(`load 0`); // stack_pointer
                     this.codeEmitter.add(`+`); // stack_pointer + variable_position
-                }
-            },
 
-            post: (node) => {
-
-                if (node.symbol!.isGlobal) {
-                    this.codeEmitter.add(`store ${node.symbol!.position}`);
+                    this.codeEmitter.add(`dig 1`); // Copies the earlier value to the top of stack. This is the value to be stored.
+                    this.codeEmitter.add(`stores`);
                 }
                 else {
-                    this.codeEmitter.add(`stores`);
+                    this.codeEmitter.add(`dup`); // Copies the value to be stored to top of stack. This is so that the earlier value can be used in higher expressions.
+                    this.codeEmitter.add(`store ${node.symbol!.position}`);
                 }
             },
         },
