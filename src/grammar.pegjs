@@ -39,10 +39,14 @@
     //
     // Makes an AST node for a txn operation.
     //
-    function makeTxn(name) {
+    function makeTxn(name, index) {
+        if (index === null) {
+            index = undefined;
+        }
         return {
             nodeType: "txn",
             name: name,
+            value: index,
         };
     }
 
@@ -292,21 +296,23 @@ unary
     / primary
 
 primary
-  = integerLiteral
-  / "txn" whitespace "." whitespace id:identifier { return makeTxn(id); }
-  / "gtxn" whitespace "[" whitespace index:integer whitespace "]" whitespace "." whitespace id:identifier { return makeGTxn(index, id); }
-  / "arg" whitespace "[" whitespace index:integer whitespace "]" { return makeArg(index); }
-  / "addr" whitespace value:addr { return makeLiteral("addr", "addr", value); }
-  / "global" whitespace "." whitespace id:identifier { return makeGlobal(id); }
-  / '"' value:stringCharacters '"' { return makeLiteral("byte", "byte", `"${value}"`); }
-  / "(" whitespace node:expression whitespace ")" { return node; }
-  / id:identifier args:(whitespace "(" (whitespace arguments)? whitespace ")")? {
-      if (!args) {
-          return useVariable(id);
-      }
+    = integerLiteral
+    / "txn" whitespace "." whitespace id:identifier index:(whitespace "[" whitespace integer whitespace "]")? { 
+        return makeTxn(id, index && index[3]); 
+    }
+    / "gtxn" whitespace "[" whitespace index:integer whitespace "]" whitespace "." whitespace id:identifier { return makeGTxn(index, id); }
+    / "arg" whitespace "[" whitespace index:integer whitespace "]" { return makeArg(index); }
+    / "addr" whitespace value:addr { return makeLiteral("addr", "addr", value); }
+    / "global" whitespace "." whitespace id:identifier { return makeGlobal(id); }
+    / '"' value:stringCharacters '"' { return makeLiteral("byte", "byte", `"${value}"`); }
+    / "(" whitespace node:expression whitespace ")" { return node; }
+    / id:identifier args:(whitespace "(" (whitespace arguments)? whitespace ")")? {
+        if (!args) {
+            return useVariable(id);
+        }
 
-      return makeFunctionCall(id, args[2] && args[2][1] || []);
-  }
+        return makeFunctionCall(id, args[2] && args[2][1] || []);
+    }
 
 integerLiteral "integer"
     = value:integer { return makeLiteral("int", "integer", value); }

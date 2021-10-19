@@ -221,7 +221,14 @@ export class CodeGenerator {
             post: (node) => this.codeEmitter.add(`${node.opcode} ${node.value}`),
         },
         "txn": {
-            post: (node) => this.codeEmitter.add(`txn ${node.name}`),
+            post: (node) => {
+                if (node.value !== undefined) {
+                    this.codeEmitter.add(`txn ${node.name} ${node.value}`);
+                }
+                else {
+                    this.codeEmitter.add(`txn ${node.name}`);
+                }
+            },                    
         },
         "gtxn": {
             post: (node) => this.codeEmitter.add(`gtxn ${node.value} ${node.name}`),

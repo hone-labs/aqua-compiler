@@ -115,6 +115,10 @@ describe("expression", () => {
         check("txn.Amount", "txn Amount");
     });
 
+    it("can get txn array element", () => {
+        check("txn.ApplicationArgs[2]", "txn ApplicationArgs 2");
+    });
+
     it("can use txn field in expression", () => {
         check(
             "txn.Amount >= 1000", 
