@@ -7,7 +7,10 @@ import * as glob from "fast-glob";
 // Normalize whitespace so we don't have to consider it when testing.
 //
 function normalize(input: string): string {
-    return input.split("\n").map(line => line.trim()).join("\n");
+    return input.split("\n")
+        .map(line => line.trim())
+        .filter(line => line.length > 0)
+        .join("\n");
 }
 
 describe("test cases", () => {
