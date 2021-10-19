@@ -12,7 +12,8 @@ load 0
 swap
 stores
 int 1
-retsub
+b myFunction-cleanup
+myFunction-cleanup:
 load 0
 loads
 store 0

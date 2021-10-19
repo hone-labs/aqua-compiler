@@ -38,7 +38,8 @@ int 2
 +
 loads
 +
-retsub
+b add-cleanup
+add-cleanup:
 load 0
 loads
 store 0

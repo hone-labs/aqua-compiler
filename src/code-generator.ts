@@ -49,6 +49,11 @@ export class CodeGenerator {
     //
     private inFunction: boolean = false;
 
+    //
+    // Tracks the function for which we are generating code.
+    //
+    private curFunction?: ASTNode = undefined;
+
     constructor(private codeEmitter: ICodeEmitter) {
     }
 
@@ -61,6 +66,7 @@ export class CodeGenerator {
         // To start with we generate global code.
         //
         this.inFunction = false;
+        this.curFunction = undefined;
 
         //
         // Collect functions so their code can be generated in a second pass.
@@ -117,6 +123,11 @@ export class CodeGenerator {
     //
     private generateFunctionCode(functionNode: ASTNode) {
 
+        // 
+        // Tracks the function we currently generating code for.
+        //
+        this.curFunction = functionNode;
+
         this.codeEmitter.add(`${functionNode.name}:`);
 
         this.codeEmitter.startBlock("setup");
@@ -163,14 +174,13 @@ export class CodeGenerator {
         //
         this.internalGenerateCode(functionNode.body!);
 
-        this.codeEmitter.startBlock("setup");
-        this.codeEmitter.add(``, `Function cleanup. Restores the previous stack frame.`)
-
         // 
         // Restore the original stack pointer.
         //
-        this.codeEmitter.add(`load 0`, `stack_pointer`);
-        this.codeEmitter.add(`loads`, `previous_stack_pointer`);
+        this.codeEmitter.startBlock("setup");
+        this.codeEmitter.add(`${functionNode.name}-cleanup:`, `Function cleanup. Restores the previous stack frame`);
+        this.codeEmitter.add(`load 0`, `Loads current stack_pointer`)
+        this.codeEmitter.add(`loads`, `Loads previous_stack_pointer`);
         this.codeEmitter.add(`store 0`, `stack_pointer = previous_stack_pointer`); // Restore stack_pointer to previous_stack_pointer.
 
         //
@@ -231,9 +241,9 @@ export class CodeGenerator {
             post: (node) => {
                 if (this.inFunction) {
                     //
-                    // Code in a function executes the "retsub" opcode to return from the function.
+                    // End of function! Jump to function cleanup code.
                     //
-                    this.codeEmitter.add(`retsub`);
+                    this.codeEmitter.add(`b ${this.curFunction!.name}-cleanup`);
                 }
                 else {
                     //

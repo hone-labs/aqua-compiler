@@ -16,7 +16,8 @@ load 0
 +
 stores
 int 1
-retsub
+b myFunction-cleanup
+myFunction-cleanup:
 load 0
 loads
 store 0

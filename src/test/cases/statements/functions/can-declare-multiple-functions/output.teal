@@ -12,7 +12,8 @@ load 0
 swap
 stores
 int 1
-retsub
+b fn1-cleanup
+fn1-cleanup:
 load 0
 loads
 store 0
@@ -27,7 +28,8 @@ load 0
 swap
 stores
 int 2
-retsub
+b fn2-cleanup
+fn2-cleanup:
 load 0
 loads
 store 0

@@ -54,7 +54,8 @@ int 2
 +
 loads
 +
-retsub
+b add-cleanup
+add-cleanup:
 load 0
 loads
 store 0
@@ -85,7 +86,8 @@ int 2
 +
 loads
 *
-retsub
+b multiply-cleanup
+multiply-cleanup:
 load 0
 loads
 store 0

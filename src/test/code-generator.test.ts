@@ -23,11 +23,11 @@ describe("code generator", () => {
             opcode: "op-parent",
             children: [
                 {
-            nodeType: "operation",
+                    nodeType: "operation",
                     opcode: "op-child-1",
                 },
                 {
-            nodeType: "operation",
+                    nodeType: "operation",
                     opcode: "op-child-2",
                 },
             ],
@@ -443,19 +443,36 @@ describe("code generator", () => {
             },
         };
 
-        const codeEmitter = new CodeEmitter(false);
-        const codeGenerator = new CodeGenerator(codeEmitter);
-        codeGenerator.generateCode(ast);
-
-        const output = codeEmitter.getBlocks()
-            .filter(block => block.tags.indexOf("setup") < 0) // Filter out setup blocks.
-            .flatMap(block => block.elements)
-            .map(element => element.code);
-
-        expect(output).toEqual([
+        expect(generateCode(ast)).toEqual([
+            "",
+            "int 256",
+            "store 0",
+            "",
+            "b program_end",
             "myFunction:",
+            "",
+            "load 0",
+            "",
+            "",
+            "load 0",
             "int 1",
+            "-",
+            "store 0",
+            "load 0",
+            "swap",
+            "stores",
+            "",
+            "",
+            "",
+            "int 1",
+            "b myFunction-cleanup",
+            "myFunction-cleanup:",
+            "load 0",
+            "loads",
+            "store 0",
             "retsub",
+            "",
+            "program_end:",
         ]);
     });
 
@@ -496,7 +513,7 @@ describe("code generator", () => {
             "",
             "",
             "int 1",
-            "",
+            "myFunction-cleanup:",
             "load 0",
             "loads",
             "store 0",
