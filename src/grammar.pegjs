@@ -213,16 +213,16 @@ start
     = declarations
 
 declarations
-    = stmts:((whitespace declaration whitespace)*) { return makeBlock(stmts.map(stmt => stmt[1])); }
+    = stmts:((___ declaration ___)*) { return makeBlock(stmts.map(stmt => stmt[1])); }
 
 declaration
-    = "function" whitespace fn:function {
+    = "function" ___ fn:function {
         return fn;
     }
     / statement
 
 function 
-    = id:identifier "(" whitespace params:parameters? whitespace ")" whitespace "{" whitespace body:statements whitespace "}" {
+    = id:identifier "(" ___ params:parameters? ___ ")" ___ "{" ___ body:statements ___ "}" {
         return {
             nodeType: "function-declaration",
             name: id,
@@ -232,43 +232,43 @@ function
     }
 
 parameters
-    = head:identifier tail:(whitespace "," whitespace identifier)* {
+    = head:identifier tail:(___ "," ___ identifier)* {
         return [head].concat(tail.map(expr => expr[3]));
     }
 
 statements
-    = stmts:((whitespace statement)*) { return makeBlock(stmts.map(stmt => stmt[1])); }
+    = stmts:((___ statement)*) { return makeBlock(stmts.map(stmt => stmt[1])); }
 
 statement
-    = whitespace ";" { return makeEmpty(); }
-    / expr:expression whitespace ";" { return makeStmt("expr-statement", [ expr ]); }
-    / "let" whitespace name:identifier expr:(whitespace "=" whitespace expression)? whitespace ";" { return declareVariable(name, expr && expr[3] || undefined); }
-    / "const" whitespace name:identifier whitespace "=" whitespace expr:expression whitespace ";" { return declareConstant(name, expr); }
-    / "return" whitespace expr:expression whitespace ";" { return makeStmt("return-statement", [ expr ]); }
-    / "if" whitespace "(" whitespace condition:expression whitespace ")" whitespace 
-        "{" whitespace ifBlock:statements whitespace "}" 
-        elseBlock:( whitespace "else" whitespace "{" whitespace statements whitespace "}" )? {
+    = ___ ";" { return makeEmpty(); }
+    / expr:expression ___ ";" { return makeStmt("expr-statement", [ expr ]); }
+    / "let" ___ name:identifier expr:(___ "=" ___ expression)? ___ ";" { return declareVariable(name, expr && expr[3] || undefined); }
+    / "const" ___ name:identifier ___ "=" ___ expr:expression ___ ";" { return declareConstant(name, expr); }
+    / "return" ___ expr:expression ___ ";" { return makeStmt("return-statement", [ expr ]); }
+    / "if" ___ "(" ___ condition:expression ___ ")" ___ 
+        "{" ___ ifBlock:statements ___ "}" 
+        elseBlock:( ___ "else" ___ "{" ___ statements ___ "}" )? {
             return makeIfStmt(condition, ifBlock, elseBlock && elseBlock[5]);
         }
-    / "while" whitespace "(" whitespace condition:expression whitespace ")" whitespace stmts:block {
+    / "while" ___ "(" ___ condition:expression ___ ")" ___ stmts:block {
         return makeWhileLoop(condition, stmts);
     }
-    / "for" whitespace "(" initializer:(whitespace (variableDeclaration / expression))? whitespace ";" condition:(whitespace expression)? whitespace ";" increment:(whitespace expression)? whitespace ")" whitespace stmts:block {
+    / "for" ___ "(" initializer:(___ (variableDeclaration / expression))? ___ ";" condition:(___ expression)? ___ ";" increment:(___ expression)? ___ ")" ___ stmts:block {
         return makeForLoop(initializer && initializer[1], condition && condition[1], increment && increment[1], stmts);
     }
 
 variableDeclaration
-    = "let" whitespace name:identifier expr:(whitespace "=" whitespace expression)? whitespace { return declareVariable(name, expr && expr[3] || undefined); }
-    / "const" whitespace name:identifier whitespace "=" whitespace expr:expression whitespace { return declareConstant(name, expr); }
+    = "let" ___ name:identifier expr:(___ "=" ___ expression)? ___ { return declareVariable(name, expr && expr[3] || undefined); }
+    / "const" ___ name:identifier ___ "=" ___ expr:expression ___ { return declareConstant(name, expr); }
 
 block 
-    = "{" whitespace stmts:statements whitespace "}" { return stmts; }
+    = "{" ___ stmts:statements ___ "}" { return stmts; }
 
 expression
     = assignment
 
 assignment
-    = assignee:logical initializer:(whitespace "=" whitespace assignment)? {
+    = assignee:logical initializer:(___ "=" ___ assignment)? {
         if (!initializer) {
             return assignee;
         }
@@ -277,36 +277,36 @@ assignment
     }
 
 logical
-    = head:equality tail:(whitespace ("&&" / "||") whitespace equality)* { return makeExpression(head, tail); }
+    = head:equality tail:(___ ("&&" / "||") ___ equality)* { return makeExpression(head, tail); }
 
 equality
-    = head:comparison tail:(whitespace ("!=" / "==") whitespace comparison)* { return makeExpression(head, tail); }
+    = head:comparison tail:(___ ("!=" / "==") ___ comparison)* { return makeExpression(head, tail); }
 
 comparison
-    = head:term tail:(whitespace ("<=" / "<" / ">=" / ">") whitespace term)* { return makeExpression(head, tail); }
+    = head:term tail:(___ ("<=" / "<" / ">=" / ">") ___ term)* { return makeExpression(head, tail); }
 
 term
-    = head:factor tail:(whitespace ("+" / "-") whitespace factor)* { return makeExpression(head, tail); }
+    = head:factor tail:(___ ("+" / "-") ___ factor)* { return makeExpression(head, tail); }
 
 factor
-    = head:unary tail:(whitespace ("*" / "/") whitespace unary)* { return makeExpression(head, tail); }
+    = head:unary tail:(___ ("*" / "/") ___ unary)* { return makeExpression(head, tail); }
 
 unary
-    = "!" whitespace child:unary { return makeOperator("!", child.type, [ child ]) }
+    = "!" ___ child:unary { return makeOperator("!", child.type, [ child ]) }
     / primary
 
 primary
     = integerLiteral
-    / "txn" whitespace "." whitespace id:identifier index:(whitespace "[" whitespace integer whitespace "]")? { 
+    / "txn" ___ "." ___ id:identifier index:(___ "[" ___ integer ___ "]")? { 
         return makeTxn(id, index && index[3]); 
     }
-    / "gtxn" whitespace "[" whitespace index:integer whitespace "]" whitespace "." whitespace id:identifier { return makeGTxn(index, id); }
-    / "arg" whitespace "[" whitespace index:integer whitespace "]" { return makeArg(index); }
-    / "addr" whitespace value:addr { return makeLiteral("addr", "addr", value); }
-    / "global" whitespace "." whitespace id:identifier { return makeGlobal(id); }
+    / "gtxn" ___ "[" ___ index:integer ___ "]" ___ "." ___ id:identifier { return makeGTxn(index, id); }
+    / "arg" ___ "[" ___ index:integer ___ "]" { return makeArg(index); }
+    / "addr" ___ value:addr { return makeLiteral("addr", "addr", value); }
+    / "global" ___ "." ___ id:identifier { return makeGlobal(id); }
     / '"' value:stringCharacters '"' { return makeLiteral("byte", "byte", `"${value}"`); }
-    / "(" whitespace node:expression whitespace ")" { return node; }
-    / id:identifier args:(whitespace "(" (whitespace arguments)? whitespace ")")? {
+    / "(" ___ node:expression ___ ")" { return node; }
+    / id:identifier args:(___ "(" (___ arguments)? ___ ")")? {
         if (!args) {
             return useVariable(id);
         }
@@ -329,10 +329,10 @@ identifier "identifier"
 stringCharacters "byte string"
     = (!('"') .)* { return text(); }
 
-whitespace "whitespace"
-    = (whitespaceCharacter / comment)*
+___ "whitespace or comment"
+    = (whitespace / comment)*
 
-whitespaceCharacter "whitespace character"
+whitespace "whitespace character"
     = [ \t\r\n]
 
 comment
@@ -346,6 +346,6 @@ multiLineComment "multi-line comment"
   = "/*" (!"*/" .)* "*/"
 
 arguments 
-    = head:expression tail:(whitespace "," whitespace expression)* {
+    = head:expression tail:(___ "," ___ expression)* {
         return [head].concat(tail.map(expr => expr[3]));
     }
