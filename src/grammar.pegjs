@@ -38,18 +38,6 @@
     }
 
     //
-    // Makes an AST node for a txn operation.
-    //
-    function makeTxn(name, index) {
-        const args = [ name ];
-        if (index !== undefined && index !== null) {
-            args.push(index);
-        }
-
-        return makeOperation("txn", undefined, args);
-    }
-
-    //
     // Makes an AST node for a statement.
     //
     function makeStmt(nodeType, children) {
@@ -264,7 +252,20 @@ unary
 primary
     = integerLiteral
     / "txn" ___ "." ___ id:identifier index:(___ "[" ___ integer ___ "]")? { 
-        return makeTxn(id, index && index[3]); 
+        const args = [ id ];
+        if (index !== null) {
+            args.push(index[3]);
+        }
+
+        return makeOperation("txn", undefined, args);
+    }
+    / "txna" ___ "." ___ id:identifier index:(___ "[" ___ integer ___ "]")? { 
+        const args = [ id ];
+        if (index !== null) {
+            args.push(index[3]);
+        }
+
+        return makeOperation("txna", undefined, args);
     }
     / "gtxn" ___ "[" ___ index:integer ___ "]" ___ "." ___ id:identifier { 
         return makeOperation("gtxn", undefined, [ index, id ]); 
