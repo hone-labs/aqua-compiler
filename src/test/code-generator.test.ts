@@ -90,6 +90,32 @@ describe("code generator", () => {
         expect(generateCode(node)).toEqual([]);
     });    
 
+    it("pops stack for each child", () => {
+
+        const node = {
+            nodeType: "expr-statement",
+            children: [
+                {
+                    nodeType: "operation",
+                    opcode: "int",
+                    args: [ 1 ],
+                },
+                {
+                    nodeType: "operation",
+                    opcode: "int",
+                    args: [ 2 ],
+                },
+            ],
+        };
+
+        expect(generateCode(node)).toEqual([
+            `int 1`,
+            `int 2`,
+            `pop`,
+            `pop`,
+        ]);
+    });    
+
     it("can generate code for global return statement", () => {
 
         const node = {
