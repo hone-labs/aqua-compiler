@@ -35,10 +35,10 @@ describe("expression", () => {
     it("can compile a parenthesized expression", ()  => {
 
         check(
-            "( 1 + 1 )",
+            "( 1 + 2 )",
             dedent(`
                 int 1
-                int 1
+                int 2
                 +
             `)
         );
@@ -144,6 +144,11 @@ describe("expression", () => {
             `)
         );
     });
+
+
+    it("can get global field", () => {
+        check("global.Something", "global Something");
+    })
 
     it("can compile addr", () => {
         check(

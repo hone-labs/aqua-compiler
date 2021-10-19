@@ -1,0 +1,24 @@
+#pragma version 4
+int 256
+store 0
+b program_end
+myFunction:
+load 0
+load 0
+int 2
+-
+store 0
+load 0
+swap
+stores
+int 1
+load 0
++
+stores
+int 1
+retsub
+load 0
+loads
+store 0
+retsub
+program_end:

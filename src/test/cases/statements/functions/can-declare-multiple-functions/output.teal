@@ -1,0 +1,35 @@
+#pragma version 4
+int 256
+store 0
+b program_end
+fn1:
+load 0
+load 0
+int 1
+-
+store 0
+load 0
+swap
+stores
+int 1
+retsub
+load 0
+loads
+store 0
+retsub
+fn2:
+load 0
+load 0
+int 1
+-
+store 0
+load 0
+swap
+stores
+int 2
+retsub
+load 0
+loads
+store 0
+retsub
+program_end:
