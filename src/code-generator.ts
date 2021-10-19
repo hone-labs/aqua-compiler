@@ -218,7 +218,7 @@ export class CodeGenerator {
             post: (node) => {
                 let output = node.opcode!;
                 if (node.args) {
-                    output += ` ${node.args && node.args.join(" ")}`;
+                    output += ` ${node.args.join(" ")}`;
                 }
                 this.codeEmitter.add(output);
             },
