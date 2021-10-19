@@ -229,6 +229,11 @@ export class CodeGenerator {
         "arg": {
             post: (node) => this.codeEmitter.add(`arg ${node.value}`),
         },
+        "global": {
+            post: (node) => {
+                this.codeEmitter.add(`global ${node.name}`);
+            },
+        },
         "return-statement": {
             post: (node) => {
                 if (this.inFunction) {

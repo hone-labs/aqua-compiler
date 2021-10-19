@@ -68,6 +68,18 @@
     }
 
     //
+    // Make an access to a global field.
+    //
+    // https://developer.algorand.org/docs/get-details/dapps/avm/teal/opcodes/#global-f
+    //
+    function makeGlobal(name) {
+        return {
+            nodeType: "global",
+            name: name,
+        };
+    }
+
+    //
     // Makes an AST node for a statement.
     //
     function makeStmt(nodeType, children) {
@@ -285,6 +297,7 @@ primary
   / "gtxn" whitespace "[" whitespace index:integer whitespace "]" whitespace "." whitespace id:identifier { return makeGTxn(index, id); }
   / "arg" whitespace "[" whitespace index:integer whitespace "]" { return makeArg(index); }
   / "addr" whitespace value:addr { return makeLiteral("addr", "addr", value); }
+  / "global" whitespace "." whitespace id:identifier { return makeGlobal(id); }
   / '"' value:stringCharacters '"' { return makeLiteral("byte", "byte", `"${value}"`); }
   / "(" whitespace node:expression whitespace ")" { return node; }
   / id:identifier args:(whitespace "(" (whitespace arguments)? whitespace ")")? {
