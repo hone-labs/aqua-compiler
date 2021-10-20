@@ -200,9 +200,9 @@ statement
     / "const" ___ name:identifier ___ "=" ___ expr:expression ___ ";" { return declareConstant(name, expr); }
     / "return" ___ expr:expression ___ ";" { return makeStmt("return-statement", [ expr ]); }
     / "if" ___ "(" ___ condition:expression ___ ")" ___ 
-        "{" ___ ifBlock:statements ___ "}" 
-        elseBlock:( ___ "else" ___ "{" ___ statements ___ "}" )? {
-            return makeIfStmt(condition, ifBlock, elseBlock && elseBlock[5]);
+        ifBlock:block 
+        elseBlock:( ___ "else" ___ block )? {
+            return makeIfStmt(condition, ifBlock, elseBlock && elseBlock[3]);
         }
     / "while" ___ "(" ___ condition:expression ___ ")" ___ stmts:block {
         return makeWhileLoop(condition, stmts);
