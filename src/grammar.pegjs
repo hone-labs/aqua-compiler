@@ -276,6 +276,9 @@ primary
     / "global" ___ "." ___ id:identifier { 
         return makeOperation("global", undefined, [ id ]);
     }
+    / "OnComplete" ___ "." ___ id:identifier {
+        return makeOperation(id, "integer");
+    }
     / '"' value:stringCharacters '"' { 
         return makeOperation("byte", "byte", [ `"${value}"` ]); 
     }
