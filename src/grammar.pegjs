@@ -196,8 +196,9 @@ statements
 statement
     = ___ ";" { return makeEmpty(); }
     / expr:expression ___ ";" { return makeStmt("expr-statement", [ expr ]); }
-    / "let" ___ name:identifier expr:(___ "=" ___ expression)? ___ ";" { return declareVariable(name, expr && expr[3] || undefined); }
-    / "const" ___ name:identifier ___ "=" ___ expr:expression ___ ";" { return declareConstant(name, expr); }
+    / decl:variableDeclaration ___ ";" {
+        return decl;
+    }
     / "return" ___ expr:expression ___ ";" { return makeStmt("return-statement", [ expr ]); }
     / "if" ___ "(" ___ condition:expression ___ ")" ___ 
         ifBlock:block 
@@ -212,8 +213,8 @@ statement
     }
 
 variableDeclaration
-    = "let" ___ name:identifier expr:(___ "=" ___ expression)? ___ { return declareVariable(name, expr && expr[3] || undefined); }
-    / "const" ___ name:identifier ___ "=" ___ expr:expression ___ { return declareConstant(name, expr); }
+    = "let" ___ name:identifier expr:(___ "=" ___ expression)? { return declareVariable(name, expr && expr[3] || undefined); }
+    / "const" ___ name:identifier ___ "=" ___ expr:expression { return declareConstant(name, expr); }
 
 block 
     = "{" ___ stmts:statements ___ "}" { return stmts; }
