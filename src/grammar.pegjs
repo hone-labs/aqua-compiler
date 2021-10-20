@@ -259,14 +259,6 @@ primary
 
         return makeOperation("txn", undefined, args);
     }
-    / "txna" ___ "." ___ id:identifier index:(___ "[" ___ integer ___ "]")? { 
-        const args = [ id ];
-        if (index !== null) {
-            args.push(index[3]);
-        }
-
-        return makeOperation("txna", undefined, args);
-    }
     / "gtxn" ___ "[" ___ index:integer ___ "]" ___ "." ___ id:identifier { 
         return makeOperation("gtxn", undefined, [ index, id ]); 
     }
