@@ -9,7 +9,7 @@
     "start:file": "npm run build-parser && ts-node ./src/cli.ts examples/test.aqua > examples/test.teal",
     "start1": "npm run build-parser && ts-node ./src/cli.ts exec examples/function.aqua",
     "start2": "npm run build-parser && ts-node ./src/cli.ts exec examples/function-with-args.aqua",
-    "start:template": "npm run build-parser && ts-node ./src/cli.ts exec examples/template.aqua",
+    "start:template": "npm run build-parser && ts-node ./src/cli.ts examples/template.aqua",
     "start:repl": "npm run build-parser && ts-node ./src/cli.ts",
     "start:ast": "npm run build-parser && ts-node ./src/cli.ts ast examples/test.aqua",
     "s": "npm run start",
