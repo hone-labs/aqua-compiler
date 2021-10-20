@@ -356,7 +356,12 @@ export class CodeGenerator {
 
         "function-call": {
             post: (node) => {
-                this.codeEmitter.add(`callsub ${node.name}`);
+                if (node.name === "appGlobalPut") {
+                    this.codeEmitter.add(`app_global_put`);
+                }
+                else {
+                	this.codeEmitter.add(`callsub ${node.name}`);
+                }
             },
         },
     };
