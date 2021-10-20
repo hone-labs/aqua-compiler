@@ -1,25 +1,25 @@
-if(txn.OnCompletion === "NoOp") {
+if(txn.OnCompletion == "NoOp") {
 
     return 1;
 }
 
-if(txn.OnCompletion === "OptIn") {
+if(txn.OnCompletion == "OptIn") {
 
     return 1;
 }
 
-if(txn.OnCompletion === "CloseOut") {
+if(txn.OnCompletion == "CloseOut") {
 
     return 1;
 }
 
 // By default, disallow updating or deleting app
-if(txn.OnCompletion === "UpdateApplication") {
+if(txn.OnCompletion == "UpdateApplication") {
 
     return 0;
 }
 
-if(txn.OnCompletion === "DeleteApplication") {
+if(txn.OnCompletion == "DeleteApplication") {
 
     return 0;
 }
