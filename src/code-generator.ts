@@ -359,6 +359,12 @@ export class CodeGenerator {
                 if (node.name === "appGlobalPut") {
                     this.codeEmitter.add(`app_global_put`);
                 }
+                if (node.name === "appGlobalGet") {
+                    this.codeEmitter.add(`app_global_get`);
+                }
+                if (node.name === "appGlobalDel") {
+                    this.codeEmitter.add(`app_global_del`);
+                }
                 else {
                 	this.codeEmitter.add(`callsub ${node.name}`);
                 }
