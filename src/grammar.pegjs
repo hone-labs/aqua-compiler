@@ -279,6 +279,9 @@ primary
     / "OnComplete" ___ "." ___ id:identifier {
         return makeOperation(id, "integer");
     }
+    / "TypeEnum" ___ "." ___ id:identifier {
+        return makeOperation(id, "integer");
+    }
     / '"' value:stringCharacters '"' { 
         return makeOperation("byte", "byte", [ `"${value}"` ]); 
     }
