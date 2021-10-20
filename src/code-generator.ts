@@ -90,12 +90,10 @@ export class CodeGenerator {
         // Setup the initial stack pointer to the end of the scratch space.
         //
         if (this.functions.length > 0) {
-            this.codeEmitter.startBlock("setup");
             this.codeEmitter.add(``, `Function data stack setup.`);
             this.codeEmitter.add(`int ${MAX_SCRATCH}`, `Initial stack pointer.`);
             this.codeEmitter.add(`store 0`, `Set stack_pointer`);
             this.codeEmitter.add(``);
-            this.codeEmitter.endBlock();
         }
 
         //
@@ -107,9 +105,7 @@ export class CodeGenerator {
             //
             // Ensures the code for functions is never executed unless we specifically call the function.
             //
-            this.codeEmitter.startBlock("setup");
             this.codeEmitter.add(`b program_end`); 
-            this.codeEmitter.endBlock();
 
             //
             // Now generating code within functions.
@@ -123,10 +119,8 @@ export class CodeGenerator {
                 this.generateFunctionCode(functionNode);
             }    
 
-            this.codeEmitter.startBlock("setup");
             this.codeEmitter.add(``);
             this.codeEmitter.add(`program_end:`);
-            this.codeEmitter.endBlock();
         }
     }
 
@@ -142,7 +136,6 @@ export class CodeGenerator {
 
         this.codeEmitter.add(`${functionNode.name}:`);
 
-        this.codeEmitter.startBlock("setup");
         this.codeEmitter.add(``, `Function setup.`)
 
         this.codeEmitter.add(`load 0`, `Take copy of current stack_pointer on stack so that we can save it as the "previous stack pointer" in the new stack frame.`);
@@ -179,7 +172,6 @@ export class CodeGenerator {
         }
 
         this.codeEmitter.add(``, `Function body.`)
-        this.codeEmitter.endBlock();
 
         //
         // Now we can generate code for the function.
@@ -189,7 +181,6 @@ export class CodeGenerator {
         // 
         // Restore the original stack pointer.
         //
-        this.codeEmitter.startBlock("setup");
         this.codeEmitter.add(`${functionNode.name}-cleanup:`, `Function cleanup. Restores the previous stack frame`);
         this.codeEmitter.add(`load 0`, `Loads current stack_pointer`)
         this.codeEmitter.add(`loads`, `Loads previous_stack_pointer`);
@@ -199,7 +190,6 @@ export class CodeGenerator {
         // Return from the function if not already done so explicitly.
         //
         this.codeEmitter.add(`retsub`, `Catch all return.`);
-        this.codeEmitter.endBlock();
     }
 
     //
