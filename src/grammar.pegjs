@@ -176,7 +176,7 @@ declaration
     / statement
 
 function 
-    = id:identifier "(" ___ params:parameters? ___ ")" ___ "{" ___ body:statements ___ "}" {
+    = id:identifier "(" ___ params:parameters? ___ ")" ___ body:block {
         return {
             nodeType: "function-declaration",
             name: id,
