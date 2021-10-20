@@ -30,6 +30,18 @@ interface INodeVisitorMap {
 }
 
 //
+// Defines a function that generates code for builtin functions.
+//
+type BuiltinFunctionGenFn = (node: ASTNode) => void;
+
+//
+// Lookup table for builtin functions.
+//
+interface IBuiltinsLookupMap {
+    [index: string]: BuiltinFunctionGenFn;
+}
+
+//
 // Handles TEAL code generation for the Aqua compiler.
 //
 export class CodeGenerator {
@@ -356,22 +368,35 @@ export class CodeGenerator {
 
         "function-call": {
             post: (node) => {
-                if (node.name === "appGlobalPut") {
-                    this.codeEmitter.add(`app_global_put`);
+                const builtin = this.builtins[node.name!];
+                if (builtin) {
+                    builtin(node);
+                    return;
                 }
-                if (node.name === "appGlobalGet") {
-                    this.codeEmitter.add(`app_global_get`);
-                }
-                if (node.name === "appGlobalDel") {
-                    this.codeEmitter.add(`app_global_del`);
-                }
-                else {
-                	this.codeEmitter.add(`callsub ${node.name}`);
-                }
+
+                this.codeEmitter.add(`callsub ${node.name}`);
             },
         },
     };
 
+    //
+    // Handlers for implementing builtin functions.
+    //
+    private builtins: IBuiltinsLookupMap = {
+        appGlobalPut: (node) => {
+            this.codeEmitter.add(`app_global_put`);
+            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
+        },
+
+        appGlobalGet: (node) => {
+            this.codeEmitter.add(`app_global_get`);
+        },
+
+        appGlobalDel: (node) => {
+            this.codeEmitter.add(`app_global_del`);
+            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
+        },
+    };
 
     //
     // Walk the tree and collection functions so there code can be generated in a second pass.
