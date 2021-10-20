@@ -116,8 +116,9 @@ describe("expression", () => {
     });
 
     it("can get txn array element", () => {
-        check("txn.ApplicationArgs[2]", "txn ApplicationArgs 2");
+        check("txn.ApplicationArgs[2]", "txna ApplicationArgs 2");
     });
+
 
     it("can use txn field in expression", () => {
         check(
@@ -128,6 +129,14 @@ describe("expression", () => {
                 >=
             `)
         );
+    });
+
+    it("can get gtxn field", () => {
+        check("gtxn[3].Something", "gtxn 3 Something");
+    });
+
+    it("can get gtxn array element", () => {
+        check("gtxn[3].Something[2]", "gtxna 3 Something 2");
     });
 
     it("can get arg", () => {

@@ -252,15 +252,20 @@ unary
 primary
     = integerLiteral
     / "txn" ___ "." ___ id:identifier index:(___ "[" ___ integer ___ "]")? { 
-        const args = [ id ];
         if (index !== null) {
-            args.push(index[3]);
+            return makeOperation("txna", undefined, [ id, index[3] ]);
         }
-
-        return makeOperation("txn", undefined, args);
+        else {
+            return makeOperation("txn", undefined, [ id ]);
     }
-    / "gtxn" ___ "[" ___ index:integer ___ "]" ___ "." ___ id:identifier { 
+    }
+    / "gtxn" ___ "[" ___ index:integer ___ "]" ___ "." ___ id:identifier index2:(___ "[" ___ integer ___ "]")? { 
+        if (index2 !== null) {
+            return makeOperation("gtxna", undefined, [ index, id, index2[3] ]); 
+        }
+        else {
         return makeOperation("gtxn", undefined, [ index, id ]); 
+        }        
     }
     / "arg" ___ "[" ___ index:integer ___ "]" { 
         return makeOperation("arg", undefined, [ index ]); 
