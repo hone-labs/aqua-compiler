@@ -23,7 +23,7 @@
     "build:watch": "tsc --incremental --watch",
     "prepublishOnly": "npm test && npm run clean && npm run build",
     "t": "npm run test",
-    "test": "npm run build-parser && jest",
+    "test": "npm run build-parser && jest --runInBand",
     "tw": "npm run test:watch",
     "test:watch": "npm run build-parser && jest --watch --runInBand",
     "build-win": "nexe build/cli.js -t windows-x64-14.15.3 -n aqua",
