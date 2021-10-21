@@ -1,5 +1,5 @@
 import { compile } from "..";
-import { execute } from "../cli";
+import { execute } from "../exec";
 
 describe("runtime tests", () => {
 

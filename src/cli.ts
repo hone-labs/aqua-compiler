@@ -17,7 +17,7 @@
 //
 
 import { compile, parse } from ".";
-import { Runtime, types, Interpreter } from "@algo-builder/runtime";
+import { execute } from "./exec";
 
 const fs = require("fs/promises");
 const minimist = require("minimist");
@@ -120,14 +120,3 @@ function recogniseCommand(args: string[]): string | undefined {
     return undefined;
 }
 
-//
-// Execute the input TEAL code in the interpreter.
-//
-export function execute(teal: string): any {
-    const runtime = new Runtime([]);
-    const interpreter = new Interpreter();
-    return interpreter.execute(teal, types.ExecutionMode.APPLICATION, runtime, undefined);
-    
-    // TODO: Enable this code once PR is accepted with algo-builder/runtime.
-    //return interpreter.executeWithResult(teal, types.ExecutionMode.APPLICATION, runtime, undefined);
-}
