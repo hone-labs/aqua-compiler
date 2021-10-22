@@ -400,6 +400,18 @@ export class CodeGenerator {
             this.codeEmitter.add(`app_local_del`);
             this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
         },
+
+        btoi: (node) => {
+            this.codeEmitter.add(`btoi`);
+        },
+
+        itob: (node) => {
+            this.codeEmitter.add(`btoi`);
+        },
+
+        exit: (node) => {
+            this.codeEmitter.add(`return`);
+        },
     };
 
     //
