@@ -1,0 +1,49 @@
+// Application creation
+
+let key = "";
+
+if(txn.ApplicationID == 0) {
+    key = "counter";
+    appGlobalPut(key, btoi(txna.ApplicationArgs[0]));
+    exit(1);
+}
+
+// Application call
+if(txn.OnCompletion == "NoOp") {
+
+    if(txn.ApplicationArgs[0] == "increment") {
+        incrementCounter();
+    }
+
+    if(txn.ApplicationArgs[0] == "decrement") {
+        decermentCounter();
+    }
+
+    exit(0);
+}
+
+// By default, disallow updating or deleting app
+if(txn.OnCompletion == "UpdateApplication"
+    || txn.OnCompletion == "DeleteApplication"
+    || txn.OnCompletion == "CloseOut"
+    || txn.OnCompletion == "DeleteApplication")
+    || txn.OnCompletion == "OptIn"{
+     exit(0);
+}
+
+function incrementCounter() {
+    let currentValue = appGlobalGet(key);
+    currentValue = currentValue + 1;
+    appGlobalPut(key, currentValue);
+    exit(1);
+}
+
+function decermentCounter() {
+    let currentValue = appGlobalGet(key);
+    currentValue = currentValue - 1;
+    appGlobalPut(key, currentValue);
+    exit(1);
+}
+
+// Unknown OnCompletion value
+return 0;

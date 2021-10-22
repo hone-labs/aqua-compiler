@@ -1,17 +1,5 @@
-let a; 
-a = 3;
-const x = 5;
-const y = 8;
-a = myFunction(1,2,3);
-// Now have comments!
-/* Both types */
-if (x + y < 5) {
-    return x + y;
-}
-else {
-    return x * y;
-}
 
-function myFunction(a, b, c) {
-    return a + b + c;
-}
+let a = gtxn[1].ApplicationArgs[1];
+let b = txn.Assets[0];
+
+return 1;

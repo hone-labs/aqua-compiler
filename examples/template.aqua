@@ -1,27 +1,27 @@
 if(txn.OnCompletion == "NoOp") {
 
-    return 1;
+    exit(0);
 }
 
 if(txn.OnCompletion == "OptIn") {
 
-    return 1;
+    exit(0);
 }
 
 if(txn.OnCompletion == "CloseOut") {
 
-    return 1;
+    exit(0);
 }
 
 // By default, disallow updating or deleting app
 if(txn.OnCompletion == "UpdateApplication") {
 
-    return 0;
+    exit(0);
 }
 
 if(txn.OnCompletion == "DeleteApplication") {
 
-    return 0;
+    exit(0);
 }
 
 // Unknown OnCompletion value
