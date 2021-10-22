@@ -4,7 +4,7 @@ let key = "";
 
 if(txn.ApplicationID == 0) {
     key = "counter";
-    appGlobalPut(key, btoi(txna.ApplicationArgs[0]));
+    appGlobalPut(key, btoi(txn.ApplicationArgs[0]));
     exit(1);
 }
 
@@ -26,8 +26,8 @@ if(txn.OnCompletion == "NoOp") {
 if(txn.OnCompletion == "UpdateApplication"
     || txn.OnCompletion == "DeleteApplication"
     || txn.OnCompletion == "CloseOut"
-    || txn.OnCompletion == "DeleteApplication")
-    || txn.OnCompletion == "OptIn"{
+    || txn.OnCompletion == "DeleteApplication"
+    || txn.OnCompletion == "OptIn") {
      exit(0);
 }
 
