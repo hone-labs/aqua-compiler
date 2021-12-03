@@ -16,8 +16,8 @@
 //      npx ts-node -T ./src/cli.js                    => Runs the REPL.
 //
 
+import { execute } from "teal-interpreter";
 import { compile, parse } from ".";
-import { execute } from "./exec";
 
 const fs = require("fs/promises");
 const minimist = require("minimist");
@@ -51,7 +51,7 @@ async function main() {
 
             // Execute the file directly.
             console.log(`\r\n== EVALUATION ==`);
-            const result = execute(teal);
+            const result = await execute(teal);
 
             console.log(`\r\n== RESULT ==`);
             console.log(result);

@@ -36,13 +36,13 @@
   "author": "ashley@codecapers.com.au",
   "license": "private",
   "dependencies": {
-    "@algo-builder/runtime": "^2.0.0",
     "@nodelib/fs.walk": "^1.2.8",
     "color-json": "^2.0.1",
     "lodash.clonedeep": "^4.5.0",
     "minimist": "^1.2.5",
     "pegjs": "^0.10.0",
     "sha3": "^2.1.4",
+    "teal-interpreter": "^0.0.14",
     "tweetnacl-ts": "^1.0.3",
     "yaml": "^1.10.2",
     "zod": "^1.10.2"
