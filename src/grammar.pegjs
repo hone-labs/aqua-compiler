@@ -161,6 +161,10 @@
             ),
         ]);
     }
+
+    function makeExprStmt(expr) {
+        return makeStmt("expr-statement", [ expr ])
+    }
 }
 
 start
@@ -195,7 +199,7 @@ statements
 
 statement
     = ___ ";" { return makeEmpty(); }
-    / expr:expression ___ ";" { return makeStmt("expr-statement", [ expr ]); }
+    / expr:expressionStmt ___ ";" { return expr; }
     / decl:variableDeclaration ___ ";" {
         return decl;
     }
@@ -208,7 +212,7 @@ statement
     / "while" ___ "(" ___ condition:expression ___ ")" ___ stmts:block {
         return makeWhileLoop(condition, stmts);
     }
-    / "for" ___ "(" initializer:(___ (variableDeclaration / expression))? ___ ";" condition:(___ expression)? ___ ";" increment:(___ expression)? ___ ")" ___ stmts:block {
+    / "for" ___ "(" initializer:(___ (variableDeclaration / expressionStmt))? ___ ";" condition:(___ expression)? ___ ";" increment:(___ expressionStmt)? ___ ")" ___ stmts:block {
         return makeForLoop(initializer && initializer[1], condition && condition[1], increment && increment[1], stmts);
     }
 
@@ -218,6 +222,9 @@ variableDeclaration
 
 block 
     = "{" ___ stmts:statements ___ "}" { return stmts; }
+
+expressionStmt /* Pops the result of the expression from the stack */
+    = expr:expression { return makeExprStmt(expr); }
 
 expression
     = assignment

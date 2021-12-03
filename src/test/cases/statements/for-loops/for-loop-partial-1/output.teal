@@ -11,5 +11,6 @@ int 1
 +
 dup
 store 1
+pop
 b loop_start_1
 loop_end_1:

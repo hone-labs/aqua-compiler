@@ -19,6 +19,7 @@ int 1
 +
 dup
 store 2
+pop
 b loop_start_1
 loop_end_1:
 load 1
