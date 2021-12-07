@@ -1,4 +1,4 @@
-#pragma version 4
+#pragma version 5
 int 3
 store 1
 loop_start_1:

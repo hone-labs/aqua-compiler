@@ -23,7 +23,7 @@ export function compile(input: string): string {
     const codeEmitter = new CodeEmitter(false);
     const codeGenerator = new CodeGenerator(codeEmitter);
     const output = codeGenerator.generateCode(ast);
-    return `#pragma version 4\r\n` + codeEmitter.getOutput().join("\r\n");
+    return `#pragma version 5\r\n` + codeEmitter.getOutput().join("\r\n");
 }
 
 //
