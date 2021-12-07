@@ -42,7 +42,7 @@
     "minimist": "^1.2.5",
     "pegjs": "^0.10.0",
     "sha3": "^2.1.4",
-    "teal-interpreter": "^0.0.18",
+    "teal-interpreter": "^0.0.19",
     "tweetnacl-ts": "^1.0.3",
     "yaml": "^1.10.2",
     "zod": "^1.10.2"
