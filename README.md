@@ -125,6 +125,12 @@ nvm install 12.15.0
 nvm use 12.15.0
 ```
 
+!! Build the TypeScript code:
+
+```bash
+npm run build
+```
+
 Build for each platform:
 
 ```bash

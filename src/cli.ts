@@ -19,6 +19,7 @@
 import { execute } from "teal-interpreter";
 import { compile, parse } from ".";
 
+const packageJson = require("../package.json");
 const fs = require("fs/promises");
 const minimist = require("minimist");
 const readline = require('readline');
@@ -28,6 +29,11 @@ async function main() {
 
     const argv = minimist(process.argv.slice(2));
     const numArgs = argv._.length;
+
+    if (argv.version) {
+        console.log(`Aqua version: ${packageJson.version}`);
+        return;
+    }
 
     if (numArgs > 0) {
         const command = recogniseCommand(argv._);
