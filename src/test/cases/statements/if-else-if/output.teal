@@ -1,0 +1,19 @@
+#pragma version 4
+int 2
+int 1
+>
+bz else_1
+int 5
+return
+b end_1
+else_1:
+int 3
+int 1
+>
+bz else_2
+int 10
+return
+b end_2
+else_2:
+end_2:
+end_2:

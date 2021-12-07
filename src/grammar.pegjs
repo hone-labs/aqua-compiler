@@ -205,8 +205,8 @@ statement
     }
     / "return" ___ expr:expression ___ ";" { return makeStmt("return-statement", [ expr ]); }
     / "if" ___ "(" ___ condition:expression ___ ")" ___ 
-        ifBlock:block 
-        elseBlock:( ___ "else" ___ block )? {
+        ifBlock:statement 
+        elseBlock:( ___ "else" ___ statement )? {
             return makeIfStmt(condition, ifBlock, elseBlock && elseBlock[3]);
         }
     / "while" ___ "(" ___ condition:expression ___ ")" ___ stmts:block {
@@ -215,6 +215,7 @@ statement
     / "for" ___ "(" initializer:(___ (variableDeclaration / expressionStmt))? ___ ";" condition:(___ expression)? ___ ";" increment:(___ expressionStmt)? ___ ")" ___ stmts:block {
         return makeForLoop(initializer && initializer[1], condition && condition[1], increment && increment[1], stmts);
     }
+    / block
 
 variableDeclaration
     = "let" ___ name:identifier expr:(___ "=" ___ expression)? { return declareVariable(name, expr && expr[3] || undefined); }
