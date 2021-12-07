@@ -23,14 +23,14 @@ describe("test cases", () => {
             const dirPath = path.dirname(testCaseFile);
             const tealFilePath = path.join(dirPath, "output.teal");
             const input = await fs.readFile(testCaseFile, "utf8");
-            const compiled = normalize(compile(input));
+            const compiled = normalize(compile(input, { disableVersionStamp: true }));
             const outputFileExists = await fs.pathExists(tealFilePath);
             if (outputFileExists) {
                 const expected = normalize(await fs.readFile(tealFilePath, "utf8"));
-            if (compiled !== expected) {
-                console.log(`== ${testName} ==\r\nCompiled:\r\n"${compiled}"\r\n\r\nExpected:\r\n"${expected}"`);
-            }
-            expect(compiled).toEqual(expected);    
+                if (compiled !== expected) {
+                    console.log(`== ${testName} ==\r\nCompiled:\r\n"${compiled}"\r\n\r\nExpected:\r\n"${expected}"`);
+                }
+                expect(compiled).toEqual(expected);    
             }
             else {
                 console.log(`Writing ${tealFilePath} because it doesn't exist yet, don't forget to commit this file.`);

@@ -1,4 +1,4 @@
-#pragma version 5
+#pragma version 4
 
 int 256
 store 0
