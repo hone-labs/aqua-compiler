@@ -37,7 +37,7 @@ export function compile(input: string, options?: ICompilerOptions): string {
         output += `// Aqua v${packageJson.version}\r\n`;
     }
 
-    output += `#pragma version 4\r\n`;
+    output += `#pragma version 5\r\n`;
     output += codeEmitter.getOutput().join("\r\n");
     return output;
 }
