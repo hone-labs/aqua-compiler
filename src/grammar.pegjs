@@ -286,10 +286,10 @@ primary
         return makeOperation("global", undefined, [ id ]);
     }
     / "OnComplete" ___ "." ___ id:identifier {
-        return makeOperation(id, "integer");
+        return makeOperation("int", "integer", [ id ]);
     }
     / "TypeEnum" ___ "." ___ id:identifier {
-        return makeOperation(id, "integer");
+        return makeOperation("int", "integer", [ id ]);
     }
     / '"' value:stringCharacters '"' { 
         return makeOperation("byte", "byte", [ `"${value}"` ]); 
