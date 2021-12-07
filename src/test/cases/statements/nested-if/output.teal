@@ -1,0 +1,20 @@
+#pragma version 4
+int 1
+bz else_1
+int 1
+bz else_2
+int 20
+return
+b end_2
+else_2:
+int 1
+bz else_3
+int 30
+return
+b end_3
+else_3:
+end_3:
+end_3:
+b end_3
+else_3:
+end_3:
