@@ -279,10 +279,10 @@ describe("code generator", () => {
     it("can generate code for nested if statment", () => {
 
         const node: ASTNode = {
-            nodeType: "if-statement",
+            nodeType: "if-statement",                       // If stmt.
             children: [
                 {
-                    nodeType: "operation",
+                    nodeType: "operation",                  // Conditon.
                     opcode: "int",
                     args: [ 1 ],
                 },
@@ -291,10 +291,10 @@ describe("code generator", () => {
                 nodeType: "block-statement",
                 children: [
                     {
-                        nodeType: "if-statement",
+                        nodeType: "if-statement",           // Nested if stmt.
                         children: [
                             {
-                                nodeType: "operation",
+                                nodeType: "operation",      // Nested condition.
                                 opcode: "int",
                                 args: [ 2 ],
                             },
@@ -303,7 +303,7 @@ describe("code generator", () => {
                             nodeType: "block-statement",
                             children: [
                                 {
-                                    nodeType: "operation",
+                                    nodeType: "operation",   // Nested body.
                                     opcode: "int",
                                     args: [ 3 ],
                                 },
@@ -355,6 +355,50 @@ describe("code generator", () => {
             "b loop_start_1",
             "loop_end_1:",            
         ]);
+    });
+
+    it ("can generate code for nested while loop", () => {
+
+        const ast: ASTNode = {                      // Loop.
+            nodeType: "while-statement",
+            children: [
+                {
+                    nodeType: "operation",          // Condition.
+                    opcode: "int",
+                    args: [ 1 ],
+                },
+            ],
+            body: {                                 // Nested loop.
+                nodeType: "while-statement",        
+                children: [
+                    {
+                        nodeType: "operation",      // Nested condition.
+                        opcode: "int",
+                        args: [ 2 ],
+                    },
+                ],
+                body: {                             // Nested body
+                    nodeType: "operation",
+                    opcode: "int",
+                    args: [ 3 ],
+                },
+            },
+        };
+
+        expect(generateCode(ast)).toEqual([
+            "loop_start_1:",        // Loop.
+            "int 1",                // Conditon.
+            "bz loop_end_1",
+                "loop_start_2:",    // Nested loop.
+                "int 2",            // Nested condition.
+                "bz loop_end_2",
+                "int 3",            // Nested body.
+                "b loop_start_2",
+                "loop_end_2:",
+            "b loop_start_1",
+            "loop_end_1:"            
+        ]);
+
     });
 
     it("can generate code for assignment to global variable", () => {
