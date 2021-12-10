@@ -276,6 +276,59 @@ describe("code generator", () => {
         ]);
     });
 
+    it("can generate code for nested if statment", () => {
+
+        const node: ASTNode = {
+            nodeType: "if-statement",
+            children: [
+                {
+                    nodeType: "operation",
+                    opcode: "int",
+                    args: [ 1 ],
+                },
+            ],
+            ifBlock: {
+                nodeType: "block-statement",
+                children: [
+                    {
+                        nodeType: "if-statement",
+                        children: [
+                            {
+                                nodeType: "operation",
+                                opcode: "int",
+                                args: [ 2 ],
+                            },
+                        ],
+                        ifBlock: {
+                            nodeType: "block-statement",
+                            children: [
+                                {
+                                    nodeType: "operation",
+                                    opcode: "int",
+                                    args: [ 3 ],
+                                },
+                            ],
+                        },
+                    }
+                ],
+            },
+        };
+
+        expect(generateCode(node)).toEqual([
+            "int 1",            // Condition.
+            "bz else_1",        
+                "int 2",        // Nested condition.
+                "bz else_2",
+                "int 3",        // Nested body.
+                "b end_2",
+                "else_2:",
+                "end_2:",
+            "b end_1",
+            "else_1:",
+            "end_1:"
+        ]);
+    });
+
     it("can generate code for while loop", () => {
 
         const ast: ASTNode = {

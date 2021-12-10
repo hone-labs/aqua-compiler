@@ -14,7 +14,7 @@ return
 b end_3
 else_3:
 end_3:
-end_3:
-b end_3
-else_3:
-end_3:
+end_2:
+b end_1
+else_1:
+end_1:

@@ -320,20 +320,21 @@ export class CodeGenerator {
         "if-statement": {
             post: (node) => {                
                 this.controlStatementId += 1;
+                node.controlStatementId = this.controlStatementId;
 
-                this.codeEmitter.add(`bz else_${this.controlStatementId}`);
+                this.codeEmitter.add(`bz else_${node.controlStatementId}`);
 
                 this.internalGenerateCode(node.ifBlock!);
 
-                this.codeEmitter.add(`b end_${this.controlStatementId}`);
+                this.codeEmitter.add(`b end_${node.controlStatementId}`);
 
-                this.codeEmitter.add(`else_${this.controlStatementId}:`);
+                this.codeEmitter.add(`else_${node.controlStatementId}:`);
 
                 if (node.elseBlock) {
                     this.internalGenerateCode(node.elseBlock);
                 }
 
-                this.codeEmitter.add(`end_${this.controlStatementId}:`);
+                this.codeEmitter.add(`end_${node.controlStatementId}:`);
             },
         },
 
