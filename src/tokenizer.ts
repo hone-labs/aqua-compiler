@@ -4,6 +4,7 @@
 
 export enum TokenType {
     PLUS,
+    EOF             // Token injected at the end of the input.
 }
 
 //
@@ -26,6 +27,11 @@ export interface ITokenizer {
     // Returns the current token.
     //
     getCurrent(): IToken | undefined;
+
+    //
+    // Returns true once all input has been consumed.
+    //
+    isAtEnd(): boolean;
 }
 
 //
@@ -59,6 +65,11 @@ export class Tokenizer implements ITokenizer {
     readNext(): void {
 
         this.skipWhitespace();
+
+        if (this.isAtEnd()) {
+            this.setCurrent({ type: TokenType.EOF });
+            return;
+        }
     
         switch (this.advance()) {
             case "+": this.setCurrent({ type: TokenType.PLUS });
@@ -101,5 +112,11 @@ export class Tokenizer implements ITokenizer {
         } 
     }
 
+    //
+    // Returns true once all input has been consumed.
+    //
+    isAtEnd(): boolean {
+        return this.curPosition >= this.code.length;
+    }
 
 }
