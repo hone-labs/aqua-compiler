@@ -15,6 +15,16 @@ export interface IToken {
 }
 
 //
+// Interface for reporting errors.
+//
+export interface IError {
+    //
+    // The error message.
+    //
+    msg: string;
+}
+
+//
 // Interface to a source code tokenizer for the Aqua language.
 //
 export interface ITokenizer {
@@ -54,9 +64,15 @@ export class Tokenizer implements ITokenizer {
     //
     private curToken?: IToken;
 
-    constructor(code: string) {
+    //
+    // A simple interface that allows the tokenizer to report an error and continue scanning.
+    //
+    private onError?: (err: IError) => void;
+
+    constructor(code: string, onError?: (err: IError) => void) {
         this.code = code;
         this.curPosition = 0;
+        this.onError = onError;
     }
 
     //
@@ -64,16 +80,34 @@ export class Tokenizer implements ITokenizer {
     //
     readNext(): void {
 
-        this.skipWhitespace();
+        while (true) {
+            this.skipWhitespace();
 
-        if (this.isAtEnd()) {
-            this.setCurrent({ type: TokenType.EOF });
-            return;
+            if (this.isAtEnd()) {
+                this.setCurrent({ type: TokenType.EOF });
+                return;
+            }
+    
+            const ch = this.advance();
+            switch (ch) {
+                case "+": {
+                    this.setCurrent({ type: TokenType.PLUS }); 
+                    return;
+                }
+    
+                default: {
+                    if (this.onError) {
+                        this.onError({
+                            msg: `Encountered unexpected character ${ch}`,
+                        });
+                    }
+
+                    // Error reported, now continue scanning at the next character.
+                    break;
+                }
+            }
         }
     
-        switch (this.advance()) {
-            case "+": this.setCurrent({ type: TokenType.PLUS });
-        }
     }
 
     //

@@ -35,11 +35,32 @@ describe("tokenizer", () => {
 
         expect(tokenizer.getCurrent()).toEqual({ type: TokenType.EOF });
     });
+
+    test("registers an error for an unexpected character", () => {
+
+        let errorReported = false;
+        const tokenizer = new Tokenizer("@", () => {
+            errorReported = true;
+        });
+        tokenizer.readNext();
+
+        expect(errorReported).toBe(true);
+        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.EOF });
+    });
+
+    test("moves onto next character after an unexpected character", () => {
+
+        const tokenizer = new Tokenizer("@+");
         tokenizer.readNext();
 
         expect(tokenizer.getCurrent()).toEqual({ type: TokenType.PLUS });
-
-
     });
 
+    test("skips whitespace between unrecognised character and next token", () => {
+
+        const tokenizer = new Tokenizer("@ +");
+        tokenizer.readNext();
+
+        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.PLUS });
+    });    
 });
