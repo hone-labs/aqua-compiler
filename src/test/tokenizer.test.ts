@@ -11,4 +11,14 @@ describe("tokenizer", () => {
 
     });
 
+    test("can skip whitespace", () => {
+
+        const tokenizer = new Tokenizer(" \t\n+");
+        tokenizer.readNext();
+
+        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.PLUS });
+
+
+    });
+
 });

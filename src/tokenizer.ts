@@ -57,6 +57,8 @@ export class Tokenizer implements ITokenizer {
     // Scans the next token and makes it the current token.
     //
     readNext(): void {
+
+        this.skipWhitespace();
     
         switch (this.advance()) {
             case "+": this.setCurrent({ type: TokenType.PLUS });
@@ -82,6 +84,21 @@ export class Tokenizer implements ITokenizer {
     //
     private advance(): string {
         return this.code[this.curPosition++];
+    }
+
+    //
+    // Skips whitespace characters in the code.
+    //
+    private skipWhitespace(): void {
+        while (true) {
+            const ch = this.code[this.curPosition];
+            if (ch === " " || ch === "\t" || ch === "\r" || ch === "\n") {
+                this.curPosition += 1;
+            }
+            else {                
+                break;
+            }
+        } 
     }
 
 
