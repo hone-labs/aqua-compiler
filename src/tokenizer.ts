@@ -206,7 +206,7 @@ export class Tokenizer implements ITokenizer {
     }
 
     //
-    // Reads the remain of a number token.
+    // Reads the subsequent digits of a number token.
     //
     private readNumber() {
         while (this.isDigit(this.peek())) {

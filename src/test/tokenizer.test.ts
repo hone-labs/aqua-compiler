@@ -118,4 +118,22 @@ describe("tokenizer", () => {
         expect(tokenize("2.1")).toEqual([{ type: TokenType.NUMBER, value: 2.1 }]);
         expect(tokenize("2.120")).toEqual([{ type: TokenType.NUMBER, value: 2.12 }]);
     });
+
+    test("can tokenize an expression", () => {
+
+        // No whitespace.
+        expect(tokenize("1+2")).toEqual([ 
+            { type: TokenType.NUMBER, value: 1 },
+            { type: TokenType.PLUS },
+            { type: TokenType.NUMBER, value: 2 },
+        ]);
+
+        // With whitespace.
+        expect(tokenize(" 1 + 2 ")).toEqual([ 
+            { type: TokenType.NUMBER, value: 1 },
+            { type: TokenType.PLUS },
+            { type: TokenType.NUMBER, value: 2 },
+        ]);
+
+    });
 });
