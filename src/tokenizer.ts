@@ -12,7 +12,15 @@ export enum TokenType {
 // Represents a token.
 //
 export interface IToken {
+    //
+    // Specifies the type of token.
+    //
     readonly type: TokenType;
+
+    //
+    // The value of the token, for tokens that have a value.
+    //
+    readonly value?: any;
 }
 
 //
@@ -61,6 +69,11 @@ export class Tokenizer implements ITokenizer {
     private curPosition: number;
 
     //
+    // The position in the code where the current token starts.
+    //
+    private curTokenStart?: number;
+
+    //
     // The most recently scannned token.
     //
     private curToken?: IToken;
@@ -90,6 +103,8 @@ export class Tokenizer implements ITokenizer {
                 this.setCurrent({ type: TokenType.EOF });
                 return;
             }
+
+            this.curTokenStart = this.curPosition;
     
             const ch = this.advance();
             switch (ch) {
@@ -209,6 +224,9 @@ export class Tokenizer implements ITokenizer {
             }    
         }
 
-        this.setCurrent({ type: TokenType.NUMBER }); 
+        this.setCurrent({ 
+            type: TokenType.NUMBER, 
+            value: parseFloat(this.code.substring(this.curTokenStart!, this.curPosition)),
+        }); 
     }
 }
