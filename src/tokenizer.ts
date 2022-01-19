@@ -213,17 +213,6 @@ export class Tokenizer implements ITokenizer {
             this.advance();
         }
 
-        if (this.peek() === ".") {
-            //
-            // Consume fractional part of the number.
-            //
-            this.advance();
-
-            while (this.isDigit(this.peek())) {
-                this.advance();
-            }    
-        }
-
         this.setCurrent({ 
             type: TokenType.NUMBER, 
             value: parseFloat(this.code.substring(this.curTokenStart!, this.curPosition)),

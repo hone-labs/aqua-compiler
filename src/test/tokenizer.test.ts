@@ -112,11 +112,6 @@ describe("tokenizer", () => {
         expect(tokenize("0")).toEqual([{ type: TokenType.NUMBER, value: 0 }]);
         expect(tokenize("1")).toEqual([{ type: TokenType.NUMBER, value: 1 }]);
         expect(tokenize("123")).toEqual([{ type: TokenType.NUMBER, value: 123 }]);
-        expect(tokenize("1.")).toEqual([{ type: TokenType.NUMBER, value: 1 }]);
-        expect(tokenize("0.0")).toEqual([{ type: TokenType.NUMBER, value: 0 }]);
-        expect(tokenize("2.0")).toEqual([{ type: TokenType.NUMBER, value: 2 }]);
-        expect(tokenize("2.1")).toEqual([{ type: TokenType.NUMBER, value: 2.1 }]);
-        expect(tokenize("2.120")).toEqual([{ type: TokenType.NUMBER, value: 2.12 }]);
     });
 
     test("can tokenize an expression", () => {
