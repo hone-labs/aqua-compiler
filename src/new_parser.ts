@@ -16,7 +16,28 @@ function expression(tokenizer: ITokenizer): ASTNode {
 // Parses an addition/subtraction expression.
 //
 function term(tokenizer: ITokenizer): ASTNode {
-    return primary(tokenizer);
+    let working = primary(tokenizer);
+
+    while (true) {
+        if (match(tokenizer, TokenType.PLUS)) {
+            const right = primary(tokenizer);
+            working = {
+                nodeType: "operation",
+                opcode: "+",
+                type: "integer",
+                children: [
+                    working, 
+                    right,
+                ],
+            };
+        }
+
+        //TODO: Add subtraction here.
+
+        break;
+    }
+
+    return working;
 }
 
 //

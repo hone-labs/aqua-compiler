@@ -14,4 +14,31 @@ describe("parser", () => {
         });
     });
 
+    test("can parse addition expression", () => {
+
+        expect(parseExpression("1+2")).toEqual({
+            nodeType: "operation",
+            opcode: "+",
+            type: "integer",
+            children: [
+                {
+                    nodeType: "operation",
+                    opcode: "int",
+                    type: "integer",
+                    args: [
+                        1
+                    ],
+                },
+                {
+                    nodeType: "operation",
+                    opcode: "int",
+                    type: "integer",
+                    args: [
+                        2
+                    ],
+                }
+            ],
+        });
+    });
+
 });
