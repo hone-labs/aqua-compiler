@@ -12,6 +12,11 @@ export interface ASTNode {
     nodeType: string;
 
     //
+    // Specifies the data type for the node when known and appropriate.
+    //
+    type?: string;
+
+    //
     // Child nodes that should have code generated before this node.
     //
     children?: ASTNode[];
