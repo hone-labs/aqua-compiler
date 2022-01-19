@@ -4,6 +4,7 @@
 
 export enum TokenType {
     PLUS,
+    NUMBER,
     EOF             // Token injected at the end of the input.
 }
 
@@ -77,6 +78,8 @@ export class Tokenizer implements ITokenizer {
 
     //
     // Scans the next token and makes it the current token.
+    // This must be called at least once to "prime" the tokenizer before trying to look at the
+    // "current token".
     //
     readNext(): void {
 
@@ -96,6 +99,11 @@ export class Tokenizer implements ITokenizer {
                 }
     
                 default: {
+                    if (this.isDigit(ch)) {
+                        this.readNumber();
+                        return;
+                    }
+
                     if (this.onError) {
                         this.onError({
                             msg: `Encountered unexpected character ${ch}`,
@@ -118,6 +126,13 @@ export class Tokenizer implements ITokenizer {
     }
 
     //
+    // Returns true once all input has been consumed.
+    //
+    isAtEnd(): boolean {
+        return this.curPosition >= this.code.length;
+    }
+
+    //
     // Sets the current token.
     //
     private setCurrent(token: IToken) {
@@ -129,6 +144,17 @@ export class Tokenizer implements ITokenizer {
     //
     private advance(): string {
         return this.code[this.curPosition++];
+    }
+
+    //
+    // Look at the next character in the input without advancing the position.
+    // Returns undefined when there is no more input to look at.
+    //
+    private peek(): string | undefined {
+        if (this.isAtEnd()) {
+            return undefined;
+        }
+        return this.code[this.curPosition];
     }
 
     //
@@ -147,10 +173,42 @@ export class Tokenizer implements ITokenizer {
     }
 
     //
-    // Returns true once all input has been consumed.
+    // https://stackoverflow.com/a/38370808/25868
     //
-    isAtEnd(): boolean {
-        return this.curPosition >= this.code.length;
+    private readonly charCodeZero = "0".charCodeAt(0);
+    private readonly charCodeNine = "9".charCodeAt(0);    
+
+    //
+    // Returns true if the specified charater is a digit.
+    //
+    private isDigit(ch: string | undefined): boolean {
+        if (ch === undefined) {
+            // No more input, so by definition it's not a digit.
+            return false;
+        }
+        const charCode = ch.charCodeAt(0); //TODO: Optimization: Just pass the character offset in the original buffer through and then pull the char code directly from the buffer.
+        return charCode >= this.charCodeZero  && charCode <= this.charCodeNine;
     }
 
+    //
+    // Reads the remain of a number token.
+    //
+    private readNumber() {
+        while (this.isDigit(this.peek())) {
+            this.advance();
+        }
+
+        if (this.peek() === ".") {
+            //
+            // Consume fractional part of the number.
+            //
+            this.advance();
+
+            while (this.isDigit(this.peek())) {
+                this.advance();
+            }    
+        }
+
+        this.setCurrent({ type: TokenType.NUMBER }); 
+    }
 }

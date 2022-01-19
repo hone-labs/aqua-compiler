@@ -1,6 +1,29 @@
-import { Tokenizer, TokenType } from "../tokenizer";
+import { IToken, Tokenizer, TokenType } from "../tokenizer";
 
 describe("tokenizer", () => {
+
+    //
+    // Helper function that converts code to an array of tokens, not including
+    // the EOF token.
+    //
+    function tokenize(code: string): IToken[] {
+
+        const tokenizer = new Tokenizer(code);
+        const tokens: IToken[] = [];
+
+        tokenizer.readNext();
+
+        while (tokenizer.getCurrent()!.type !== TokenType.EOF) {
+            const token = tokenizer.getCurrent();
+            if (!token) {
+                throw new Error(`Expected a token if not at the end!`);
+            }
+            tokens.push(token);
+            tokenizer.readNext();
+        }
+
+        return tokens;       
+    }
 
     test("can tokenize + operator", () => {
 
@@ -62,5 +85,37 @@ describe("tokenizer", () => {
         tokenizer.readNext();
 
         expect(tokenizer.getCurrent()).toEqual({ type: TokenType.PLUS });
-    });    
+    });
+
+    test("empty code triggers EOF immediately", () => {
+
+        const tokenizer = new Tokenizer("+");
+        tokenizer.readNext();
+        expect(tokenizer.isAtEnd()).toEqual(true);
+
+        tokenizer.readNext(); // No effect.
+    });
+
+    test("code with a token triggers EOF later", () => {
+
+        const tokenizer = new Tokenizer("+ +");
+
+        tokenizer.readNext(); // Consumes first token.
+        expect(tokenizer.isAtEnd()).toEqual(false);
+
+        tokenizer.readNext(); // Consumes second token., triggers EOF.
+        expect(tokenizer.isAtEnd()).toEqual(true);
+    });
+
+    test("can tokenize various numbers", () => {
+
+        expect(tokenize("0")).toEqual([{ type: TokenType.NUMBER }]);
+        expect(tokenize("1")).toEqual([{ type: TokenType.NUMBER }]);
+        expect(tokenize("123")).toEqual([{ type: TokenType.NUMBER }]);
+        expect(tokenize("1.")).toEqual([{ type: TokenType.NUMBER }]);
+        expect(tokenize("0.0")).toEqual([{ type: TokenType.NUMBER }]);
+        expect(tokenize("2.0")).toEqual([{ type: TokenType.NUMBER }]);
+        expect(tokenize("2.1")).toEqual([{ type: TokenType.NUMBER }]);
+        expect(tokenize("2.120")).toEqual([{ type: TokenType.NUMBER }]);
+    });
 });
