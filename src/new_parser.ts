@@ -3,7 +3,7 @@
 //
 
 import { ASTNode } from "./ast";
-import { IToken, ITokenizer, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
+import { IError, IToken, ITokenizer, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
 
 export interface IParser {
 
@@ -21,9 +21,15 @@ export class Parser implements IParser {
     //
     private tokenizer: ITokenizer;
 
-    constructor(code: string) {
-        this.tokenizer = new Tokenizer(code);
+    //
+    // A simple interface that allows the tokenizer to report an error and continue scanning.
+    //
+    private onError?: (err: IError) => void;
+
+    constructor(code: string, onError?: (err: IError) => void) {
+        this.tokenizer = new Tokenizer(code, onError);
         this.tokenizer.readNext(); // Read first token.
+        this.onError = onError;
     }
 
     //
@@ -37,13 +43,22 @@ export class Parser implements IParser {
     // Parses multiple statements.
     //
     private statements(): ASTNode {
-        const stmt = this.statement();
-        return {
-            nodeType: "block-statment",
-            children: [
-                stmt,
-            ],
-        };
+        try {
+            const stmt = this.statement();
+            return {
+                nodeType: "block-statment",
+                children: [
+                    stmt,
+                ],
+            };
+        }
+        catch {
+            //TODO: This is a syncrhronization point where we should try to parse the next statement.
+            return {
+                nodeType: "block-statment",
+                children: [],
+            };
+        }
     }
 
     //
@@ -143,7 +158,18 @@ export class Parser implements IParser {
     //
     private expect(type: TokenType): void {
         if (!this.match(type)) {
-            throw new Error(`Expected token ${TOKEN_NAME}`); //TODO: Need a better error reporting mechanism.
+            const msg = `Expected token ${TOKEN_NAME}`;
+            this.raiseError(msg);
+            throw new Error(msg); 
+        }
+    }
+
+    //
+    // Reports an error to the next level up.
+    //
+    private raiseError(msg: string): void {
+        if (this.onError) {
+            this.onError({ msg: msg });
         }
     }
 }
@@ -151,15 +177,15 @@ export class Parser implements IParser {
 //
 // Helper function for testing.
 //
-export function parseExpression(code: string): ASTNode {
-    const parser = new Parser(code);
+export function parseExpression(code: string, onError?: (err: IError) => void): ASTNode {
+    const parser = new Parser(code, onError);
     return parser.expression();
 }
 
 //
 // Helper function for testing.
 //
-export function parse(code: string): ASTNode {
-    const parser = new Parser(code);
+export function parse(code: string, onError?: (err: IError) => void): ASTNode {
+    const parser = new Parser(code, onError);
     return parser.program();
 }

@@ -64,4 +64,21 @@ describe("parser", () => {
 
     });
 
+    test("missing semicolon triggers an error", () => {
+
+        let errorReported = false;
+        const ast = parse("1", () => {
+            errorReported = true;
+        });
+        expect(errorReported).toEqual(true);
+    });
+
+    test("erroneous statement is omitted", () => {
+
+        const ast = parse("1");
+        expect(ast).toEqual({
+            nodeType: "block-statment",
+            children: [] // No children, the broken statement is omitted.
+        });
+    });    
 });
