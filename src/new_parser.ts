@@ -3,14 +3,14 @@
 //
 
 import { ASTNode } from "./ast";
-import { IToken, ITokenizer, Tokenizer, TokenType } from "./tokenizer";
+import { IToken, ITokenizer, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
 
 export interface IParser {
 
     //
-    // Parses an Aqua expression.
+    // Parses an entire TEAL program.
     //
-    expression(tokenizer: ITokenizer): ASTNode;
+    program(): ASTNode;
 
 }
 
@@ -24,6 +24,48 @@ export class Parser implements IParser {
     constructor(code: string) {
         this.tokenizer = new Tokenizer(code);
         this.tokenizer.readNext(); // Read first token.
+    }
+
+    //
+    // Parses an entire TEAL program.
+    //
+    program(): ASTNode {
+        return this.statements();
+    }
+
+    //
+    // Parses multiple statements.
+    //
+    private statements(): ASTNode {
+        const stmt = this.statement();
+        return {
+            nodeType: "block-statment",
+            children: [
+                stmt,
+            ],
+        };
+    }
+
+    //
+    // Parses a single statement.
+    //
+    private statement(): ASTNode {
+        return this.exprStatement();
+    }
+
+    //
+    // Parses an expression that consists of an expression.
+    //
+    private exprStatement(): ASTNode {
+        const expr = this.expression();
+        this.expect(TokenType.SEMICOLON);
+        return {
+            nodeType: "expr-statement",
+            children: [
+                expr,
+            ],
+        };
+
     }
 
     //
@@ -95,6 +137,15 @@ export class Parser implements IParser {
             return undefined;
         }
     }
+
+    //
+    // Expects that the next token is a particular token.
+    //
+    private expect(type: TokenType): void {
+        if (!this.match(type)) {
+            throw new Error(`Expected token ${TOKEN_NAME}`); //TODO: Need a better error reporting mechanism.
+        }
+    }
 }
 
 //
@@ -103,4 +154,12 @@ export class Parser implements IParser {
 export function parseExpression(code: string): ASTNode {
     const parser = new Parser(code);
     return parser.expression();
+}
+
+//
+// Helper function for testing.
+//
+export function parse(code: string): ASTNode {
+    const parser = new Parser(code);
+    return parser.program();
 }

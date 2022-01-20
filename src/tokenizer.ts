@@ -3,10 +3,18 @@
 //
 
 export enum TokenType {
+    EOF, // Token injected at the end of the input.
     PLUS,
     NUMBER,
-    EOF             // Token injected at the end of the input.
+    SEMICOLON,    
 }
+
+export const TOKEN_NAME = [
+    "end-of-file",
+    "+",
+    "number",
+    "semicolon",
+];
 
 //
 // Represents a token.
@@ -110,6 +118,11 @@ export class Tokenizer implements ITokenizer {
             switch (ch) {
                 case "+": {
                     this.setCurrent({ type: TokenType.PLUS }); 
+                    return;
+                }
+
+                case ";": {
+                    this.setCurrent({ type: TokenType.SEMICOLON }); 
                     return;
                 }
     

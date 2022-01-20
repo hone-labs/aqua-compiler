@@ -1,4 +1,4 @@
-import { parseExpression } from "../new_parser";
+import { parse, parseExpression } from "../new_parser";
 
 describe("parser", () => {
 
@@ -39,6 +39,29 @@ describe("parser", () => {
                 }
             ],
         });
+    });
+
+    test("can parse addition expression statement", () => {
+
+        expect(parse("1;")).toEqual({
+            nodeType: "block-statment",
+            children: [
+              {
+                nodeType: "expr-statement",
+                children: [
+                    {
+                        nodeType: "operation",
+                        opcode: "int",
+                        type: "integer",
+                        args: [
+                            1
+                        ]
+                    }
+                ]
+              }
+            ]
+        });
+
     });
 
 });

@@ -25,12 +25,18 @@ describe("tokenizer", () => {
         return tokens;       
     }
 
-    test("can tokenize + operator", () => {
+    test("register EOF token at end of input after whitespace", () => {
 
-        const tokenizer = new Tokenizer("+");
+        const tokenizer = new Tokenizer(" ");
         tokenizer.readNext();
 
-        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.PLUS });
+        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.EOF });
+    });
+
+    test("can scan various tokens", () => {
+
+        expect(tokenize("+")).toEqual([{ type: TokenType.PLUS }]);
+        expect(tokenize(";")).toEqual([{ type: TokenType.SEMICOLON }]);
     });
 
     test("can skip whitespace", () => {
@@ -51,13 +57,6 @@ describe("tokenizer", () => {
         expect(tokenizer.getCurrent()).toEqual({ type: TokenType.EOF });
     });
 
-    test("register EOF token at end of input after whitespace", () => {
-
-        const tokenizer = new Tokenizer(" ");
-        tokenizer.readNext();
-
-        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.EOF });
-    });
 
     test("registers an error for an unexpected character", () => {
 
