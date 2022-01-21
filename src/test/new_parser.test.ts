@@ -81,4 +81,13 @@ describe("parser", () => {
             children: [] // No children, the broken statement is omitted.
         });
     });    
+
+    test("bad token triggers an error", () => {
+
+        let errorReported = false;
+        const ast = parse("@;", () => {
+            errorReported = true;
+        });
+        expect(errorReported).toEqual(true);
+    });
 });
