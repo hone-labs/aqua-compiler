@@ -2,6 +2,8 @@
 // Tokenizer for the Aqua language.
 //
 
+import { number } from "zod";
+
 export enum TokenType {
     EOF, // Token injected at the end of the input.
     PLUS,
@@ -29,6 +31,16 @@ export interface IToken {
     // The value of the token, for tokens that have a value.
     //
     readonly value?: any;
+
+    //
+    // Line number where the token starts.
+    //
+    readonly line: number;
+
+    //
+    // Column number where the token starts.
+    //
+    readonly column: number;
 }
 
 //
@@ -39,6 +51,16 @@ export interface IError {
     // The error message.
     //
     msg: string;
+
+    //
+    // 1-based line number where the error occurred.
+    //
+    line: number;
+
+    //
+    // 0-based column number where the error occurred.
+    //
+    column: number;
 }
 
 //
@@ -59,7 +81,22 @@ export interface ITokenizer {
     // Returns true once all input has been consumed.
     //
     isAtEnd(): boolean;
+
+    //
+    // Gets the current line number in the input.
+    //
+    getLine(): number;
+
+    //
+    // Gets the current column number in the input.
+    //
+    getColumn(): number;    
 }
+
+//
+// Defines a handler for errors.
+//
+export type OnErrorFn = (err: IError) => void;
 
 //
 // A source code tokenizer for the Aqua language.
@@ -77,9 +114,29 @@ export class Tokenizer implements ITokenizer {
     private curPosition: number;
 
     //
+    // Tracks the current line number within the input.
+    //
+    private curLine: number;
+
+    //
+    // Tracks the current column number within the input.
+    //
+    private curColumn: number;
+
+    //
     // The position in the code where the current token starts.
     //
     private curTokenStart?: number;
+
+    //
+    // The line in the code where the current token starts.
+    //
+    private curTokenLine?: number;
+
+    //
+    // The column in the code where the current token starts.
+    //
+    private curTokenColumn?: number;
 
     //
     // The most recently scannned token.
@@ -89,11 +146,13 @@ export class Tokenizer implements ITokenizer {
     //
     // A simple interface that allows the tokenizer to report an error and continue scanning.
     //
-    private onError?: (err: IError) => void;
+    private onError?: OnErrorFn;
 
-    constructor(code: string, onError?: (err: IError) => void) {
+    constructor(code: string, onError?: OnErrorFn) {
         this.code = code;
         this.curPosition = 0;
+        this.curLine = 1;
+        this.curColumn = 0;
         this.onError = onError;
     }
 
@@ -108,21 +167,35 @@ export class Tokenizer implements ITokenizer {
             this.skipWhitespace();
 
             if (this.isAtEnd()) {
-                this.setCurrent({ type: TokenType.EOF });
+                this.setCurrent({ 
+                    type: TokenType.EOF,
+                    line: this.curLine,
+                    column: this.curColumn,
+                });
                 return;
             }
 
             this.curTokenStart = this.curPosition;
+            this.curTokenLine = this.curLine;
+            this.curTokenColumn = this.curColumn;
     
             const ch = this.advance();
             switch (ch) {
                 case "+": {
-                    this.setCurrent({ type: TokenType.PLUS }); 
+                    this.setCurrent({ 
+                        type: TokenType.PLUS,
+                        line: this.curTokenLine,
+                        column: this.curTokenColumn,
+                    }); 
                     return;
                 }
 
                 case ";": {
-                    this.setCurrent({ type: TokenType.SEMICOLON }); 
+                    this.setCurrent({ 
+                        type: TokenType.SEMICOLON,
+                        line: this.curTokenLine,
+                        column: this.curTokenColumn,
+                    }); 
                     return;
                 }
     
@@ -135,6 +208,8 @@ export class Tokenizer implements ITokenizer {
                     if (this.onError) {
                         this.onError({
                             msg: `Encountered unexpected character ${ch}`,
+                            line: this.curTokenLine,
+                            column: this.curTokenColumn,
                         });
                     }
 
@@ -161,6 +236,20 @@ export class Tokenizer implements ITokenizer {
     }
 
     //
+    // Gets the current line number in the input.
+    //
+    getLine(): number {
+        return this.curLine;
+    }
+
+    //
+    // Gets the current column number in the input.
+    //
+    getColumn(): number {
+        return this.curColumn;
+    }
+
+    //
     // Sets the current token.
     //
     private setCurrent(token: IToken) {
@@ -171,7 +260,16 @@ export class Tokenizer implements ITokenizer {
     // Return the current character and then advance the current position by one place.
     //
     private advance(): string {
-        return this.code[this.curPosition++];
+        const ch = this.code[this.curPosition];
+        if (ch === "\n") {
+            this.curLine += 1;
+            this.curColumn = 0;
+        }
+        else {
+            this.curColumn += 1;
+        }
+        this.curPosition += 1;
+        return ch;
     }
 
     //
@@ -190,9 +288,9 @@ export class Tokenizer implements ITokenizer {
     //
     private skipWhitespace(): void {
         while (true) {
-            const ch = this.code[this.curPosition];
+            const ch = this.peek();
             if (ch === " " || ch === "\t" || ch === "\r" || ch === "\n") {
-                this.curPosition += 1;
+                this.advance();
             }
             else {                
                 break;
@@ -229,6 +327,8 @@ export class Tokenizer implements ITokenizer {
         this.setCurrent({ 
             type: TokenType.NUMBER, 
             value: parseFloat(this.code.substring(this.curTokenStart!, this.curPosition)),
+            line: this.curTokenLine!,
+            column: this.curTokenColumn!,
         }); 
     }
 }

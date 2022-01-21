@@ -1,4 +1,4 @@
-import { IToken, Tokenizer, TokenType } from "../tokenizer";
+import { IError, IToken, OnErrorFn, Tokenizer, TokenType } from "../tokenizer";
 
 describe("tokenizer", () => {
 
@@ -6,9 +6,9 @@ describe("tokenizer", () => {
     // Helper function that converts code to an array of tokens, not including
     // the EOF token.
     //
-    function tokenize(code: string): IToken[] {
+    function tokenize(code: string, onError?: OnErrorFn): IToken[] {
 
-        const tokenizer = new Tokenizer(code);
+        const tokenizer = new Tokenizer(code, onError);
         const tokens: IToken[] = [];
 
         tokenizer.readNext();
@@ -47,7 +47,7 @@ describe("tokenizer", () => {
             const actualValue = actual[key];
             const expectedValue  = expected[key];
             if (actualValue !== expectedValue) {
-                throw new Error(`Expected ${key} to be set to ${value}.\r\nActual ${actualValue}.\r\nExpected: ${expectedValue}.`);
+                throw new Error(`Expected "${key}" to be set to ${value}\r\nActual value: ${actualValue}\r\nExpected value: ${expectedValue}\r\nActual object: ${JSON.stringify(actual, null, 4)}`);
             }            
         }
     }
@@ -105,6 +105,16 @@ describe("tokenizer", () => {
 
         expect(errorReported).toBe(true);
         expectFields(tokenizer.getCurrent(), { type: TokenType.EOF });
+    });
+
+    test("error reports line and column", () => {
+
+        expectArray(retreiveErrors("@"), [{ line: 1, column: 0 }]);
+        expectArray(retreiveErrors("\n@"), [{ line: 2, column: 0 }]);
+        expectArray(retreiveErrors("\r\n@"), [{ line: 2, column: 0 }]);
+        expectArray(retreiveErrors(" @"), [{ line: 1, column: 1 }]);
+        expectArray(retreiveErrors("\n@"), [{ line: 2, column: 0 }]);
+        expectArray(retreiveErrors("\n @"), [{ line: 2, column: 1 }]);
     });
 
     test("moves onto next character after an unexpected character", () => {

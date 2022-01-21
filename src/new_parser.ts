@@ -3,7 +3,7 @@
 //
 
 import { ASTNode } from "./ast";
-import { IError, IToken, ITokenizer, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
+import { IError, IToken, ITokenizer, OnErrorFn, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
 
 export interface IParser {
 
@@ -24,9 +24,9 @@ export class Parser implements IParser {
     //
     // A simple interface that allows the tokenizer to report an error and continue scanning.
     //
-    private onError?: (err: IError) => void;
+    private onError?: OnErrorFn;
 
-    constructor(code: string, onError?: (err: IError) => void) {
+    constructor(code: string, onError?: OnErrorFn) {
         this.tokenizer = new Tokenizer(code, onError);
         this.tokenizer.readNext(); // Read first token.
         this.onError = onError;
@@ -158,8 +158,13 @@ export class Parser implements IParser {
     //
     private expect(type: TokenType): void {
         if (!this.match(type)) {
-            const msg = `Expected token ${TOKEN_NAME[type]}, found token ${TOKEN_NAME[this.tokenizer.getCurrent()!.type]}`;
-            this.raiseError(msg);
+            const token = this.tokenizer.getCurrent()!;
+            const msg = `Expected token ${TOKEN_NAME[type]}, found token ${TOKEN_NAME[token.type]}`;
+            this.raiseError({ 
+                msg: msg,
+                line: token.line,
+                column: token.column,
+             });
             throw new Error(msg); 
         }
     }
@@ -167,9 +172,9 @@ export class Parser implements IParser {
     //
     // Reports an error to the next level up.
     //
-    private raiseError(msg: string): void {
+    private raiseError(err: IError): void {
         if (this.onError) {
-            this.onError({ msg: msg });
+            this.onError(err);
         }
     }
 }
@@ -177,7 +182,7 @@ export class Parser implements IParser {
 //
 // Helper function for testing.
 //
-export function parseExpression(code: string, onError?: (err: IError) => void): ASTNode {
+export function parseExpression(code: string, onError?: OnErrorFn): ASTNode {
     const parser = new Parser(code, onError);
     return parser.expression();
 }
@@ -185,7 +190,7 @@ export function parseExpression(code: string, onError?: (err: IError) => void): 
 //
 // Helper function for testing.
 //
-export function parse(code: string, onError?: (err: IError) => void): ASTNode {
+export function parse(code: string, onError?: OnErrorFn): ASTNode {
     const parser = new Parser(code, onError);
     return parser.program();
 }
