@@ -158,7 +158,7 @@ export class Parser implements IParser {
     //
     private expect(type: TokenType): void {
         if (!this.match(type)) {
-            const msg = `Expected token ${TOKEN_NAME}`;
+            const msg = `Expected token ${TOKEN_NAME[type]}`;
             this.raiseError(msg);
             throw new Error(msg); 
         }
