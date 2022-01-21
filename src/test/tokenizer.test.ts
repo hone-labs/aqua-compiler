@@ -25,18 +25,57 @@ describe("tokenizer", () => {
         return tokens;       
     }
 
-    test("register EOF token at end of input after whitespace", () => {
+    //
+    // Tokenizes code and only returns the errors produced.
+    //
+    function retreiveErrors(code: string): IError[] {
+
+        let errors: IError[] = [];
+
+        tokenize(code, err => {
+            errors.push(err);
+        });        
+
+        return errors;
+    }
+
+    //
+    // Expect a single object to contain expected fields.
+    //
+    function expectFields(actual: any, expected: any): void {
+        for (const [key, value] of Object.entries(expected)) {
+            const actualValue = actual[key];
+            const expectedValue  = expected[key];
+            if (actualValue !== expectedValue) {
+                throw new Error(`Expected ${key} to be set to ${value}.\r\nActual ${actualValue}.\r\nExpected: ${expectedValue}.`);
+            }            
+        }
+    }
+
+    //
+    // Expect an array of object to contain expected fields.
+    //
+    function expectArray(actual: any[], expected: any[]): void {
+        
+        expect(actual.length).toEqual(expected.length);
+
+        for (let i = 0; i < actual.length; ++i) {
+            expectFields(actual[i], expected[i]);
+        }
+    }
+
+    test("registers EOF token at end of input after whitespace", () => {
 
         const tokenizer = new Tokenizer(" ");
         tokenizer.readNext();
 
-        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.EOF });
+        expectFields(tokenizer.getCurrent(), { type: TokenType.EOF });
     });
 
     test("can scan various tokens", () => {
 
-        expect(tokenize("+")).toEqual([{ type: TokenType.PLUS }]);
-        expect(tokenize(";")).toEqual([{ type: TokenType.SEMICOLON }]);
+        expectArray(tokenize("+"), [{ type: TokenType.PLUS }]);
+        expectArray(tokenize(";"), [{ type: TokenType.SEMICOLON }]);
     });
 
     test("can skip whitespace", () => {
@@ -44,17 +83,15 @@ describe("tokenizer", () => {
         const tokenizer = new Tokenizer(" \t\r\n+");
         tokenizer.readNext();
 
-        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.PLUS });
-
-
+        expectFields(tokenizer.getCurrent(), { type: TokenType.PLUS });
     });
 
-    test("register EOF token at end of input", () => {
+    test("registers EOF token at end of input", () => {
 
         const tokenizer = new Tokenizer("");
         tokenizer.readNext();
 
-        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.EOF });
+        expectFields(tokenizer.getCurrent(), { type: TokenType.EOF });
     });
 
 
@@ -67,7 +104,7 @@ describe("tokenizer", () => {
         tokenizer.readNext();
 
         expect(errorReported).toBe(true);
-        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.EOF });
+        expectFields(tokenizer.getCurrent(), { type: TokenType.EOF });
     });
 
     test("moves onto next character after an unexpected character", () => {
@@ -75,7 +112,7 @@ describe("tokenizer", () => {
         const tokenizer = new Tokenizer("@+");
         tokenizer.readNext();
 
-        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.PLUS });
+        expectFields(tokenizer.getCurrent(), { type: TokenType.PLUS });
     });
 
     test("skips whitespace between unrecognised character and next token", () => {
@@ -83,7 +120,7 @@ describe("tokenizer", () => {
         const tokenizer = new Tokenizer("@ +");
         tokenizer.readNext();
 
-        expect(tokenizer.getCurrent()).toEqual({ type: TokenType.PLUS });
+        expectFields(tokenizer.getCurrent(), { type: TokenType.PLUS });
     });
 
     test("empty code triggers EOF immediately", () => {
@@ -108,22 +145,22 @@ describe("tokenizer", () => {
 
     test("can tokenize various numbers", () => {
 
-        expect(tokenize("0")).toEqual([{ type: TokenType.NUMBER, value: 0 }]);
-        expect(tokenize("1")).toEqual([{ type: TokenType.NUMBER, value: 1 }]);
-        expect(tokenize("123")).toEqual([{ type: TokenType.NUMBER, value: 123 }]);
+        expectArray(tokenize("0"), [{ type: TokenType.NUMBER, value: 0 }]);
+        expectArray(tokenize("1"), [{ type: TokenType.NUMBER, value: 1 }]);
+        expectArray(tokenize("123"), [{ type: TokenType.NUMBER, value: 123 }]);
     });
 
     test("can tokenize an expression", () => {
 
         // No whitespace.
-        expect(tokenize("1+2")).toEqual([ 
+        expectArray(tokenize("1+2"), [ 
             { type: TokenType.NUMBER, value: 1 },
             { type: TokenType.PLUS },
             { type: TokenType.NUMBER, value: 2 },
         ]);
 
         // With whitespace.
-        expect(tokenize(" 1 + 2 ")).toEqual([ 
+        expectArray(tokenize(" 1 + 2 "), [ 
             { type: TokenType.NUMBER, value: 1 },
             { type: TokenType.PLUS },
             { type: TokenType.NUMBER, value: 2 },
