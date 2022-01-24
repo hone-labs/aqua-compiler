@@ -1,7 +1,7 @@
 {
   "name": "aqua-compiler",
-  "version": "0.0.8",
-  "description": "A TEAL compiler and REPL.",
+  "version": "0.0.1",
+  "description": "An expressive high level language for the Algorand block chain that compiles to TEAL code.",
   "main": "build/cli.js",
   "scripts": {
     "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
@@ -35,7 +35,7 @@
   },
   "keywords": [],
   "author": "ashley@codecapers.com.au",
-  "license": "private",
+  "license": "MIT",
   "dependencies": {
     "@nodelib/fs.walk": "^1.2.8",
     "color-json": "^2.0.1",
