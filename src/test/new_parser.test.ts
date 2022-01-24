@@ -131,13 +131,23 @@ describe("parser", () => {
         expect(errorReported).toEqual(true);
     });
 
+    test("error for unexpected character", () => {
+        expectArray(retreiveErrors("@"), [{ msg: 'Encountered unexpected character @' }]);
+    });
+
+    test("error unexpected token", () => {
+        expectArray(retreiveErrors(";"), [{ msg: 'Unexpected token ;' }]);
+    });
+
     test("error reports line and column", () => {
 
-        expectArray(retreiveErrors("@;"), [{ line: 1, column: 0 }]);
-        expectArray(retreiveErrors("\n@;"), [{ line: 2, column: 0 }]);
-        expectArray(retreiveErrors(" @;"), [{ line: 1, column: 1 }]);
-        expectArray(retreiveErrors("\n @;"), [{ line: 2, column: 1 }]);
+        expectArray(retreiveErrors("@"), [{ line: 1, column: 0 }]);
+        expectArray(retreiveErrors("\n@"), [{ line: 2, column: 0 }]);
+        expectArray(retreiveErrors(" @"), [{ line: 1, column: 1 }]);
+        expectArray(retreiveErrors("\n @"), [{ line: 2, column: 1 }]);
     });
+
+
 
     test("can parse multiple statments", () => {
 
@@ -173,5 +183,28 @@ describe("parser", () => {
                 }
             ]
         });
+    });
+
+    test("error causes resync to next statement", () => {
+
+        const ast = parse("@;2;");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "expr-statement",
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                2
+                            ]
+                        }
+                    ]
+                }
+            ]
+        });        
     });
 });

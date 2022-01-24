@@ -41,6 +41,13 @@ export interface IToken {
     // Column number where the token starts.
     //
     readonly column: number;
+
+    //
+    // The string value of the token.
+    //
+    // TODO: This should only be read from the source code buffer when necessary.
+    //
+    readonly string: string;
 }
 
 //
@@ -171,6 +178,7 @@ export class Tokenizer implements ITokenizer {
                     type: TokenType.EOF,
                     line: this.curLine,
                     column: this.curColumn,
+                    string: "end of file",
                 });
                 return;
             }
@@ -186,6 +194,7 @@ export class Tokenizer implements ITokenizer {
                         type: TokenType.PLUS,
                         line: this.curTokenLine,
                         column: this.curTokenColumn,
+                        string: "+",
                     }); 
                     return;
                 }
@@ -195,6 +204,7 @@ export class Tokenizer implements ITokenizer {
                         type: TokenType.SEMICOLON,
                         line: this.curTokenLine,
                         column: this.curTokenColumn,
+                        string: ";",
                     }); 
                     return;
                 }
@@ -324,11 +334,14 @@ export class Tokenizer implements ITokenizer {
             this.advance();
         }
 
+        const stringValue = this.code.substring(this.curTokenStart!, this.curPosition);
+
         this.setCurrent({ 
             type: TokenType.NUMBER, 
-            value: parseFloat(this.code.substring(this.curTokenStart!, this.curPosition)),
+            value: parseFloat(stringValue),
             line: this.curTokenLine!,
             column: this.curTokenColumn!,
+            string: stringValue,
         }); 
     }
 }

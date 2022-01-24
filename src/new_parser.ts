@@ -43,24 +43,37 @@ export class Parser implements IParser {
     // Parses multiple statements.
     //
     private statements(): ASTNode {
-        try {
-            const stmts: ASTNode[] = [];
+        const stmts: ASTNode[] = [];
 
-            while (!this.isAtEnd()) {
+        while (!this.isAtEnd()) {
+            try {
                 stmts.push(this.statement());
             }
-
-            return {
-                nodeType: "block-statment",
-                children: stmts,
-            };
+            catch (err) {
+                // Error should have already been raised.
+                // At this point we just want to resynchronize to the next statement.
+                this.syncNextStatement();
+            }
         }
-        catch {
-            //TODO: This is a syncrhronization point where we should try to parse the next statement.
-            return {
-                nodeType: "block-statment",
-                children: [],
-            };
+
+        return {
+            nodeType: "block-statment",
+            children: stmts,
+        };
+    }
+
+    //
+    // Discards token until we find a token that can end a statement so we can resynchronize the parser.
+    //
+    private syncNextStatement(): void {
+        while (!this.isAtEnd()) {
+            const token = this.tokenizer.getCurrent();
+            this.tokenizer.readNext(); // Skip token.
+
+            if (token && token.type === TokenType.SEMICOLON) { //todo: move this to an array of token types!
+                console.log(this.tokenizer.getCurrent());
+                break; // After skipping a semicolon we should be at a new statement.
+            }
         }
     }
 
@@ -77,6 +90,7 @@ export class Parser implements IParser {
     private exprStatement(): ASTNode {
         const expr = this.expression();
         this.expect(TokenType.SEMICOLON);
+
         return {
             nodeType: "expr-statement",
             children: [
@@ -137,7 +151,14 @@ export class Parser implements IParser {
             }
         }
 
-        throw new Error(`Unexpected token`);
+        const token = this.tokenizer.getCurrent();
+        const msg = `Unexpected token ${token!.string}`;
+        this.raiseError({
+            msg: msg,
+            line: token!.line,
+            column: token!.column,
+        })
+        throw new Error(msg);
     }
 
     //
@@ -167,7 +188,8 @@ export class Parser implements IParser {
                 msg: msg,
                 line: token.line,
                 column: token.column,
-             });
+            });
+
             throw new Error(msg); 
         }
     }
