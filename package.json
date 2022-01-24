@@ -1,8 +1,8 @@
 {
   "name": "aqua-compiler",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "An expressive high level language for the Algorand block chain that compiles to TEAL code.",
-  "main": "build/cli.js",
+  "main": "build/index.js",
   "scripts": {
     "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
     "start": "npm run build-parser && ts-node ./src/cli.ts exec examples/test.aqua",
