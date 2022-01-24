@@ -71,7 +71,6 @@ export class Parser implements IParser {
             this.tokenizer.readNext(); // Skip token.
 
             if (token && token.type === TokenType.SEMICOLON) { //todo: move this to an array of token types!
-                console.log(this.tokenizer.getCurrent());
                 break; // After skipping a semicolon we should be at a new statement.
             }
         }
