@@ -44,12 +44,15 @@ export class Parser implements IParser {
     //
     private statements(): ASTNode {
         try {
-            const stmt = this.statement();
+            const stmts: ASTNode[] = [];
+
+            while (!this.isAtEnd()) {
+                stmts.push(this.statement());
+            }
+
             return {
                 nodeType: "block-statment",
-                children: [
-                    stmt,
-                ],
+                children: stmts,
             };
         }
         catch {
@@ -176,6 +179,19 @@ export class Parser implements IParser {
         if (this.onError) {
             this.onError(err);
         }
+    }
+
+    //
+    // Returns true when we have reached the end-of-file token in the source code.
+    //
+    private isAtEnd(): boolean {
+        const token = this.tokenizer.getCurrent();
+        if (token && token.type === TokenType.EOF) {
+            // Found an EOF token.
+            return true;
+        }
+
+        return false;
     }
 }
 

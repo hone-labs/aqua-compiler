@@ -12,7 +12,7 @@ describe("parser", () => {
 
         parse(code, err => {
             errors.push(err);
-        });        
+        });
 
         return errors;
     }
@@ -23,10 +23,10 @@ describe("parser", () => {
     function expectFields(actual: any, expected: any): void {
         for (const [key, value] of Object.entries(expected)) {
             const actualValue = actual[key];
-            const expectedValue  = expected[key];
+            const expectedValue = expected[key];
             if (actualValue !== expectedValue) {
                 throw new Error(`Expected "${key}" to be set to ${value}\r\nActual value: ${actualValue}\r\nExpected value: ${expectedValue}\r\nActual object: ${JSON.stringify(actual, null, 4)}`);
-            }            
+            }
         }
     }
 
@@ -34,13 +34,13 @@ describe("parser", () => {
     // Expect an array of object to contain expected fields.
     //
     function expectArray(actual: any[], expected: any[]): void {
-        
+
         expect(actual.length).toEqual(expected.length);
 
         for (let i = 0; i < actual.length; ++i) {
             expectFields(actual[i], expected[i]);
         }
-    }    
+    }
 
     test("can parse number expression", () => {
 
@@ -86,19 +86,19 @@ describe("parser", () => {
         expect(parse("1;")).toEqual({
             nodeType: "block-statment",
             children: [
-              {
-                nodeType: "expr-statement",
-                children: [
-                    {
-                        nodeType: "operation",
-                        opcode: "int",
-                        type: "integer",
-                        args: [
-                            1
-                        ]
-                    }
-                ]
-              }
+                {
+                    nodeType: "expr-statement",
+                    children: [
+                        {
+                            nodeType: "operation",
+                            opcode: "int",
+                            type: "integer",
+                            args: [
+                                1
+                            ]
+                        }
+                    ]
+                }
             ]
         });
 
@@ -120,7 +120,7 @@ describe("parser", () => {
             nodeType: "block-statment",
             children: [] // No children, the broken statement is omitted.
         });
-    });    
+    });
 
     test("bad token triggers an error", () => {
 
@@ -137,5 +137,41 @@ describe("parser", () => {
         expectArray(retreiveErrors("\n@;"), [{ line: 2, column: 0 }]);
         expectArray(retreiveErrors(" @;"), [{ line: 1, column: 1 }]);
         expectArray(retreiveErrors("\n @;"), [{ line: 2, column: 1 }]);
+    });
+
+    test("can parse multiple statments", () => {
+
+        const ast = parse("1;\n2;");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "expr-statement",
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                1
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "nodeType": "expr-statement",
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                2
+                            ]
+                        }
+                    ]
+                }
+            ]
+        });
     });
 });
