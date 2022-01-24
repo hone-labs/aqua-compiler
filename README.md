@@ -2,7 +2,7 @@
 
 An expressive high level language for the Algorand block chain that compiles to TEAL code.
 
-This is a working in progress. Please report issues and help set the direction for this project.
+This is a work in progress. Please report issues and help set the direction for this project.
 
 ## Quick setup
 
