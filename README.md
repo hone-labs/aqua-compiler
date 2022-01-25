@@ -1,150 +1,57 @@
 # Aqua-compiler
 
-An expressive high level language for the Algorand block chain that compiles to TEAL code.
+An expressive high level language for [the Algorand blockchain](https://en.wikipedia.org/wiki/Algorand) smart contracts that compiles to [TEAL](https://developer.algorand.org/docs/get-details/dapps/avm/teal/specification/) code.
 
 This is a work in progress. Please report issues and help set the direction for this project.
 
-## Quick setup
+## Using the Aqua command
 
-Clone the repo:
+Download the latest executable for your platform from [the releases page](https://github.com/optio-labs/aqua-compiler/releases).
 
-```bash
-git clone git@github.com:sovereign-labs/aqua-compiler.git
-```
+Add the executable to your path. If you are on MacOS or Linux you should rename the executable from `aqua-mac` or `aqua-linux` to just be called `aqua` (so the rest of the instructions make sense).
 
-Install dependencies:
+## REPL
 
-```bash
-cd aqua-compiler
-npm install
-```
-
-Then run it:
-
-```bash
-npm start
-```
-
-Or with live reload:
-
-```bash
-npm run start:dev
-```
-
-## Build Aqua
-
-Build the parser:
-
-```bash
-npm run build-parse
-```
-
-Build TypeScript code:
-
-```bash
-npm run build 
-```
-
-## Compile a file
-
-```bash
-aqua test.aqua
-```
-
-Or:
-
-```bash
-npx ts-node src/cli.ts examples/test.aqua
-```
-
-## Executing a file
-
-```bash
-aqua exec test.aqua
-```
-
-Or:
-
-```bash
-npx ts-node src/cli.ts exec examples/test.aqua
-```
-
-## Run the REPL
+Running the executable with no arguments starts the REPL:
 
 ```bash
 aqua
 ```
 
-Or:
-
-```bash
-npx ts-node src/cli.ts
-```
-
-Or 
-
-```bash
-npm run start:repl
-```
-
+You can type Aqua expressions and statements at the REPL and see the TEAL code that is generated.
 
 Trying entering expressions at the REPL prompt:
 
-- `txn Amount >= 1000;`
-- `15 + txn Amount >= 1000;`
-- `txn Amount <= arg 0;`
-- `txn Amount + arg0 > 1000 && arg1 > 30;`
-- `txn Receiver == addr ABC123;`
-- `"a string" == txn Something;`
+- `txn.Amount >= 1000;`
+- `15 + txn.Amount >= 1000;`
+- `txn.Amount <= arg[0];`
+- `txn.Amount + arg[0] > 1000 && arg[1] > 30;`
+- `txn.Receiver == addr ABC123;`
+- `"a string" == txn.Something;`
 - `return 1+2;`
 
-## Visualise the AST
+
+## Compiling an Aqua file
+
+To compile an Aqua file to TEAL code, input the Aqua filename:
 
 ```bash
-npm run start:ast
+aqua my-smart-contract.aqua
 ```
 
-## Run tests
+That prints the generated TEAL code to standard output.
+
+Typically you'll want to capture the TEAL code to a file (so you can run it against the blockchain):
 
 ```bash
-npm test
+aqua my-smart-contact.aqua > my-smart-contract.teal
 ```
 
-Or 
+## Examples of Aqua code
 
-```bash
-npm run test:watch
-```
+See the `examples` subdirectory for various examples of Aqua code.
 
-## Build the binary executables
 
-Make sure to have use Node.js v12.15.0 which is known to work with Nexe.
+## Development
 
-Use `nvm` to install and swap between different versions of Node.js:
-
-```bash
-nvm install 12.15.0
-nvm use 12.15.0
-```
-
-!! Build the TypeScript code:
-
-```bash
-npm run build
-```
-
-Build for each platform:
-
-```bash
-npm run build-macos
-npm run build-linux
-npm run build-win
-```
-
-Or 
-
-```bash
-npm run build-all
-```
-
-**NOTE:** Linux and MacOS builds should be built on Linux.
+See [the development guide](docs/DEVELOPMENT.md) for instructions on development of Aqua.
