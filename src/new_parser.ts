@@ -147,7 +147,7 @@ export class Parser implements IParser {
                 args: [
                     numberToken.value!,
                 ]
-            }
+            };
         }
 
         const token = this.tokenizer.getCurrent();
@@ -156,7 +156,7 @@ export class Parser implements IParser {
             msg: msg,
             line: token!.line,
             column: token!.column,
-        })
+        });
         throw new Error(msg);
     }
 
