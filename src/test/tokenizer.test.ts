@@ -77,6 +77,7 @@ describe("tokenizer", () => {
         expectArray(tokenize("+"), [{ type: TokenType.PLUS }]);
         expectArray(tokenize(";"), [{ type: TokenType.SEMICOLON }]);
         expectArray(tokenize("const"), [{ type: TokenType.CONST }]);
+        expectArray(tokenize("let"), [{ type: TokenType.LET }]);
         expectArray(tokenize("="), [{ type: TokenType.ASSIGNMENT }]);
     });
 

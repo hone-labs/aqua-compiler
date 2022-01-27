@@ -8,8 +8,9 @@ export enum TokenType {
     NUMBER,
     SEMICOLON,
     CONST,
+    LET,
     ASSIGNMENT,
-    IDENTIFIER // The column in the code where the current token starts.
+    IDENTIFIER, // The column in the code where the current token starts.
 }
 
 //
@@ -21,6 +22,7 @@ export const TOKEN_NAME = [
     "number",
     "semicolon",
     "const",
+    "let",
     "=",
     "identifier",
 ];
@@ -30,6 +32,7 @@ export const TOKEN_NAME = [
 //
 export const KEYWORDS = {
     const: TokenType.CONST,
+    let: TokenType.LET,
 };
 
 //
