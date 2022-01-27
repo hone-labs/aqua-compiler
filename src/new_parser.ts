@@ -38,7 +38,64 @@ export class Parser implements IParser {
     program(): ASTNode {
         return {
             nodeType: "block-statment", //TODO: fix spelling later.
-            children: this.statements(TokenType.EOF),
+            children: this.declarations(),
+        };
+    }
+
+    //
+    // Parse top level declarations.
+    //
+    private declarations(): ASTNode[] {
+        const stmts: ASTNode[] = [];
+
+        while (!this.peek(TokenType.EOF)) {
+            try {
+                stmts.push(this.declaration());
+            }
+            catch (err) {
+                // Error should have already been raised.
+                // At this point we just want to resynchronize to the next statement.
+                this.syncNextStatement();
+            }
+        }
+
+        return stmts;
+    }
+
+    //
+    // Parses a top level declaration.
+    //
+    private declaration(): ASTNode {
+        if (this.match(TokenType.FUNCTION)) {
+            return this.function();
+        }
+
+        return this.statement();
+    }
+
+    //
+    // Parses a function declaration.
+    //
+    private function(): ASTNode {
+        const identifier = this.expect(TokenType.IDENTIFIER);
+        this.expect(TokenType.OPEN_PAREN);
+
+        //TODO: Add function parameters.
+
+        this.expect(TokenType.CLOSE_PAREN);
+        
+        this.expect(TokenType.OPEN_BRACKET);
+
+        const body = this.blockStatement();
+
+        return {
+            nodeType: "function-declaration",
+            name: identifier.value!,
+            params: [],
+            body: {
+                nodeType: "block-statment",
+                children: []
+            }
         };
     }
 

@@ -256,7 +256,7 @@ describe("parser", () => {
                 }
             ]
         });
-    });    
+    });
 
     test("can parse an empty block statement", () => {
 
@@ -267,11 +267,11 @@ describe("parser", () => {
                 {
                     "nodeType": "block-statment",
                     "children": [
-                    ]        
+                    ]
                 }
             ]
         });
-    });    
+    });
 
     test("can parse block statement with sub-statement", () => {
 
@@ -294,12 +294,12 @@ describe("parser", () => {
                                     ]
                                 }
                             ]
-                        }               
+                        }
                     ]
                 }
             ]
         });
-    });    
+    });
 
     test("can parse a nested block statement", () => {
 
@@ -308,15 +308,34 @@ describe("parser", () => {
             "nodeType": "block-statment", // Program level.
             "children": [
                 {
-                    "nodeType": "block-statment", 
+                    "nodeType": "block-statment",
                     "children": [
                         {
                             "nodeType": "block-statment",
                             "children": []
-                        }                
+                        }
                     ]
                 }
             ]
         });
-    });    
+    });
+
+    test("can declare a function", () => {
+
+        const ast = parse("function test () {\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "function-declaration",
+                    "name": "test",
+                    "params": [],
+                    "body": {
+                        "nodeType": "block-statment",
+                        "children": []
+                    }
+                }
+            ]
+        });
+    });
 });
