@@ -205,6 +205,31 @@ describe("parser", () => {
                     ]
                 }
             ]
-        });        
+        });
+    });
+
+    test("can declare a constant", () => {
+
+        const ast = parse("const a = 3;");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "declare-variable",
+                    "name": "a",
+                    "symbolType": 1,
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                3
+                            ]
+                        }
+                    ]
+                }
+            ]
+        });
     });
 });

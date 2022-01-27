@@ -80,7 +80,33 @@ export class Parser implements IParser {
     // Parses a single statement.
     //
     private statement(): ASTNode {
+        if (this.match(TokenType.CONST)) {
+            return this.constantDeclaration();
+        }
+        
         return this.exprStatement();
+    }
+
+    //
+    // Parses a constant declaration.
+    //
+    private constantDeclaration(): ASTNode {
+
+        const identifier = this.expect(TokenType.IDENTIFIER);
+        this.expect(TokenType.ASSIGNMENT);
+
+        const initializer = this.expression();       
+
+        this.expect(TokenType.SEMICOLON);
+
+        return {
+            nodeType: "declare-variable",
+            name: identifier.value!,
+            symbolType: 1, // Constant. TOOD: This shouldn't be hardcoded - after new parser is finished.
+            children: [
+                initializer,
+            ],
+        };
     }
 
     //
@@ -161,6 +187,14 @@ export class Parser implements IParser {
     }
 
     //
+    // Returns true if the current token is a particular type.
+    //
+    private peek(type: TokenType): boolean {
+        const curToken = this.tokenizer.getCurrent();
+        return curToken && curToken.type === type || false;
+    }
+
+    //
     // Matches the current token against an expected token. 
     // If it matches the token is returned and the current token is advanced.
     // If it doesn't match, undefined is returned.
@@ -179,9 +213,9 @@ export class Parser implements IParser {
     //
     // Expects that the next token is a particular token.
     //
-    private expect(type: TokenType): void {
+    private expect(type: TokenType): IToken {
+        const token = this.tokenizer.getCurrent()!;
         if (!this.match(type)) {
-            const token = this.tokenizer.getCurrent()!;
             const msg = `Expected token ${TOKEN_NAME[type]}, found token ${TOKEN_NAME[token.type]}`;
             this.raiseError({ 
                 msg: msg,
@@ -191,6 +225,7 @@ export class Parser implements IParser {
 
             throw new Error(msg); 
         }
+        return token;
     }
 
     //
