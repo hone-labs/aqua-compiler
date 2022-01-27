@@ -81,7 +81,10 @@ export class Parser implements IParser {
     //
     private statement(): ASTNode {
         if (this.match(TokenType.CONST)) {
-            return this.constantDeclaration();
+            return this.variableDeclaration(true);
+        }
+        else if (this.match(TokenType.LET)) {
+            return this.variableDeclaration(false);
         }
         
         return this.exprStatement();
@@ -90,7 +93,7 @@ export class Parser implements IParser {
     //
     // Parses a constant declaration.
     //
-    private constantDeclaration(): ASTNode {
+    private variableDeclaration(isConstant: boolean): ASTNode {
 
         const identifier = this.expect(TokenType.IDENTIFIER);
         this.expect(TokenType.ASSIGNMENT);
@@ -102,7 +105,7 @@ export class Parser implements IParser {
         return {
             nodeType: "declare-variable",
             name: identifier.value!,
-            symbolType: 1, // Constant. TOOD: This shouldn't be hardcoded - after new parser is finished.
+            symbolType: isConstant ? 1 : 0, // Constant. TOOD: This shouldn't be hardcoded - after new parser is finished.
             children: [
                 initializer,
             ],
