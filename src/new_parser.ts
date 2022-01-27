@@ -36,16 +36,19 @@ export class Parser implements IParser {
     // Parses an entire TEAL program.
     //
     program(): ASTNode {
-        return this.statements();
+        return {
+            nodeType: "block-statment", //TODO: fix spelling later.
+            children: this.statements(TokenType.EOF),
+        };
     }
 
     //
     // Parses multiple statements.
     //
-    private statements(): ASTNode {
+    private statements(endToken: TokenType): ASTNode[] {
         const stmts: ASTNode[] = [];
 
-        while (!this.isAtEnd()) {
+        while (!this.peek(endToken)) {
             try {
                 stmts.push(this.statement());
             }
@@ -56,10 +59,7 @@ export class Parser implements IParser {
             }
         }
 
-        return {
-            nodeType: "block-statment",
-            children: stmts,
-        };
+        return stmts;
     }
 
     //
@@ -86,6 +86,9 @@ export class Parser implements IParser {
         else if (this.match(TokenType.LET)) {
             return this.variableDeclaration(false);
         }
+        else if (this.match(TokenType.OPEN_BRACKET)) {
+            return this.blockStatement();
+        }
         
         return this.exprStatement();
     }
@@ -109,6 +112,20 @@ export class Parser implements IParser {
             children: [
                 initializer,
             ],
+        };
+    }
+
+    //
+    // Parses a block statement.
+    //
+    private blockStatement(): ASTNode {
+
+        const stmts = this.statements(TokenType.CLOSE_BRACKET);
+        this.expect(TokenType.CLOSE_BRACKET);
+
+        return {
+            nodeType: "block-statment", // TODO: Fix spelling later.
+            children: stmts,
         };
     }
 

@@ -257,4 +257,66 @@ describe("parser", () => {
             ]
         });
     });    
+
+    test("can parse an empty block statement", () => {
+
+        const ast = parse("{}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment", // Program level.
+            "children": [
+                {
+                    "nodeType": "block-statment",
+                    "children": [
+                    ]        
+                }
+            ]
+        });
+    });    
+
+    test("can parse block statement with sub-statement", () => {
+
+        const ast = parse("{\n1;\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment", // Program level.
+            "children": [
+                {
+                    "nodeType": "block-statment",
+                    "children": [
+                        {
+                            "nodeType": "expr-statement",
+                            "children": [
+                                {
+                                    "nodeType": "operation",
+                                    "opcode": "int",
+                                    "type": "integer",
+                                    "args": [
+                                        1
+                                    ]
+                                }
+                            ]
+                        }               
+                    ]
+                }
+            ]
+        });
+    });    
+
+    test("can parse a nested block statement", () => {
+
+        const ast = parse("{\n{\n}\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment", // Program level.
+            "children": [
+                {
+                    "nodeType": "block-statment", 
+                    "children": [
+                        {
+                            "nodeType": "block-statment",
+                            "children": []
+                        }                
+                    ]
+                }
+            ]
+        });
+    });    
 });
