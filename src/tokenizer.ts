@@ -15,6 +15,7 @@ export enum TokenType {
     CLOSE_PAREN,
     OPEN_BRACKET,
     CLOSE_BRACKET,
+    FUNCTION,
 }
 
 //
@@ -33,6 +34,7 @@ export const TOKEN_NAME = [
     ")",
     "{",
     "}",
+    "function",
 ];
 
 //
@@ -41,6 +43,7 @@ export const TOKEN_NAME = [
 export const KEYWORDS = {
     const: TokenType.CONST,
     let: TokenType.LET,
+    function: TokenType.FUNCTION,
 };
 
 //

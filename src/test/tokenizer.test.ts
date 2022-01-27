@@ -83,6 +83,7 @@ describe("tokenizer", () => {
         expectArray(tokenize(")"), [{ type: TokenType.CLOSE_PAREN }]);
         expectArray(tokenize("{"), [{ type: TokenType.OPEN_BRACKET }]);
         expectArray(tokenize("}"), [{ type: TokenType.CLOSE_BRACKET }]);
+        expectArray(tokenize("function"), [{ type: TokenType.FUNCTION }]);
     });
 
     test("can scan identifier", () => {
