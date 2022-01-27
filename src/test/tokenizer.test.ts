@@ -76,6 +76,7 @@ describe("tokenizer", () => {
 
         expectArray(tokenize("+"), [{ type: TokenType.PLUS }]);
         expectArray(tokenize(";"), [{ type: TokenType.SEMICOLON }]);
+        expectArray(tokenize("const"), [{ type: TokenType.CONST }]);
         expectArray(tokenize("="), [{ type: TokenType.ASSIGNMENT }]);
     });
 
@@ -85,6 +86,7 @@ describe("tokenizer", () => {
             value: "abc",
         }]);
     });
+
     test("can skip whitespace", () => {
 
         const tokenizer = new Tokenizer(" \t\r\n+");

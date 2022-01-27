@@ -2,25 +2,35 @@
 // Tokenizer for the Aqua language.
 //
 
-import { number } from "zod";
-
 export enum TokenType {
-    EOF, // Token injected at the end of the input.
+    EOF,
     PLUS,
     NUMBER,
-    SEMICOLON,    
+    SEMICOLON,
+    CONST,
     ASSIGNMENT,
     IDENTIFIER // The column in the code where the current token starts.
 }
 
+//
+// Maps TokenType to the name of each type of token.
+//
 export const TOKEN_NAME = [
     "end-of-file",
     "+",
     "number",
     "semicolon",
+    "const",
     "=",
     "identifier",
 ];
+
+//
+// Maps a string of characters to a TokenType.
+//
+export const KEYWORDS = {
+    const: TokenType.CONST,
+};
 
 //
 // Represents a token.
@@ -399,14 +409,24 @@ export class Tokenizer implements ITokenizer {
         }
 
         const stringValue = this.code.substring(this.curTokenStart!, this.curPosition);
-
-        this.setCurrent({ 
-            type: TokenType.IDENTIFIER, 
-            value: stringValue,
-            line: this.curTokenLine!,
-            column: this.curTokenColumn!,
-            string: stringValue,
-        }); 
+        const tokenType = (KEYWORDS as any)[stringValue];
+        if (tokenType === undefined) {
+            this.setCurrent({ 
+                type: TokenType.IDENTIFIER, 
+                value: stringValue,
+                line: this.curTokenLine!,
+                column: this.curTokenColumn!,
+                string: stringValue,
+            }); 
+        }
+        else {
+            this.setCurrent({ 
+                type: tokenType, 
+                line: this.curTokenLine!,
+                column: this.curTokenColumn!,
+                string: stringValue,
+            }); 
+        }
     }
 
 }
