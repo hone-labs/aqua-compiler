@@ -79,6 +79,10 @@ describe("tokenizer", () => {
         expectArray(tokenize("const"), [{ type: TokenType.CONST }]);
         expectArray(tokenize("let"), [{ type: TokenType.LET }]);
         expectArray(tokenize("="), [{ type: TokenType.ASSIGNMENT }]);
+        expectArray(tokenize("("), [{ type: TokenType.OPEN_PAREN }]);
+        expectArray(tokenize(")"), [{ type: TokenType.CLOSE_PAREN }]);
+        expectArray(tokenize("{"), [{ type: TokenType.OPEN_BRACKET }]);
+        expectArray(tokenize("}"), [{ type: TokenType.CLOSE_BRACKET }]);
     });
 
     test("can scan identifier", () => {

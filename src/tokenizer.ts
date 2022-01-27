@@ -10,7 +10,11 @@ export enum TokenType {
     CONST,
     LET,
     ASSIGNMENT,
-    IDENTIFIER, // The column in the code where the current token starts.
+    IDENTIFIER,
+    OPEN_PAREN,
+    CLOSE_PAREN,
+    OPEN_BRACKET,
+    CLOSE_BRACKET,
 }
 
 //
@@ -25,6 +29,10 @@ export const TOKEN_NAME = [
     "let",
     "=",
     "identifier",
+    "(",
+    ")",
+    "{",
+    "}",
 ];
 
 //
@@ -235,7 +243,47 @@ export class Tokenizer implements ITokenizer {
                     }); 
                     return;
                 }
-    
+
+                case "(": {
+                    this.setCurrent({ 
+                        type: TokenType.OPEN_PAREN,
+                        line: this.curTokenLine,
+                        column: this.curTokenColumn,
+                        string: "(",
+                    }); 
+                    return;
+                }
+                
+                case ")": {
+                    this.setCurrent({ 
+                        type: TokenType.CLOSE_PAREN,
+                        line: this.curTokenLine,
+                        column: this.curTokenColumn,
+                        string: ")",
+                    }); 
+                    return;
+                }
+
+                case "{": {
+                    this.setCurrent({ 
+                        type: TokenType.OPEN_BRACKET,
+                        line: this.curTokenLine,
+                        column: this.curTokenColumn,
+                        string: "{",
+                    }); 
+                    return;
+                }
+                
+                case "}": {
+                    this.setCurrent({ 
+                        type: TokenType.CLOSE_BRACKET,
+                        line: this.curTokenLine,
+                        column: this.curTokenColumn,
+                        string: "}",
+                    }); 
+                    return;
+                }
+
                 default: {
                     if (this.isDigit(ch)) {
                         this.readNumber();
