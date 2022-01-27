@@ -9,6 +9,7 @@ export enum TokenType {
     PLUS,
     NUMBER,
     SEMICOLON,    
+    ASSIGNMENT,
 }
 
 export const TOKEN_NAME = [
@@ -205,6 +206,16 @@ export class Tokenizer implements ITokenizer {
                         line: this.curTokenLine,
                         column: this.curTokenColumn,
                         string: ";",
+                    }); 
+                    return;
+                }
+
+                case "=": {
+                    this.setCurrent({ 
+                        type: TokenType.ASSIGNMENT,
+                        line: this.curTokenLine,
+                        column: this.curTokenColumn,
+                        string: "=",
                     }); 
                     return;
                 }

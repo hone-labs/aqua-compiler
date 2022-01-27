@@ -76,6 +76,7 @@ describe("tokenizer", () => {
 
         expectArray(tokenize("+"), [{ type: TokenType.PLUS }]);
         expectArray(tokenize(";"), [{ type: TokenType.SEMICOLON }]);
+        expectArray(tokenize("="), [{ type: TokenType.ASSIGNMENT }]);
     });
 
     test("can skip whitespace", () => {
