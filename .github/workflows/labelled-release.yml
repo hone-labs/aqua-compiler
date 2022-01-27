@@ -61,6 +61,11 @@ jobs:
           npm run build-parser
           npm run build
 
+      - name: NPM publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.ASHS_NPM_TOKEN }}
+
       - name: Build Windows
         run: |
           npm run build-win
