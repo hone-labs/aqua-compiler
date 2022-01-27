@@ -10,6 +10,7 @@ export enum TokenType {
     NUMBER,
     SEMICOLON,    
     ASSIGNMENT,
+    IDENTIFIER // The column in the code where the current token starts.
 }
 
 export const TOKEN_NAME = [
@@ -17,6 +18,8 @@ export const TOKEN_NAME = [
     "+",
     "number",
     "semicolon",
+    "=",
+    "identifier",
 ];
 
 //
@@ -226,6 +229,11 @@ export class Tokenizer implements ITokenizer {
                         return;
                     }
 
+                    if (this.isAlpha(ch)) {
+                        this.readIdentifer();
+                        return;
+                    }
+
                     if (this.onError) {
                         this.onError({
                             msg: `Encountered unexpected character ${ch}`,
@@ -324,6 +332,11 @@ export class Tokenizer implements ITokenizer {
     //
     private readonly charCodeZero = "0".charCodeAt(0);
     private readonly charCodeNine = "9".charCodeAt(0);    
+    private readonly charCodea = "a".charCodeAt(0);
+    private readonly charCodez = "z".charCodeAt(0);
+    private readonly charCodeA = "A".charCodeAt(0);
+    private readonly charCodeZ = "Z".charCodeAt(0);
+    private readonly charCode_ = "_".charCodeAt(0);
 
     //
     // Returns true if the specified charater is a digit.
@@ -355,4 +368,45 @@ export class Tokenizer implements ITokenizer {
             string: stringValue,
         }); 
     }
+
+    //
+    // Returns true if the specified charater is a alphabetical character..
+    //
+    private isAlpha(ch: string | undefined): boolean {
+        if (ch === undefined) {
+            // No more input, so by definition it's not a digit.
+            return false;
+        }
+        const charCode = ch.charCodeAt(0); //TODO: Optimization: Just pass the character offset in the original buffer through and then pull the char code directly from the buffer.
+        return charCode >= this.charCodea && charCode <= this.charCodez
+            || charCode >= this.charCodeA && charCode <= this.charCodeZ
+            || charCode === this.charCode_;
+    }
+
+    //
+    // Returns true if the specified charater is a alphabetical or numerical character.
+    //
+    private isAlphaNumeric(ch: string | undefined): boolean {
+        return this.isAlpha(ch) || this.isDigit(ch);
+    }
+
+    //
+    // Reads the subsequent digits of an identifier or keyword token.
+    //
+    private readIdentifer() {
+        while (this.isAlphaNumeric(this.peek())) {
+            this.advance();
+        }
+
+        const stringValue = this.code.substring(this.curTokenStart!, this.curPosition);
+
+        this.setCurrent({ 
+            type: TokenType.IDENTIFIER, 
+            value: stringValue,
+            line: this.curTokenLine!,
+            column: this.curTokenColumn!,
+            string: stringValue,
+        }); 
+    }
+
 }

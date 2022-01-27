@@ -79,6 +79,12 @@ describe("tokenizer", () => {
         expectArray(tokenize("="), [{ type: TokenType.ASSIGNMENT }]);
     });
 
+    test("can scan identifier", () => {
+        expectArray(tokenize("abc"), [{ 
+            type: TokenType.IDENTIFIER,
+            value: "abc",
+        }]);
+    });
     test("can skip whitespace", () => {
 
         const tokenizer = new Tokenizer(" \t\r\n+");
