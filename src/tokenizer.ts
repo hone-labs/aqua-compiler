@@ -312,7 +312,7 @@ export class Tokenizer implements ITokenizer {
 
                     if (this.onError) {
                         this.onError({
-                            msg: `Encountered unexpected character ${ch}`,
+                            msg: `Encountered unexpected character "${ch}"`,
                             line: this.curTokenLine,
                             column: this.curTokenColumn,
                         });

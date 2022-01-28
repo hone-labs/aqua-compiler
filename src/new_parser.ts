@@ -251,7 +251,7 @@ export class Parser implements IParser {
         }
 
         const token = this.tokenizer.getCurrent();
-        const msg = `Unexpected token ${token!.string}`;
+        const msg = `Unexpected token "${token!.string}"`;
         this.raiseError({
             msg: msg,
             line: token!.line,
@@ -290,7 +290,7 @@ export class Parser implements IParser {
     private expect(type: TokenType): IToken {
         const token = this.tokenizer.getCurrent()!;
         if (!this.match(type)) {
-            const msg = `Expected token ${TOKEN_NAME[type]}, found token ${TOKEN_NAME[token.type]}`;
+            const msg = `Expected token "${TOKEN_NAME[type]}", found token "${TOKEN_NAME[token.type]}"`;
             this.raiseError({ 
                 msg: msg,
                 line: token.line,
