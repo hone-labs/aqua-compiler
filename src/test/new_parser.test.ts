@@ -1,13 +1,49 @@
+import { ASTNode } from "../ast";
 import { parse, parseExpression } from "../new_parser";
 import { IError } from "../tokenizer";
 
 describe("parser", () => {
 
     //
+    // Parse code and return the AST.
+    // Expects that no errors occurred.
+    //
+    function parseOk(code: string): ASTNode {
+        let errors: IError[] = [];
+
+        const ast = parse(code, err => {
+            errors.push(err);
+        });
+
+        if (errors.length > 0) {
+            throw new Error(`Got errors during parsing:\n${errors.map(err => err.msg).join('\n')}`);
+        }
+
+        return ast;        
+    }
+
+    //
+    // Parse code and return the AST.
+    // Expects that no errors occurred.
+    //
+    function parseExpressionOk(code: string): ASTNode {
+        let errors: IError[] = [];
+
+        const ast = parseExpression(code, err => {
+            errors.push(err);
+        });
+
+        if (errors.length > 0) {
+            throw new Error(`Got errors during parsing:\n${errors.map(err => err.msg).join('\n')}`);
+        }
+
+        return ast;        
+    }
+
+    //
     // Parses code and only returns the errors produced.
     //
     function retreiveErrors(code: string): IError[] {
-
         let errors: IError[] = [];
 
         parse(code, err => {
@@ -44,7 +80,7 @@ describe("parser", () => {
 
     test("can parse number expression", () => {
 
-        expect(parseExpression("12")).toEqual({
+        expect(parseExpressionOk("12")).toEqual({
             nodeType: "operation",
             opcode: "int",
             type: "integer",
@@ -56,7 +92,7 @@ describe("parser", () => {
 
     test("can parse addition expression", () => {
 
-        expect(parseExpression("1+2")).toEqual({
+        expect(parseExpressionOk("1+2")).toEqual({
             nodeType: "operation",
             opcode: "+",
             type: "integer",
@@ -83,7 +119,7 @@ describe("parser", () => {
 
     test("can parse addition expression statement", () => {
 
-        expect(parse("1;")).toEqual({
+        expect(parseOk("1;")).toEqual({
             nodeType: "block-statment",
             children: [
                 {
@@ -151,7 +187,7 @@ describe("parser", () => {
 
     test("can parse multiple statments", () => {
 
-        const ast = parse("1;\n2;");
+        const ast = parseOk("1;\n2;");
         expect(ast).toEqual({
             "nodeType": "block-statment",
             "children": [
@@ -187,7 +223,7 @@ describe("parser", () => {
 
     test("error causes resync to next statement", () => {
 
-        const ast = parse("@;2;");
+        const ast = parseOk("@;2;");
         expect(ast).toEqual({
             "nodeType": "block-statment",
             "children": [
@@ -210,7 +246,7 @@ describe("parser", () => {
 
     test("can declare a constant", () => {
 
-        const ast = parse("const a = 3;");
+        const ast = parseOk("const a = 3;");
         expect(ast).toEqual({
             "nodeType": "block-statment",
             "children": [
@@ -235,7 +271,7 @@ describe("parser", () => {
 
     test("can declare a variable", () => {
 
-        const ast = parse("let a = 3;");
+        const ast = parseOk("let a = 3;");
         expect(ast).toEqual({
             "nodeType": "block-statment",
             "children": [
@@ -260,7 +296,7 @@ describe("parser", () => {
 
     test("can parse an empty block statement", () => {
 
-        const ast = parse("{}");
+        const ast = parseOk("{}");
         expect(ast).toEqual({
             "nodeType": "block-statment", // Program level.
             "children": [
@@ -275,7 +311,7 @@ describe("parser", () => {
 
     test("can parse block statement with sub-statement", () => {
 
-        const ast = parse("{\n1;\n}");
+        const ast = parseOk("{\n1;\n}");
         expect(ast).toEqual({
             "nodeType": "block-statment", // Program level.
             "children": [
@@ -303,7 +339,7 @@ describe("parser", () => {
 
     test("can parse a nested block statement", () => {
 
-        const ast = parse("{\n{\n}\n}");
+        const ast = parseOk("{\n{\n}\n}");
         expect(ast).toEqual({
             "nodeType": "block-statment", // Program level.
             "children": [
@@ -322,7 +358,7 @@ describe("parser", () => {
 
     test("can declare a function", () => {
 
-        const ast = parse("function test () {\n}");
+        const ast = parseOk("function test () {\n}");
         expect(ast).toEqual({
             "nodeType": "block-statment",
             "children": [
@@ -341,7 +377,7 @@ describe("parser", () => {
 
     test("a function can contain statements", () => {
 
-        const ast = parse("function test () {\n1;\n}");
+        const ast = parseOk("function test () {\n1;\n}");
         expect(ast).toEqual({
             "nodeType": "block-statment",
             "children": [
