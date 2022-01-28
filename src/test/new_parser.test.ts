@@ -375,6 +375,25 @@ describe("parser", () => {
         });
     });
 
+    test("can declare a function with parameters", () => {
+
+        const ast = parseOk("function test( a, b, c ) {}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "function-declaration",
+                    "name": "test",
+                    "params": ["a", "b", "c"],
+                    "body": {
+                        "nodeType": "block-statment",
+                        "children": []
+                    }
+                }
+            ]
+        });
+    });
+
     test("a function can contain statements", () => {
 
         const ast = parseOk("function test () {\n1;\n}");

@@ -78,22 +78,41 @@ export class Parser implements IParser {
     //
     private function(): ASTNode {
         const identifier = this.expect(TokenType.IDENTIFIER);
+
         this.expect(TokenType.OPEN_PAREN);
-
-        //TODO: Add function parameters.
-
-        this.expect(TokenType.CLOSE_PAREN);
+        const params = this.parameters();        
         
         this.expect(TokenType.OPEN_BRACKET);
-
         const body = this.blockStatement();
 
         return {
             nodeType: "function-declaration",
             name: identifier.value!,
-            params: [],
+            params: params,
             body: body,
         };
+    }
+
+    //
+    // Parses a list of function parameters.
+    //
+    private parameters(): string[] {
+
+        const params: string[] = [];
+
+        while (!this.peek(TokenType.CLOSE_PAREN)) {
+
+            if (params.length > 0) {
+                this.expect(TokenType.COMMA);
+            }
+
+            const identifier = this.expect(TokenType.IDENTIFIER);
+            params.push(identifier.value!);
+        }
+
+        this.expect(TokenType.CLOSE_PAREN);        
+
+        return params;
     }
 
     //
