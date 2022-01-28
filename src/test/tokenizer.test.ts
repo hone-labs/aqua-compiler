@@ -75,6 +75,7 @@ describe("tokenizer", () => {
     test("can scan various tokens", () => {
 
         expectArray(tokenize("+"), [{ type: TokenType.PLUS }]);
+        expectArray(tokenize("-"), [{ type: TokenType.MINUS }]);
         expectArray(tokenize(";"), [{ type: TokenType.SEMICOLON }]);
         expectArray(tokenize("const"), [{ type: TokenType.CONST }]);
         expectArray(tokenize("let"), [{ type: TokenType.LET }]);
@@ -192,6 +193,5 @@ describe("tokenizer", () => {
             { type: TokenType.PLUS },
             { type: TokenType.NUMBER, value: 2 },
         ]);
-
     });
 });

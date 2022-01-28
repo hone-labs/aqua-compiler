@@ -18,6 +18,7 @@ export enum TokenType {
     FUNCTION,
     COMMA,
     RETURN,
+    MINUS,
 }
 
 //
@@ -26,6 +27,7 @@ export enum TokenType {
 export const TOKEN_NAME = [
     "end-of-file",
     "+",
+    "-",
     "number",
     "semicolon",
     "const",
@@ -46,6 +48,7 @@ export const TOKEN_NAME = [
 //
 const SINGLE_CHARACTER_OPERATORS = {
     "+": TokenType.PLUS,
+    "-": TokenType.MINUS,
     ";": TokenType.SEMICOLON,
     "=": TokenType.ASSIGNMENT,
     "(": TokenType.OPEN_PAREN,
