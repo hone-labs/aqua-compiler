@@ -40,6 +40,20 @@ export const TOKEN_NAME = [
 ];
 
 //
+// A lookup table for single character operators.
+//
+const SINGLE_CHARACTER_OPERATORS = {
+    "+": TokenType.PLUS,
+    ";": TokenType.SEMICOLON,
+    "=": TokenType.ASSIGNMENT,
+    "(": TokenType.OPEN_PAREN,
+    ")": TokenType.CLOSE_PAREN,
+    "{": TokenType.OPEN_BRACKET,
+    "}": TokenType.CLOSE_BRACKET,
+    ",": TokenType.COMMA,
+}
+
+//
 // Maps a string of characters to a TokenType.
 //
 export const KEYWORDS = {
@@ -218,112 +232,37 @@ export class Tokenizer implements ITokenizer {
             this.curTokenColumn = this.curColumn;
     
             const ch = this.advance();
-            switch (ch) {
-                case "+": {
-                    this.setCurrent({ 
-                        type: TokenType.PLUS,
-                        line: this.curTokenLine,
-                        column: this.curTokenColumn,
-                        string: "+",
-                    }); 
-                    return;
-                }
-
-                case ";": {
-                    this.setCurrent({ 
-                        type: TokenType.SEMICOLON,
-                        line: this.curTokenLine,
-                        column: this.curTokenColumn,
-                        string: ";",
-                    }); 
-                    return;
-                }
-
-                case "=": {
-                    this.setCurrent({ 
-                        type: TokenType.ASSIGNMENT,
-                        line: this.curTokenLine,
-                        column: this.curTokenColumn,
-                        string: "=",
-                    }); 
-                    return;
-                }
-
-                case "(": {
-                    this.setCurrent({ 
-                        type: TokenType.OPEN_PAREN,
-                        line: this.curTokenLine,
-                        column: this.curTokenColumn,
-                        string: "(",
-                    }); 
-                    return;
-                }
-                
-                case ")": {
-                    this.setCurrent({ 
-                        type: TokenType.CLOSE_PAREN,
-                        line: this.curTokenLine,
-                        column: this.curTokenColumn,
-                        string: ")",
-                    }); 
-                    return;
-                }
-
-                case "{": {
-                    this.setCurrent({ 
-                        type: TokenType.OPEN_BRACKET,
-                        line: this.curTokenLine,
-                        column: this.curTokenColumn,
-                        string: "{",
-                    }); 
-                    return;
-                }
-                
-                case "}": {
-                    this.setCurrent({ 
-                        type: TokenType.CLOSE_BRACKET,
-                        line: this.curTokenLine,
-                        column: this.curTokenColumn,
-                        string: "}",
-                    }); 
-                    return;
-                }
-
-                case ",": {
-                    this.setCurrent({ 
-                        type: TokenType.COMMA,
-                        line: this.curTokenLine,
-                        column: this.curTokenColumn,
-                        string: ",",
-                    }); 
-                    return;
-                }
-
-                default: {
-                    if (this.isDigit(ch)) {
-                        this.readNumber();
-                        return;
-                    }
-
-                    if (this.isAlpha(ch)) {
-                        this.readIdentifer();
-                        return;
-                    }
-
-                    if (this.onError) {
-                        this.onError({
-                            msg: `Encountered unexpected character "${ch}"`,
-                            line: this.curTokenLine,
-                            column: this.curTokenColumn,
-                        });
-                    }
-
-                    // Error reported, now continue scanning at the next character.
-                    break;
-                }
+            const singleCharacterTokenType = (SINGLE_CHARACTER_OPERATORS as any)[ch];
+            if (singleCharacterTokenType !== undefined) {
+                this.setCurrent({ 
+                    type: singleCharacterTokenType,
+                    line: this.curTokenLine,
+                    column: this.curTokenColumn,
+                    string: ch,
+                }); 
+                return;
             }
-        }
-    
+
+            if (this.isDigit(ch)) {
+                this.readNumber();
+                return;
+            }
+
+            if (this.isAlpha(ch)) {
+                this.readIdentifer();
+                return;
+            }
+
+            // Report error, then continue scanning at the next character.
+
+            if (this.onError) {
+                this.onError({
+                    msg: `Encountered unexpected character "${ch}"`,
+                    line: this.curTokenLine,
+                    column: this.curTokenColumn,
+                });
+            }
+        }    
     }
 
     //
