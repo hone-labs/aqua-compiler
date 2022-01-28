@@ -272,6 +272,20 @@ export class Parser implements IParser {
                 continue;
             }
 
+            if (this.match(TokenType.MINUS)) {
+                const right = this.primary();
+                working = {
+                    nodeType: "operation",
+                    opcode: "-",
+                    type: "integer",
+                    children: [
+                        working, 
+                        right,
+                    ],
+                };
+                continue;
+            }
+
             break;
         }
 

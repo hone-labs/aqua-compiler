@@ -158,7 +158,78 @@ describe("parser", () => {
             ]
         });
     });
-    test("can parse addition expression statement", () => {
+
+    test("can parse subtraction expression", () => {
+
+        expect(parseExpressionOk("1-2")).toEqual({
+            nodeType: "operation",
+            opcode: "-",
+            type: "integer",
+            children: [
+                {
+                    nodeType: "operation",
+                    opcode: "int",
+                    type: "integer",
+                    args: [
+                        1
+                    ],
+                },
+                {
+                    nodeType: "operation",
+                    opcode: "int",
+                    type: "integer",
+                    args: [
+                        2
+                    ],
+                }
+            ],
+        });
+    });
+
+    test("can parse continued subtraction expression", () => {
+
+        const ast = parseExpressionOk("1-2-3");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "-",
+            "type": "integer",
+            "children": [
+                {
+                    "nodeType": "operation",
+                    "opcode": "-",
+                    "type": "integer",
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                1
+                            ]
+                        },
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                2
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        3
+                    ]
+                }
+            ]
+        });
+    });
+
+    test("can parse expression statement", () => {
 
         expect(parseOk("1;")).toEqual({
             nodeType: "block-statment",
@@ -500,6 +571,8 @@ describe("parser", () => {
                 }
             ]
         });
-
     });
+
+
+
 });
