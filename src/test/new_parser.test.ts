@@ -168,13 +168,13 @@ describe("parser", () => {
     });
 
     test("error for unexpected character", () => {
-        expectArray(retreiveErrors("@"), [{ msg: 'Encountered unexpected character @' }]);
+        expectArray(retreiveErrors("@"), [{ msg: 'Encountered unexpected character "@"' }]);
     });
 
     test("error unexpected token", () => {
-        expectArray(retreiveErrors(";"), [{ msg: 'Unexpected token ;' }]);
+        expectArray(retreiveErrors(";"), [{ msg: 'Unexpected token ";"' }]);
     });
-
+    
     test("error reports line and column", () => {
 
         expectArray(retreiveErrors("@"), [{ line: 1, column: 0 }]);
@@ -182,8 +182,6 @@ describe("parser", () => {
         expectArray(retreiveErrors(" @"), [{ line: 1, column: 1 }]);
         expectArray(retreiveErrors("\n @"), [{ line: 2, column: 1 }]);
     });
-
-
 
     test("can parse multiple statments", () => {
 
@@ -223,7 +221,7 @@ describe("parser", () => {
 
     test("error causes resync to next statement", () => {
 
-        const ast = parseOk("@;2;");
+        const ast = parse("@;2;");
         expect(ast).toEqual({
             "nodeType": "block-statment",
             "children": [
