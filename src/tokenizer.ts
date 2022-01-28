@@ -17,6 +17,7 @@ export enum TokenType {
     CLOSE_BRACKET,
     FUNCTION,
     COMMA,
+    RETURN,
 }
 
 //
@@ -37,6 +38,7 @@ export const TOKEN_NAME = [
     "}",
     "function",
     ",",
+    "return",
 ];
 
 //
@@ -60,6 +62,7 @@ export const KEYWORDS = {
     const: TokenType.CONST,
     let: TokenType.LET,
     function: TokenType.FUNCTION,
+    return: TokenType.RETURN,
 };
 
 //
