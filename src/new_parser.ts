@@ -2,6 +2,7 @@
 // Parser for the Aqua language.
 //
 
+import { AST } from "yaml";
 import { ASTNode } from "./ast";
 import { IError, IToken, ITokenizer, OnErrorFn, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
 
@@ -168,6 +169,9 @@ export class Parser implements IParser {
         else if (this.match(TokenType.OPEN_BRACKET)) {
             return this.blockStatement();
         }
+        else if (this.match(TokenType.RETURN)) {
+            return this.returnStatement();
+        }
         
         return this.exprStatement();
     }
@@ -205,6 +209,22 @@ export class Parser implements IParser {
         return {
             nodeType: "block-statment", // TODO: Fix spelling later.
             children: stmts,
+        };
+    }
+
+    //
+    // Parses a return statement.
+    //
+    private returnStatement(): ASTNode {
+        const expr = this.expression();
+
+        this.expect(TokenType.SEMICOLON);
+
+        return {
+            nodeType: "return-statement",
+            children: [
+                expr,
+            ],
         };
     }
 

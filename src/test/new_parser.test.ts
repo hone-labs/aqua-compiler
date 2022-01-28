@@ -437,4 +437,28 @@ describe("parser", () => {
             ]
         });
     });
+
+    it("can parse a return statement", () => {
+
+        const ast = parseOk("return 1;");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "return-statement",
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                1
+                            ]
+                        }
+                    ]
+                }
+            ]
+        });
+
+    });
 });
