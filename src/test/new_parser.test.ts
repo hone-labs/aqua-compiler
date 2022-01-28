@@ -424,4 +424,17 @@ describe("parser", () => {
             ]
         });
     });
+
+    test("can parse empty statement", () => {
+        const ast = parseOk(";");
+        expect(ast).toEqual({
+            "nodeType": "block-statment", // Program level.
+            "children": [
+                {
+                    "nodeType": "block-statment", // Empty statement.
+                    "children": []
+                }
+            ]
+        });
+    });
 });

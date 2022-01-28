@@ -153,7 +153,13 @@ export class Parser implements IParser {
     // Parses a single statement.
     //
     private statement(): ASTNode {
-        if (this.match(TokenType.CONST)) {
+        if (this.match(TokenType.SEMICOLON)) {
+            return {
+                nodeType: "block-statment", // Empty statement.
+                children: [],
+            };
+        }
+        else if (this.match(TokenType.CONST)) {
             return this.variableDeclaration(true);
         }
         else if (this.match(TokenType.LET)) {
