@@ -19,7 +19,7 @@ describe("parser", () => {
             throw new Error(`Got errors during parsing:\n${errors.map(err => err.msg).join('\n')}`);
         }
 
-        return ast;        
+        return ast;
     }
 
     //
@@ -37,7 +37,7 @@ describe("parser", () => {
             throw new Error(`Got errors during parsing:\n${errors.map(err => err.msg).join('\n')}`);
         }
 
-        return ast;        
+        return ast;
     }
 
     //
@@ -172,9 +172,9 @@ describe("parser", () => {
     });
 
     test("error unexpected token", () => {
-        expectArray(retreiveErrors(";"), [{ msg: 'Unexpected token ";"' }]);
+        expectArray(retreiveErrors("="), [{ msg: 'Unexpected token "="' }]);
     });
-    
+
     test("error reports line and column", () => {
 
         expectArray(retreiveErrors("@"), [{ line: 1, column: 0 }]);
@@ -221,7 +221,7 @@ describe("parser", () => {
 
     test("error causes resync to next statement", () => {
 
-        const ast = parse("@;2;");
+        const ast = parse("=;2;");
         expect(ast).toEqual({
             "nodeType": "block-statment",
             "children": [
