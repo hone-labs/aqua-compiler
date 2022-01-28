@@ -269,9 +269,8 @@ export class Parser implements IParser {
                         right,
                     ],
                 };
+                continue;
             }
-
-            //TODO: Add subtraction here.
 
             break;
         }

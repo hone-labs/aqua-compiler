@@ -117,6 +117,47 @@ describe("parser", () => {
         });
     });
 
+    test("can parse continued addition expression", () => {
+
+        expect(parseExpressionOk("1+2+3")).toEqual({
+            "nodeType": "operation",
+            "opcode": "+",
+            "type": "integer",
+            "children": [
+                {
+                    "nodeType": "operation",
+                    "opcode": "+",
+                    "type": "integer",
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                1
+                            ]
+                        },
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                2
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        3
+                    ]
+                }
+            ]
+        });
+    });
     test("can parse addition expression statement", () => {
 
         expect(parseOk("1;")).toEqual({
