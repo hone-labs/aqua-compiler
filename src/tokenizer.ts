@@ -16,6 +16,7 @@ export enum TokenType {
     OPEN_BRACKET,
     CLOSE_BRACKET,
     FUNCTION,
+    COMMA,
 }
 
 //
@@ -35,6 +36,7 @@ export const TOKEN_NAME = [
     "{",
     "}",
     "function",
+    ",",
 ];
 
 //
@@ -283,6 +285,16 @@ export class Tokenizer implements ITokenizer {
                         line: this.curTokenLine,
                         column: this.curTokenColumn,
                         string: "}",
+                    }); 
+                    return;
+                }
+
+                case ",": {
+                    this.setCurrent({ 
+                        type: TokenType.COMMA,
+                        line: this.curTokenLine,
+                        column: this.curTokenColumn,
+                        string: ",",
                     }); 
                     return;
                 }
