@@ -92,10 +92,7 @@ export class Parser implements IParser {
             nodeType: "function-declaration",
             name: identifier.value!,
             params: [],
-            body: {
-                nodeType: "block-statment",
-                children: []
-            }
+            body: body,
         };
     }
 

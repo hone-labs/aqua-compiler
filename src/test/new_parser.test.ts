@@ -338,4 +338,37 @@ describe("parser", () => {
             ]
         });
     });
+
+    test("a function can contain statements", () => {
+
+        const ast = parse("function test () {\n1;\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "function-declaration",
+                    "name": "test",
+                    "params": [],
+                    "body": {
+                        "nodeType": "block-statment",
+                        "children": [
+                            {
+                                "nodeType": "expr-statement",
+                                "children": [
+                                    {
+                                        "nodeType": "operation",
+                                        "opcode": "int",
+                                        "type": "integer",
+                                        "args": [
+                                            1
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        });
+    });
 });
