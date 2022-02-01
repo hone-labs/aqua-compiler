@@ -1,3 +1,4 @@
+import { isString } from "util";
 import { ASTNode } from "../ast";
 import { parse, parseExpression } from "../new_parser";
 import { IError } from "../tokenizer";
@@ -550,7 +551,7 @@ describe("parser", () => {
         });
     });
 
-    it("can parse a return statement", () => {
+    test("can parse a return statement", () => {
 
         const ast = parseOk("return 1;");
         expect(ast).toEqual({
@@ -573,7 +574,7 @@ describe("parser", () => {
         });
     });
 
-    it("can parse variable access", () => {
+    test("can parse variable access", () => {
 
         const ast = parseExpressionOk("foo");
         expect(ast).toEqual({
@@ -582,7 +583,7 @@ describe("parser", () => {
         });
     });
 
-    it("can parse function call", () => {
+    test("can parse function call", () => {
 
         const ast = parseExpressionOk("foo()");
         expect(ast).toEqual({
@@ -593,7 +594,7 @@ describe("parser", () => {
 
     });
 
-    it("can parse function call with arguments", () => {
+    test("can parse function call with arguments", () => {
 
         const ast = parseExpressionOk("foo(1, 2, 3)");
         expect(ast).toEqual({
@@ -627,5 +628,6 @@ describe("parser", () => {
             ]
         });
     });
+
 
 });
