@@ -310,10 +310,17 @@ export class Parser implements IParser {
 
         const identifierToken = this.match(TokenType.IDENTIFIER);
         if (identifierToken) {
-            return {
-                nodeType: "access-variable",
-                name: identifierToken.value!,
-            };
+
+            if (this.match(TokenType.OPEN_PAREN)) {
+                return this.functionCall(identifierToken.value!);
+
+            }
+            else {
+                return {
+                    nodeType: "access-variable",
+                    name: identifierToken.value!,
+                };
+            }
         }
 
         const token = this.tokenizer.getCurrent();
@@ -324,6 +331,20 @@ export class Parser implements IParser {
             column: token!.column,
         });
         throw new Error(msg);
+    }
+
+    //
+    // Parses a function call.
+    //
+    private functionCall(functionName: string): ASTNode {
+
+        this.expect(TokenType.CLOSE_PAREN);
+
+        return {
+            nodeType: "function-call",
+            name: functionName,
+            children: [],
+        };
     }
 
     //

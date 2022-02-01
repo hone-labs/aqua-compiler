@@ -582,5 +582,17 @@ describe("parser", () => {
         });
     });
 
+    it("can parse function call", () => {
+
+        const ast = parseExpressionOk("foo()");
+        expect(ast).toEqual({
+            "nodeType": "function-call",
+            "name": "foo",
+            "children": []
+        });
+
+    });
+
+
 
 });
