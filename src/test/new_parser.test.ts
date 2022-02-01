@@ -593,6 +593,39 @@ describe("parser", () => {
 
     });
 
+    it("can parse function call with arguments", () => {
 
+        const ast = parseExpressionOk("foo(1, 2, 3)");
+        expect(ast).toEqual({
+            "nodeType": "function-call",
+            "name": "foo",
+            "children": [
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        1
+                    ]
+                },
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        2
+                    ]
+                },
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        3
+                    ]
+                }
+            ]
+        });
+    });
 
 });

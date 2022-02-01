@@ -2,6 +2,7 @@
 // Parser for the Aqua language.
 //
 
+import { toLength } from "lodash";
 import { AST } from "yaml";
 import { ASTNode } from "./ast";
 import { IError, IToken, ITokenizer, OnErrorFn, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
@@ -313,7 +314,6 @@ export class Parser implements IParser {
 
             if (this.match(TokenType.OPEN_PAREN)) {
                 return this.functionCall(identifierToken.value!);
-
             }
             else {
                 return {
@@ -338,13 +338,33 @@ export class Parser implements IParser {
     //
     private functionCall(functionName: string): ASTNode {
 
+        const args = this.arguments();
+
         this.expect(TokenType.CLOSE_PAREN);
 
         return {
             nodeType: "function-call",
             name: functionName,
-            children: [],
+            children: args,
         };
+    }
+
+    //
+    // Parses arguments to a function call.
+    //
+    private arguments(): ASTNode[] {
+        
+        const args: ASTNode[] = [];
+
+        while (!this.peek(TokenType.CLOSE_PAREN)) {
+            if (args.length > 0) {
+                this.expect(TokenType.COMMA);
+            }
+
+            args.push(this.expression());
+        }
+
+        return args;
     }
 
     //
