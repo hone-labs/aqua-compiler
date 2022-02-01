@@ -629,5 +629,17 @@ describe("parser", () => {
         });
     });
 
+    test("can parse parenthesized expression", () => {
+
+        const ast = parseExpressionOk("(1)");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "int",
+            "type": "integer",
+            "args": [
+                1
+            ]
+        });
+    });
 
 });

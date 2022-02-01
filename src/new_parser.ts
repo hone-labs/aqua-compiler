@@ -297,6 +297,13 @@ export class Parser implements IParser {
     // Parse a primary compoent of an expression such as a number or identifier.
     //
     private primary(): ASTNode {
+
+        if (this.match(TokenType.OPEN_PAREN)) {
+            const expr = this.expression();
+            this.expect(TokenType.CLOSE_PAREN);
+            return expr;
+        }
+
         const numberToken = this.match(TokenType.NUMBER);
         if (numberToken) {
             return {
