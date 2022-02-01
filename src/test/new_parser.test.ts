@@ -573,6 +573,14 @@ describe("parser", () => {
         });
     });
 
+    it("can parse variable access", () => {
+
+        const ast = parseExpressionOk("foo");
+        expect(ast).toEqual({
+            "nodeType": "access-variable",
+            "name": "foo"
+        });
+    });
 
 
 });

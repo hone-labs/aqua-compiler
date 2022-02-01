@@ -308,6 +308,14 @@ export class Parser implements IParser {
             };
         }
 
+        const identifierToken = this.match(TokenType.IDENTIFIER);
+        if (identifierToken) {
+            return {
+                nodeType: "access-variable",
+                name: identifierToken.value!,
+            };
+        }
+
         const token = this.tokenizer.getCurrent();
         const msg = `Unexpected token "${token!.string}"`;
         this.raiseError({
