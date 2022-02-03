@@ -542,7 +542,7 @@ describe("code generator", () => {
 
         expect(generateCode(ast)).toEqual([
             "",
-            "int 256",
+            "int 255",
             "store 0",
             "",
             "b program_end",
@@ -590,7 +590,7 @@ describe("code generator", () => {
 
         expect(generateCode(node)).toEqual([
             "",
-            "int 256",
+            "int 255",
             "store 0",
             "",
             "b program_end",

@@ -3,4 +3,4 @@
 //
 
 // https://developer.algorand.org/docs/get-details/dapps/avm/teal/specification/#scratch-space
-export const MAX_SCRATCH = 256;
+export const MAX_SCRATCH = 255;

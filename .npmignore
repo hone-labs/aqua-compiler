@@ -16,3 +16,5 @@ check-version.js
 .env
 examples/
 tsconfig.tsbuildinfo
+.github
+docs/
