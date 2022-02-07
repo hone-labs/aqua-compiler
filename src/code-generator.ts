@@ -413,6 +413,22 @@ export class CodeGenerator {
         exit: (node) => {
             this.codeEmitter.add(`return`);
         },
+
+        itxn_begin: (node) => {
+            this.codeEmitter.add(`itxn_begin`);
+            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.            
+        },
+
+        itxn_field: (node) => {
+            //todo: this should really remove the first argument from the code generator.
+            this.codeEmitter.add(`itxn_field ${unquote(node.children![0].args![0])}`);
+            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
+        },
+
+        itxn_submit: (node) => {
+            this.codeEmitter.add(`itxn_submit`);
+            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
+        },
     };
 
     //
@@ -433,3 +449,9 @@ export class CodeGenerator {
 
 }
 
+//
+// Removes quotes from a string.
+//
+function unquote(input: string): string {
+    return input.substring(1, input.length-1);
+}

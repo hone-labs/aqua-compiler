@@ -1,6 +1,6 @@
 {
   "name": "aqua-compiler",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "An expressive high level language for the Algorand block chain that compiles to TEAL code.",
   "main": "build/index.js",
   "scripts": {
