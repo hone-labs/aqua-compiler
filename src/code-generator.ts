@@ -422,7 +422,7 @@ export class CodeGenerator {
         itxn_field: (node) => {
             //todo: this should really remove the first argument from the code generator.
             this.codeEmitter.add(`itxn_field ${unquote(node.children![0].args![0])}`);
-            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
+            // Don't need the extra item on the stack here because we are discarding the first parameter which is on the stack.
         },
 
         itxn_submit: (node) => {
