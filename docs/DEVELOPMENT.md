@@ -146,3 +146,23 @@ npm run build-all
 ```
 
 **NOTE:** Linux and MacOS builds should be built on Linux.
+
+## Deployment
+
+The Aqua compiler is automatically deployed.
+
+To deploy a new version simply tag the commit for the new release with the version number in the following form:
+
+```bash
+v0.0.5
+```
+
+Don't forget to add the `v` to the tag, this is how the deployment pipeline knows the tag is a version (and not some other tag).
+
+Now push tags:
+
+```
+git push --tags
+```
+
+The updated version will deploy automatically to npm and a GitHub release will be created with executables for each platform (provided the automated tests pass).
