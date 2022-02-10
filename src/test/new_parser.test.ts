@@ -830,4 +830,75 @@ describe("parser", () => {
 
     });
 
+    test("can parse if-else with single statements", () => {
+
+        const ast = parseOk("if (1) {\n2;\n}\nelse if (3) {\n4;\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "if-statement",
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                1
+                            ]
+                        }
+                    ],
+                    "ifBlock": {
+                        "nodeType": "block-statment",
+                        "children": [
+                            {
+                                "nodeType": "expr-statement",
+                                "children": [
+                                    {
+                                        "nodeType": "operation",
+                                        "opcode": "int",
+                                        "type": "integer",
+                                        "args": [
+                                            2
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "elseBlock": {
+                        "nodeType": "if-statement",
+                        "children": [
+                            {
+                                "nodeType": "operation",
+                                "opcode": "int",
+                                "type": "integer",
+                                "args": [
+                                    3
+                                ]
+                            }
+                        ],
+                        "ifBlock": {
+                            "nodeType": "block-statment",
+                            "children": [
+                                {
+                                    "nodeType": "expr-statement",
+                                    "children": [
+                                        {
+                                            "nodeType": "operation",
+                                            "opcode": "int",
+                                            "type": "integer",
+                                            "args": [
+                                                4
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        });
+    });
 });
