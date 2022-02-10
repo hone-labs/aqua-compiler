@@ -391,8 +391,8 @@ export class Parser implements IParser {
     //
     // Parses an assignment expression.
     //
-    assignment(): ASTNode {
-        const assignee = this.term();
+    private assignment(): ASTNode {
+        const assignee = this.logical();
 
         if (this.match(TokenType.ASSIGNMENT)) {
             const initializer = this.expression();
@@ -407,6 +407,30 @@ export class Parser implements IParser {
         else {
             return assignee;
         }
+    }
+
+    private logical(): ASTNode {
+        let working = this.term();
+
+        while (true) {
+            if (this.match(TokenType.AND)) {
+                const right = this.term();
+                working = {
+                    nodeType: "operation",
+                    opcode: "&&",
+                    type: "integer",
+                    children: [
+                        working,
+                        right,
+                    ],
+                };
+                continue;
+            }
+
+            break;
+        }
+
+        return working;
     }
 
     //

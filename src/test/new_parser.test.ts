@@ -1184,4 +1184,32 @@ describe("parser", () => {
         });
     });
 
+    test("can parse logical and expression", () => {
+
+        const ast = parseExpressionOk("1 && 2");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "&&",
+            "type": "integer",
+            "children": [
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        1
+                    ]
+                },
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        2
+                    ]
+                }
+            ]
+        });
+    });
+
 });
