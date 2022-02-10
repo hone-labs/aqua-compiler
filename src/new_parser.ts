@@ -176,6 +176,9 @@ export class Parser implements IParser {
         else if (this.match(TokenType.IF)) {
             return this.ifStatement();
         }
+        else if (this.match(TokenType.WHILE)) {
+            return this.whileStatement();
+        }
         
         return this.exprStatement();
     }
@@ -259,6 +262,27 @@ export class Parser implements IParser {
             ifBlock: ifBlock,
             elseBlock: elseBlock,
         };
+    }
+
+    //
+    // Parses a while statement.
+    //
+    private whileStatement(): ASTNode {
+        this.expect(TokenType.OPEN_PAREN);
+
+        const conditionalExpr = this.expression();
+
+        this.expect(TokenType.CLOSE_PAREN);
+
+        const whileBody = this.statement();
+
+        return {
+            nodeType: "while-statement",
+            children: [
+                conditionalExpr,
+            ],
+            body: whileBody,
+        }
     }
 
     //
