@@ -684,4 +684,62 @@ describe("parser", () => {
 
     });
 
+    test("can parse if-else statement", () => {
+
+        const ast = parseOk("if (1) {\n2;\n}\nelse {\n 3;\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "if-statement",
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                1
+                            ]
+                        }
+                    ],
+                    "ifBlock": {
+                        "nodeType": "block-statment",
+                        "children": [
+                            {
+                                "nodeType": "expr-statement",
+                                "children": [
+                                    {
+                                        "nodeType": "operation",
+                                        "opcode": "int",
+                                        "type": "integer",
+                                        "args": [
+                                            2
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "elseBlock": {
+                        "nodeType": "block-statment",
+                        "children": [
+                            {
+                                "nodeType": "expr-statement",
+                                "children": [
+                                    {
+                                        "nodeType": "operation",
+                                        "opcode": "int",
+                                        "type": "integer",
+                                        "args": [
+                                            3
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        });
+    });
 });

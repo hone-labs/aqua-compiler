@@ -246,6 +246,12 @@ export class Parser implements IParser {
         this.expect(TokenType.OPEN_BRACKET);
 
         const ifBlock = this.blockStatement();
+        
+        let elseBlock: ASTNode | undefined;
+
+        if (this.match(TokenType.ELSE)) {
+            elseBlock = this.statement();
+        }
 
         return {
             nodeType: "if-statement",
@@ -253,6 +259,7 @@ export class Parser implements IParser {
                 conditionalExpr,
             ],
             ifBlock: ifBlock,
+            elseBlock: elseBlock,
         };
     }
 
