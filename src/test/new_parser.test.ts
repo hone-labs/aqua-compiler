@@ -1162,4 +1162,26 @@ describe("parser", () => {
         });
     });
 
+    test("can parse assignment expression", () => {
+
+        const ast = parseExpressionOk("x = 3");
+        expect(ast).toEqual({
+            "nodeType": "assignment-statement",
+            "assignee": {
+                "nodeType": "access-variable",
+                "name": "x"
+            },
+            "children": [
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        3
+                    ]
+                }
+            ]
+        });
+    });
+
 });

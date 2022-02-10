@@ -385,7 +385,28 @@ export class Parser implements IParser {
     // Parses an Aqua expression.
     //
     expression(): ASTNode {
-        return this.term();
+        return this.assignment();
+    }
+
+    //
+    // Parses an assignment expression.
+    //
+    assignment(): ASTNode {
+        const assignee = this.term();
+
+        if (this.match(TokenType.ASSIGNMENT)) {
+            const initializer = this.expression();
+            return {
+                nodeType: "assignment-statement",
+                assignee: assignee,
+                children: [
+                    initializer,
+                ],
+            };
+        }
+        else {
+            return assignee;
+        }
     }
 
     //
