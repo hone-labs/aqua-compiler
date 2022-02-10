@@ -87,6 +87,10 @@ describe("tokenizer", () => {
         expectArray(tokenize("function"), [{ type: TokenType.FUNCTION }]);
         expectArray(tokenize(","), [{ type: TokenType.COMMA }]);
         expectArray(tokenize("return"), [{ type: TokenType.RETURN }]);
+        expectArray(tokenize("if"), [{ type: TokenType.IF }]);
+        expectArray(tokenize("else"), [{ type: TokenType.ELSE }]);
+        expectArray(tokenize("for"), [{ type: TokenType.FOR }]);
+        expectArray(tokenize("while"), [{ type: TokenType.WHILE }]);
     });
 
     test("can scan identifier", () => {

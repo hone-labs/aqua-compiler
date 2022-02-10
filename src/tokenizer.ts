@@ -5,6 +5,7 @@
 export enum TokenType {
     EOF,
     PLUS,
+    MINUS,
     NUMBER,
     SEMICOLON,
     CONST,
@@ -18,8 +19,11 @@ export enum TokenType {
     FUNCTION,
     COMMA,
     RETURN,
-    MINUS,
-}
+    IF,
+    ELSE,
+    WHILE,
+    FOR,    
+};
 
 //
 // Maps TokenType to the name of each type of token.
@@ -41,6 +45,10 @@ export const TOKEN_NAME = [
     "function",
     ",",
     "return",
+    "if",
+    "else",
+    "while",
+    "for"
 ];
 
 //
@@ -66,6 +74,10 @@ export const KEYWORDS = {
     let: TokenType.LET,
     function: TokenType.FUNCTION,
     return: TokenType.RETURN,
+    if: TokenType.IF,
+    else: TokenType.ELSE,
+    for: TokenType.FOR,
+    while: TokenType.WHILE,
 };
 
 //
