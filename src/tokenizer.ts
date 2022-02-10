@@ -23,6 +23,7 @@ export enum TokenType {
     ELSE,
     WHILE,
     FOR,    
+    AND,
 };
 
 //
@@ -48,7 +49,8 @@ export const TOKEN_NAME = [
     "if",
     "else",
     "while",
-    "for"
+    "for",
+    "&&",
 ];
 
 //
@@ -250,7 +252,7 @@ export class Tokenizer implements ITokenizer {
             this.curTokenColumn = this.curColumn;
     
             const ch = this.advance();
-            const singleCharacterTokenType = (SINGLE_CHARACTER_OPERATORS as any)[ch];
+            const singleCharacterTokenType: TokenType = (SINGLE_CHARACTER_OPERATORS as any)[ch];
             if (singleCharacterTokenType !== undefined) {
                 this.setCurrent({ 
                     type: singleCharacterTokenType,
@@ -259,6 +261,18 @@ export class Tokenizer implements ITokenizer {
                     string: ch,
                 }); 
                 return;
+            }
+
+            if (ch === "&") {
+                if (this.advance() === "&") {
+                    this.setCurrent({
+                        type: TokenType.AND,
+                        line: this.curTokenLine,
+                        column: this.curTokenColumn,
+                        string: "&&",   
+                    });
+                    return;
+                }                
             }
 
             if (this.isDigit(ch)) {

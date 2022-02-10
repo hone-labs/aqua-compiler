@@ -91,6 +91,7 @@ describe("tokenizer", () => {
         expectArray(tokenize("else"), [{ type: TokenType.ELSE }]);
         expectArray(tokenize("for"), [{ type: TokenType.FOR }]);
         expectArray(tokenize("while"), [{ type: TokenType.WHILE }]);
+        expectArray(tokenize("&&"), [{ type: TokenType.AND }]);
     });
 
     test("can scan identifier", () => {
