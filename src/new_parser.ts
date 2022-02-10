@@ -243,9 +243,7 @@ export class Parser implements IParser {
 
         this.expect(TokenType.CLOSE_PAREN);
 
-        this.expect(TokenType.OPEN_BRACKET);
-
-        const ifBlock = this.blockStatement();
+        const ifBlock = this.statement();
         
         let elseBlock: ASTNode | undefined;
 
