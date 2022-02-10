@@ -427,6 +427,20 @@ export class Parser implements IParser {
                 continue;
             }
 
+            if (this.match(TokenType.OR)) {
+                const right = this.term();
+                working = {
+                    nodeType: "operation",
+                    opcode: "||",
+                    type: "integer",
+                    children: [
+                        working,
+                        right,
+                    ],
+                };
+                continue;
+            }
+
             break;
         }
 
