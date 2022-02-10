@@ -320,27 +320,45 @@ export class Parser implements IParser {
         return {
             nodeType: "block-statment",
             children: [
-                {
-                    nodeType: "expr-statement",
-                    children: [
-                        initializer!, //fio:
-                    ],
-                },
+                (initializer !== undefined //TODO: This code can do with some revision.
+                    ? {
+                        nodeType: "expr-statement",
+                        children: [
+                            initializer
+                        ],
+                    }
+                    : {
+                        nodeType: "block-statment",
+                        children: [],
+                    }
+                ),
                 {
                     nodeType: "while-statement",
                     children: [
-                        conditional!, //fio:
+                        (conditional !== undefined //TODO: This code can do with some revision.
+                            ? conditional
+                            : {
+                                nodeType: "block-statment",
+                                children: []
+                            }
+                        ),
                     ],
                     body: {
                         nodeType: "block-statment",
                         children: [
                             forBody,
-                            {
-                                nodeType: "expr-statement",
-                                children: [
-                                    increment!, //fio:
-                                ],
-                            },
+                            (increment !== undefined //TODO: This code can do with some revision.
+                                ? {
+                                    nodeType: "expr-statement",
+                                    children: [
+                                        increment,
+                                    ],
+                                }
+                                : {
+                                    nodeType: "block-statment",
+                                    children: [],
+                                }
+                            ),
                         ],
                     },
                 },

@@ -1056,4 +1056,59 @@ describe("parser", () => {
             ]
         });
     });
+
+    test("can parse for statement without expressions", () => {
+
+        const ast = parseOk("for (;;)\n{\n4;\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "block-statment",
+                    "children": [
+                        {
+                            "nodeType": "block-statment",
+                            "children": []
+                        },
+                        {
+                            "nodeType": "while-statement",
+                            "children": [
+                                {
+                                    "nodeType": "block-statment",
+                                    "children": []
+                                }
+                            ],
+                            "body": {
+                                "nodeType": "block-statment",
+                                "children": [
+                                    {
+                                        "nodeType": "block-statment",
+                                        "children": [
+                                            {
+                                                "nodeType": "expr-statement",
+                                                "children": [
+                                                    {
+                                                        "nodeType": "operation",
+                                                        "opcode": "int",
+                                                        "type": "integer",
+                                                        "args": [
+                                                            4
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "nodeType": "block-statment",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+    });
 });
