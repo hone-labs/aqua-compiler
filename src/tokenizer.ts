@@ -69,6 +69,15 @@ const SINGLE_CHARACTER_OPERATORS = {
 }
 
 //
+// A lookup table for two character operators.
+//
+const TWO_CHARACTER_OPERATORS = {
+    "&": {
+        "&": TokenType.AND,
+    },
+}
+
+//
 // Maps a string of characters to a TokenType.
 //
 export const KEYWORDS = {
@@ -263,26 +272,30 @@ export class Tokenizer implements ITokenizer {
                 return;
             }
 
-            if (ch === "&") {
-                if (this.advance() === "&") {
+            const twoCharacterTokenLookup = (TWO_CHARACTER_OPERATORS as any)[ch];
+            if (twoCharacterTokenLookup !== undefined) {
+                const nextCh = this.advance();
+                const twoCharacterTokenType = twoCharacterTokenLookup[nextCh];
+                if (twoCharacterTokenType !== undefined) {
                     this.setCurrent({
-                        type: TokenType.AND,
+                        type: twoCharacterTokenType,
                         line: this.curTokenLine,
                         column: this.curTokenColumn,
-                        string: "&&",   
+                        string: ch + nextCh,   
                     });
                     return;
                 }                
             }
-
-            if (this.isDigit(ch)) {
-                this.readNumber();
-                return;
-            }
-
-            if (this.isAlpha(ch)) {
-                this.readIdentifer();
-                return;
+            else {
+                if (this.isDigit(ch)) {
+                    this.readNumber();
+                    return;
+                }
+    
+                if (this.isAlpha(ch)) {
+                    this.readIdentifer();
+                    return;
+                }
             }
 
             // Report error, then continue scanning at the next character.
