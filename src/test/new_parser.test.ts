@@ -943,4 +943,39 @@ describe("parser", () => {
         });
     });
 
+    test("can parse while with single statement", () => {
+
+        const ast = parseOk("while (1)\n2;");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "while-statement",
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                1
+                            ]
+                        }
+                    ],
+                    "body": {
+                        "nodeType": "expr-statement",
+                        "children": [
+                            {
+                                "nodeType": "operation",
+                                "opcode": "int",
+                                "type": "integer",
+                                "args": [
+                                    2
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        });
+    });
 });
