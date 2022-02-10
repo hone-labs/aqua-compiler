@@ -978,4 +978,82 @@ describe("parser", () => {
             ]
         });
     });
+
+
+    test("can parse for statement", () => {
+
+        const ast = parseOk("for (1; 2; 3)\n{\n4;\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "block-statment",
+                    "children": [
+                        {
+                            "nodeType": "expr-statement",
+                            "children": [
+                                {
+                                    "nodeType": "operation",
+                                    "opcode": "int",
+                                    "type": "integer",
+                                    "args": [
+                                        1
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeType": "while-statement",
+                            "children": [
+                                {
+                                    "nodeType": "operation",
+                                    "opcode": "int",
+                                    "type": "integer",
+                                    "args": [
+                                        2
+                                    ]
+                                }
+                            ],
+                            "body": {
+                                "nodeType": "block-statment",
+                                "children": [
+                                    {
+                                        "nodeType": "block-statment",
+                                        "children": [
+                                            {
+                                                "nodeType": "expr-statement",
+                                                "children": [
+                                                    {
+                                                        "nodeType": "operation",
+                                                        "opcode": "int",
+                                                        "type": "integer",
+                                                        "args": [
+                                                            4
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "nodeType": "expr-statement",
+                                        "children": [
+                                            {
+                                                "nodeType": "operation",
+                                                "opcode": "int",
+                                                "type": "integer",
+                                                "args": [
+                                                    3
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+    });
 });

@@ -179,6 +179,9 @@ export class Parser implements IParser {
         else if (this.match(TokenType.WHILE)) {
             return this.whileStatement();
         }
+        else if (this.match(TokenType.FOR)) {
+            return this.forStatement();
+        }
         
         return this.exprStatement();
     }
@@ -282,7 +285,67 @@ export class Parser implements IParser {
                 conditionalExpr,
             ],
             body: whileBody,
+        };
+    }
+
+    //
+    // Parses a for statement.
+    //
+    private forStatement(): ASTNode {
+        this.expect(TokenType.OPEN_PAREN);
+
+        let initializer: ASTNode | undefined;
+        if (!this.peek(TokenType.SEMICOLON)) {
+            initializer = this.expression();
         }
+
+        this.expect(TokenType.SEMICOLON);
+
+        let conditional: ASTNode | undefined;
+        if (!this.peek(TokenType.SEMICOLON)) {
+            conditional = this.expression();
+        }
+
+        this.expect(TokenType.SEMICOLON);
+
+        let increment: ASTNode | undefined;
+        if (!this.peek(TokenType.CLOSE_PAREN)) {
+            increment = this.expression();
+        }
+
+        this.expect(TokenType.CLOSE_PAREN);
+
+        const forBody = this.statement();
+
+        return {
+            nodeType: "block-statment",
+            children: [
+                {
+                    nodeType: "expr-statement",
+                    children: [
+                        initializer!, //fio:
+                    ],
+                },
+                {
+                    nodeType: "while-statement",
+                    children: [
+                        conditional!, //fio:
+                    ],
+                    body: {
+                        nodeType: "block-statment",
+                        children: [
+                            forBody,
+                            {
+                                nodeType: "expr-statement",
+                                children: [
+                                    increment!, //fio:
+                                ],
+                            },
+                        ],
+                    },
+                },
+            ],
+        };
     }
 
     //
