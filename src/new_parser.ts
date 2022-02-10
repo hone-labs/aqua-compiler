@@ -173,6 +173,9 @@ export class Parser implements IParser {
         else if (this.match(TokenType.RETURN)) {
             return this.returnStatement();
         }
+        else if (this.match(TokenType.IF)) {
+            return this.ifStatement();
+        }
         
         return this.exprStatement();
     }
@@ -226,6 +229,30 @@ export class Parser implements IParser {
             children: [
                 expr,
             ],
+        };
+    }
+
+    //
+    // Parses an if statement.
+    //
+    private ifStatement(): ASTNode {
+
+        this.expect(TokenType.OPEN_PAREN);
+
+        const conditionalExpr = this.expression();
+
+        this.expect(TokenType.CLOSE_PAREN);
+
+        this.expect(TokenType.OPEN_BRACKET);
+
+        const ifBlock = this.blockStatement();
+
+        return {
+            nodeType: "if-statement",
+            children: [
+                conditionalExpr,
+            ],
+            ifBlock: ifBlock,
         };
     }
 
