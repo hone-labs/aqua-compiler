@@ -1111,4 +1111,55 @@ describe("parser", () => {
             ]
         });
     });
+
+    test("can parse for with a single statement", () => {
+
+        const ast = parseOk("for (;;)\n4;");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "block-statment",
+                    "children": [
+                        {
+                            "nodeType": "block-statment",
+                            "children": []
+                        },
+                        {
+                            "nodeType": "while-statement",
+                            "children": [
+                                {
+                                    "nodeType": "block-statment",
+                                    "children": []
+                                }
+                            ],
+                            "body": {
+                                "nodeType": "block-statment",
+                                "children": [
+                                    {
+                                        "nodeType": "expr-statement",
+                                        "children": [
+                                            {
+                                                "nodeType": "operation",
+                                                "opcode": "int",
+                                                "type": "integer",
+                                                "args": [
+                                                    4
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "nodeType": "block-statment",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+    });
+
 });
