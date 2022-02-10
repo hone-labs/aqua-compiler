@@ -24,6 +24,13 @@ export enum TokenType {
     WHILE,
     FOR,    
     AND,
+    OR,
+    EQ,
+    NE,
+    LTE,
+    LT,
+    GTE,
+    GT,
 };
 
 //
@@ -51,6 +58,13 @@ export const TOKEN_NAME = [
     "while",
     "for",
     "&&",
+    "||",
+    "==",
+    "!=",
+    "<=",
+    "<",
+    ">=",
+    ">",
 ];
 
 //
@@ -66,6 +80,8 @@ const SINGLE_CHARACTER_OPERATORS = {
     "{": TokenType.OPEN_BRACKET,
     "}": TokenType.CLOSE_BRACKET,
     ",": TokenType.COMMA,
+    "<": TokenType.LT,
+    ">": TokenType.GT,
 }
 
 //
@@ -74,6 +90,21 @@ const SINGLE_CHARACTER_OPERATORS = {
 const TWO_CHARACTER_OPERATORS = {
     "&": {
         "&": TokenType.AND,
+    },
+    "|": {
+        "|": TokenType.OR,
+    },
+    "=": {
+        "=": TokenType.EQ,
+    },
+    "!": {
+        "=": TokenType.NE,
+    },
+    "<": {
+        "=": TokenType.LTE,
+    },
+    ">": {
+        "=": TokenType.GTE,
     },
 }
 
@@ -261,6 +292,22 @@ export class Tokenizer implements ITokenizer {
             this.curTokenColumn = this.curColumn;
     
             const ch = this.advance();
+            const twoCharacterTokenLookup = (TWO_CHARACTER_OPERATORS as any)[ch];
+            if (twoCharacterTokenLookup !== undefined) {
+                const nextCh = this.peek();
+                const twoCharacterTokenType = nextCh !== undefined && twoCharacterTokenLookup[nextCh] || undefined;
+                if (twoCharacterTokenType !== undefined) {
+                    this.advance();
+                    this.setCurrent({
+                        type: twoCharacterTokenType,
+                        line: this.curTokenLine,
+                        column: this.curTokenColumn,
+                        string: ch + nextCh,   
+                    });
+                    return;
+                }      
+            }          
+
             const singleCharacterTokenType: TokenType = (SINGLE_CHARACTER_OPERATORS as any)[ch];
             if (singleCharacterTokenType !== undefined) {
                 this.setCurrent({ 
@@ -272,30 +319,14 @@ export class Tokenizer implements ITokenizer {
                 return;
             }
 
-            const twoCharacterTokenLookup = (TWO_CHARACTER_OPERATORS as any)[ch];
-            if (twoCharacterTokenLookup !== undefined) {
-                const nextCh = this.advance();
-                const twoCharacterTokenType = twoCharacterTokenLookup[nextCh];
-                if (twoCharacterTokenType !== undefined) {
-                    this.setCurrent({
-                        type: twoCharacterTokenType,
-                        line: this.curTokenLine,
-                        column: this.curTokenColumn,
-                        string: ch + nextCh,   
-                    });
-                    return;
-                }                
+            if (this.isDigit(ch)) {
+                this.readNumber();
+                return;
             }
-            else {
-                if (this.isDigit(ch)) {
-                    this.readNumber();
-                    return;
-                }
-    
-                if (this.isAlpha(ch)) {
-                    this.readIdentifer();
-                    return;
-                }
+
+            if (this.isAlpha(ch)) {
+                this.readIdentifer();
+                return;
             }
 
             // Report error, then continue scanning at the next character.

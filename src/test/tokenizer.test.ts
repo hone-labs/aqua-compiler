@@ -56,7 +56,7 @@ describe("tokenizer", () => {
     // Expect an array of object to contain expected fields.
     //
     function expectArray(actual: any[], expected: any[]): void {
-        
+
         expect(actual.length).toEqual(expected.length);
 
         for (let i = 0; i < actual.length; ++i) {
@@ -92,6 +92,13 @@ describe("tokenizer", () => {
         expectArray(tokenize("for"), [{ type: TokenType.FOR }]);
         expectArray(tokenize("while"), [{ type: TokenType.WHILE }]);
         expectArray(tokenize("&&"), [{ type: TokenType.AND }]);
+        expectArray(tokenize("||"), [{ type: TokenType.OR }]);
+        expectArray(tokenize("=="), [{ type: TokenType.EQ }]);
+        expectArray(tokenize("!="), [{ type: TokenType.NE }]);
+        expectArray(tokenize("<="), [{ type: TokenType.LTE }]);
+        expectArray(tokenize("<"), [{ type: TokenType.LT }]);
+        expectArray(tokenize(">="), [{ type: TokenType.GTE }]);
+        expectArray(tokenize(">"), [{ type: TokenType.GT }]);
     });
 
     test("can scan identifier", () => {
