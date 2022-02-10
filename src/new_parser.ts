@@ -274,7 +274,6 @@ export class Parser implements IParser {
                 expr,
             ],
         };
-
     }
 
     //

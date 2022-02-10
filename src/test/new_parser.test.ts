@@ -779,4 +779,55 @@ describe("parser", () => {
             ]
         });
     });
+
+    test("can parse if-else with single statements", () => {
+
+        const ast = parseOk("if (1)\n2;\nelse\n 3;");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "if-statement",
+                    "children": [
+                        {
+                            "nodeType": "operation",
+                            "opcode": "int",
+                            "type": "integer",
+                            "args": [
+                                1
+                            ]
+                        }
+                    ],
+                    "ifBlock": {
+                        "nodeType": "expr-statement",
+                        "children": [
+                            {
+                                "nodeType": "operation",
+                                "opcode": "int",
+                                "type": "integer",
+                                "args": [
+                                    2
+                                ]
+                            }
+                        ]
+                    },
+                    "elseBlock": {
+                        "nodeType": "expr-statement",
+                        "children": [
+                            {
+                                "nodeType": "operation",
+                                "opcode": "int",
+                                "type": "integer",
+                                "args": [
+                                    3
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        });
+
+    });
+
 });
