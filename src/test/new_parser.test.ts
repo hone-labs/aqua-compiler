@@ -1463,4 +1463,24 @@ describe("parser", () => {
             ]
         });
     });    
+
+    test("can parse not expression", () => {
+
+        const ast = parseExpressionOk("!1");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "!",
+            "type": "integer",
+            "children": [
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        1
+                    ]
+                }
+            ]
+        });
+    });    
 });

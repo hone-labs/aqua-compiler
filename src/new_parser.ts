@@ -605,11 +605,11 @@ export class Parser implements IParser {
     // Parses a multiplication or division expression.
     //
     private factor(): ASTNode {
-        let working = this.primary();
+        let working = this.unary();
 
         while (true) {
             if (this.match(TokenType.MULTIPLY)) {
-                const right = this.primary();
+                const right = this.unary();
                 working = {
                     nodeType: "operation",
                     opcode: "*",
@@ -623,7 +623,7 @@ export class Parser implements IParser {
             }
 
             if (this.match(TokenType.DIVIDE)) {
-                const right = this.primary();
+                const right = this.unary();
                 working = {
                     nodeType: "operation",
                     opcode: "/",
@@ -640,6 +640,26 @@ export class Parser implements IParser {
         }
 
         return working;
+    }
+
+    //
+    // Parses a unary expression.
+    //
+    private unary(): ASTNode {
+        if (this.match(TokenType.NOT)) {
+            const expression = this.unary();
+            return {
+                nodeType: "operation",
+                opcode: "!",
+                type: "integer",
+                children: [
+                    expression,
+                ],
+            };
+        }
+        else {
+            return this.primary();
+        }
     }
 
     //
