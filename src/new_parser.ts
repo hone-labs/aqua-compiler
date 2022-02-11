@@ -702,7 +702,7 @@ export class Parser implements IParser {
         }
 
         if (this.match(TokenType.GLOBAL)) {
-            return this.global();
+            return this.dot("global");
         }
 
         const identifierToken = this.match(TokenType.IDENTIFIER);
@@ -838,16 +838,16 @@ export class Parser implements IParser {
     }
 
     //
-    // Parses a global expression.
+    // Parses a dot expression.
     //
-    private global(): ASTNode {
+    private dot(opcode: string): ASTNode {
         this.expect(TokenType.DOT);
 
         const globalName = this.expect(TokenType.IDENTIFIER);
 
         return {
             nodeType: "operation",
-            opcode: "global",
+            opcode: opcode,
             args: [
                 globalName.value!,
             ],
