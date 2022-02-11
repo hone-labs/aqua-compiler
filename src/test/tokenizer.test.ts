@@ -84,6 +84,8 @@ describe("tokenizer", () => {
         expectArray(tokenize(")"), [{ type: TokenType.CLOSE_PAREN }]);
         expectArray(tokenize("{"), [{ type: TokenType.OPEN_BRACKET }]);
         expectArray(tokenize("}"), [{ type: TokenType.CLOSE_BRACKET }]);
+        expectArray(tokenize("["), [{ type: TokenType.OPEN_BRACE }]);
+        expectArray(tokenize("]"), [{ type: TokenType.CLOSE_BRACE }]);
         expectArray(tokenize("function"), [{ type: TokenType.FUNCTION }]);
         expectArray(tokenize(","), [{ type: TokenType.COMMA }]);
         expectArray(tokenize("return"), [{ type: TokenType.RETURN }]);
