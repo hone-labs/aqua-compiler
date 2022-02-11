@@ -1554,4 +1554,15 @@ describe("parser", () => {
             ]
         });
     });
+
+    test("can parse global expression", () => {
+        const ast = parseExpressionOk("global.Foo");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "global",
+            "args": [
+                "Foo"
+            ]
+        });
+    });
 });

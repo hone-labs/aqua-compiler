@@ -701,6 +701,10 @@ export class Parser implements IParser {
             return this.addr();
         }
 
+        if (this.match(TokenType.GLOBAL)) {
+            return this.global();
+        }
+
         const identifierToken = this.match(TokenType.IDENTIFIER);
         if (identifierToken) {
 
@@ -829,6 +833,23 @@ export class Parser implements IParser {
             type: "addr",
             args: [
                 stringLiteral.value!,
+            ],
+        };
+    }
+
+    //
+    // Parses a global expression.
+    //
+    private global(): ASTNode {
+        this.expect(TokenType.DOT);
+
+        const globalName = this.expect(TokenType.IDENTIFIER);
+
+        return {
+            nodeType: "operation",
+            opcode: "global",
+            args: [
+                globalName.value!,
             ],
         };
     }
