@@ -102,6 +102,7 @@ describe("tokenizer", () => {
         expectArray(tokenize("*"), [{ type: TokenType.MULTIPLY }]);
         expectArray(tokenize("/"), [{ type: TokenType.DIVIDE }]);
         expectArray(tokenize("!"), [{ type: TokenType.NOT }]);
+        expectArray(tokenize("."), [{ type: TokenType.DOT }]);
     });
 
     test("can scan identifier", () => {

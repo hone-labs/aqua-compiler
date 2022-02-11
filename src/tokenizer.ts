@@ -34,6 +34,7 @@ export enum TokenType {
     MULTIPLY,
     DIVIDE,
     NOT,
+    DOT,
 };
 
 //
@@ -71,6 +72,7 @@ export const TOKEN_NAME = [
     "*",
     "/",
     "!",
+    ".",
 ];
 
 //
@@ -91,6 +93,7 @@ const SINGLE_CHARACTER_OPERATORS = {
     "*": TokenType.MULTIPLY,
     "/": TokenType.DIVIDE,
     "!": TokenType.NOT,
+    ".": TokenType.DOT,
 }
 
 //
