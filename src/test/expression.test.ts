@@ -161,7 +161,7 @@ describe("expression", () => {
 
     it("can compile addr", () => {
         check(
-            "addr ABC1234",
+            "addr \"ABC1234\"",
             dedent(`
                 addr ABC1234
             `)
