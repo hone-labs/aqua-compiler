@@ -689,6 +689,10 @@ export class Parser implements IParser {
             return this.txnExpression();
         }
 
+        if (this.match(TokenType.GTXN)) {
+            return this.gtxnExpression();
+        }
+
         const identifierToken = this.match(TokenType.IDENTIFIER);
         if (identifierToken) {
 
@@ -741,6 +745,48 @@ export class Parser implements IParser {
             opcode: "txn",
             args: [
                 nextIdentifier.value!,
+            ],
+        };
+
+    }
+
+    //
+    // Parses a gtxn expression.
+    //
+    private gtxnExpression(): ASTNode {
+
+        this.expect(TokenType.OPEN_BRACE);
+
+        const gtxnIndexToken = this.expect(TokenType.NUMBER);
+
+        this.expect(TokenType.CLOSE_BRACE);
+
+        this.expect(TokenType.DOT);
+
+        const fieldIdentifier = this.expect(TokenType.IDENTIFIER);
+
+        if (this.match(TokenType.OPEN_BRACE)) {
+            const arrayIndexToken = this.expect(TokenType.NUMBER);
+
+            this.expect(TokenType.CLOSE_BRACE);
+
+            return {
+                nodeType: "operation",
+                opcode: "gtxna",
+                args: [
+                    gtxnIndexToken.value!,
+                    fieldIdentifier.value!,
+                    arrayIndexToken.value!,
+                ],
+            };
+        }
+
+        return {
+            nodeType: "operation",
+            opcode: "gtxn",
+            args: [
+                gtxnIndexToken.value!,
+                fieldIdentifier.value!,
             ],
         };
 

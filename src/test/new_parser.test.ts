@@ -1506,4 +1506,29 @@ describe("parser", () => {
             ]
         });
     });
+
+    test("can parse gtxn expression", () => {
+        const ast = parseExpressionOk("gtxn[1].Foo");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "gtxn",
+            "args": [
+                1,
+                "Foo"
+            ]
+        });
+    });
+
+    test("can parse indexed gtxn expression", () => {
+        const ast = parseExpressionOk("gtxn[1].Foo[2]");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "gtxna",
+            "args": [
+              1,
+              "Foo",
+              2
+            ]
+        });
+    });
 });
