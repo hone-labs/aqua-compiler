@@ -1565,4 +1565,15 @@ describe("parser", () => {
             ]
         });
     });
+
+    test("can parse OnComplete expression", () => {
+        const ast = parseExpressionOk("OnComplete.Foo");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "int",
+            "args": [
+                "Foo"
+            ]
+        });
+    });
 });

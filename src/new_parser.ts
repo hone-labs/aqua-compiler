@@ -705,6 +705,10 @@ export class Parser implements IParser {
             return this.dot("global");
         }
 
+        if (this.match(TokenType.ONCOMPLETE)) {
+            return this.dot("int");
+        }
+
         const identifierToken = this.match(TokenType.IDENTIFIER);
         if (identifierToken) {
 
@@ -843,13 +847,13 @@ export class Parser implements IParser {
     private dot(opcode: string): ASTNode {
         this.expect(TokenType.DOT);
 
-        const globalName = this.expect(TokenType.IDENTIFIER);
+        const fieldName = this.expect(TokenType.IDENTIFIER);
 
         return {
             nodeType: "operation",
             opcode: opcode,
             args: [
-                globalName.value!,
+                fieldName.value!,
             ],
         };
     }
