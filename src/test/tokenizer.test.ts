@@ -112,7 +112,6 @@ describe("tokenizer", () => {
         expectArray(tokenize("global"), [{ type: TokenType.GLOBAL }]);
         expectArray(tokenize("OnComplete"), [{ type: TokenType.ONCOMPLETE }]);
         expectArray(tokenize("TypeEnum"), [{ type: TokenType.TYPEENUM }]);
-        expectArray(tokenize("\""), [{ type: TokenType.QUOTE }]);
     });
 
     test("can scan identifier", () => {
@@ -220,4 +219,15 @@ describe("tokenizer", () => {
             { type: TokenType.NUMBER, value: 2 },
         ]);
     });
+
+    test("can tokenize a quoted string", () => {
+        expectArray(tokenize("\"Hello\""), [{ type: TokenType.STRING, value: "Hello" }]);
+    });
+
+    test("can tokenize an empty string", () => {
+        expectArray(tokenize("\"\""), [{ type: TokenType.STRING, value: "" }]);
+    });
+
+    //todo: error for unterminated string
+
 });

@@ -44,7 +44,7 @@ export enum TokenType {
     GLOBAL,
     ONCOMPLETE,
     TYPEENUM,
-    QUOTE,
+    STRING,
 };
 
 //
@@ -92,7 +92,7 @@ export const TOKEN_NAME = [
     "global",
     "OnComplete",
     "TypeEnum",
-    "\"",
+    "string literal",
 ];
 
 //
@@ -116,7 +116,6 @@ const SINGLE_CHARACTER_OPERATORS = {
     "/": TokenType.DIVIDE,
     "!": TokenType.NOT,
     ".": TokenType.DOT,
-    "\"": TokenType.QUOTE,
 }
 
 //
@@ -361,6 +360,11 @@ export class Tokenizer implements ITokenizer {
                 return;
             }
 
+            if (ch === "\"") {
+                this.stringLiteral();
+                return;
+            }
+
             if (this.isDigit(ch)) {
                 this.readNumber();
                 return;
@@ -486,7 +490,7 @@ export class Tokenizer implements ITokenizer {
     //
     // Reads the subsequent digits of a number token.
     //
-    private readNumber() {
+    private readNumber(): void {
         while (this.isDigit(this.peek())) {
             this.advance();
         }
@@ -526,7 +530,7 @@ export class Tokenizer implements ITokenizer {
     //
     // Reads the subsequent digits of an identifier or keyword token.
     //
-    private readIdentifer() {
+    private readIdentifer(): void {
         while (this.isAlphaNumeric(this.peek())) {
             this.advance();
         }
@@ -550,6 +554,33 @@ export class Tokenizer implements ITokenizer {
                 string: stringValue,
             }); 
         }
+    }
+
+    //
+    // Reads the characters of a string literal.
+    //
+    private stringLiteral(): void {
+        while (true) {
+            const ch = this.peek();
+            if (ch === undefined) {
+                //todo: Should be an error, unterminated.
+            }
+            this.advance();
+            if (ch === "\"") {
+                break; // Send of string literal.
+            }
+        }
+
+        const value = this.code.substring(this.curTokenStart! + 1, this.curPosition - 1);
+
+        this.setCurrent({ 
+            type: TokenType.STRING, 
+            value: value,
+            line: this.curTokenLine!,
+            column: this.curTokenColumn!,
+            string: value,
+        }); 
+
     }
 
 }
