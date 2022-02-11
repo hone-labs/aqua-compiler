@@ -99,6 +99,8 @@ describe("tokenizer", () => {
         expectArray(tokenize("<"), [{ type: TokenType.LT }]);
         expectArray(tokenize(">="), [{ type: TokenType.GTE }]);
         expectArray(tokenize(">"), [{ type: TokenType.GT }]);
+        expectArray(tokenize("*"), [{ type: TokenType.MULTIPLY }]);
+        expectArray(tokenize("/"), [{ type: TokenType.DIVIDE }]);
     });
 
     test("can scan identifier", () => {

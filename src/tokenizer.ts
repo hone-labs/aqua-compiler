@@ -31,6 +31,8 @@ export enum TokenType {
     LT,
     GTE,
     GT,
+    MULTIPLY,
+    DIVIDE,
 };
 
 //
@@ -65,6 +67,8 @@ export const TOKEN_NAME = [
     "<",
     ">=",
     ">",
+    "*",
+    "/",
 ];
 
 //
@@ -82,6 +86,8 @@ const SINGLE_CHARACTER_OPERATORS = {
     ",": TokenType.COMMA,
     "<": TokenType.LT,
     ">": TokenType.GT,
+    "*": TokenType.MULTIPLY,
+    "/": TokenType.DIVIDE,
 }
 
 //
