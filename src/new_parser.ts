@@ -686,32 +686,7 @@ export class Parser implements IParser {
         }
 
         if (this.match(TokenType.TXN)) {
-            this.expect(TokenType.DOT);
-
-            const nextIdentifier = this.expect(TokenType.IDENTIFIER);
-
-            if (this.match(TokenType.OPEN_BRACE)) {
-                const numberToken = this.expect(TokenType.NUMBER);
-
-                this.expect(TokenType.CLOSE_BRACE);
-
-                return {
-                    nodeType: "operation",
-                    opcode: "txna",
-                    args: [
-                        nextIdentifier.value!,
-                        numberToken.value!,
-                    ],
-                };
-            }
-
-            return {
-                nodeType: "operation",
-                opcode: "txn",
-                args: [
-                    nextIdentifier.value!,
-                ],
-            };
+            return this.txnExpression();
         }
 
         const identifierToken = this.match(TokenType.IDENTIFIER);
@@ -736,6 +711,39 @@ export class Parser implements IParser {
             column: token!.column,
         });
         throw new Error(msg);
+    }
+
+    //
+    // Parses a txn expression.
+    //
+    private txnExpression(): ASTNode {
+        this.expect(TokenType.DOT);
+
+        const nextIdentifier = this.expect(TokenType.IDENTIFIER);
+
+        if (this.match(TokenType.OPEN_BRACE)) {
+            const numberToken = this.expect(TokenType.NUMBER);
+
+            this.expect(TokenType.CLOSE_BRACE);
+
+            return {
+                nodeType: "operation",
+                opcode: "txna",
+                args: [
+                    nextIdentifier.value!,
+                    numberToken.value!,
+                ],
+            };
+        }
+
+        return {
+            nodeType: "operation",
+            opcode: "txn",
+            args: [
+                nextIdentifier.value!,
+            ],
+        };
+
     }
 
     //
