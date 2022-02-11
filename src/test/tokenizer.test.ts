@@ -105,6 +105,14 @@ describe("tokenizer", () => {
         expectArray(tokenize("/"), [{ type: TokenType.DIVIDE }]);
         expectArray(tokenize("!"), [{ type: TokenType.NOT }]);
         expectArray(tokenize("."), [{ type: TokenType.DOT }]);
+
+        expectArray(tokenize("txn"), [{ type: TokenType.TXN }]);
+        expectArray(tokenize("gtxn"), [{ type: TokenType.GTXN }]);
+        expectArray(tokenize("arg"), [{ type: TokenType.ARG }]);
+        expectArray(tokenize("addr"), [{ type: TokenType.ADDR }]);
+        expectArray(tokenize("global"), [{ type: TokenType.GLOBAL }]);
+        expectArray(tokenize("OnComplete"), [{ type: TokenType.ONCOMPLETE }]);
+        expectArray(tokenize("TypeEnum"), [{ type: TokenType.TYPEENUM }]);
     });
 
     test("can scan identifier", () => {

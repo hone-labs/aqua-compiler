@@ -37,6 +37,13 @@ export enum TokenType {
     DIVIDE,
     NOT,
     DOT,
+    TXN,
+    GTXN,
+    ARG,
+    ADDR,
+    GLOBAL,
+    ONCOMPLETE,
+    TYPEENUM,
 };
 
 //
@@ -77,6 +84,13 @@ export const TOKEN_NAME = [
     "/",
     "!",
     ".",
+    "txn",
+    "gtxn",
+    "arg",
+    "addr",
+    "global",
+    "OnComplete",
+    "TypeEnum",
 ];
 
 //
@@ -138,6 +152,13 @@ export const KEYWORDS = {
     else: TokenType.ELSE,
     for: TokenType.FOR,
     while: TokenType.WHILE,
+    txn: TokenType.TXN,
+    gtxn: TokenType.GTXN,
+    arg: TokenType.ARG,
+    addr: TokenType.ADDR,
+    global: TokenType.GLOBAL,
+    OnComplete: TokenType.ONCOMPLETE,
+    TypeEnum: TokenType.TYPEENUM,
 };
 
 //
