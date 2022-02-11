@@ -44,6 +44,7 @@ export enum TokenType {
     GLOBAL,
     ONCOMPLETE,
     TYPEENUM,
+    QUOTE,
 };
 
 //
@@ -91,6 +92,7 @@ export const TOKEN_NAME = [
     "global",
     "OnComplete",
     "TypeEnum",
+    "\"",
 ];
 
 //
@@ -114,6 +116,7 @@ const SINGLE_CHARACTER_OPERATORS = {
     "/": TokenType.DIVIDE,
     "!": TokenType.NOT,
     ".": TokenType.DOT,
+    "\"": TokenType.QUOTE,
 }
 
 //
