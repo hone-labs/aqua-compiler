@@ -1,16 +1,9 @@
 import { CodeEmitter } from "./code-emitter";
 import { CodeGenerator } from "./code-generator";
 import { SymbolResolution } from "./symbol-resolution";
+import { parse, parseExpression } from "./new_parser";
 
 const packageJson = require("../package.json");
-const parser = require("./parser");
-
-//
-// Parses Aqua code to an AST.
-//
-export function parse(input: string): any {
-    return parser.parse(input);
-}
 
 //
 // Options to control the compiler.
@@ -46,7 +39,7 @@ export function compile(input: string, options?: ICompilerOptions): string {
 // Compiles an expression to TEAL.
 //
 export function compileExpression(input: string): string {
-    const ast = parser.parse(input, { startRule: "expression" });
+    const ast = parseExpression(input);
 
     const symbolResolution = new SymbolResolution();
     symbolResolution.resolveSymbols(ast);
