@@ -1162,6 +1162,110 @@ describe("parser", () => {
         });
     });
 
+    test("can parse for loop with variable declaration", () => {
+
+        const ast = parseOk("for (let x = 3;;)\n{\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "block-statment",
+                    "children": [
+                        {
+                            "nodeType": "declare-variable",
+                            "name": "x",
+                            "symbolType": 0,
+                            "children": [
+                                {
+                                    "nodeType": "operation",
+                                    "opcode": "int",
+                                    "type": "integer",
+                                    "args": [
+                                        3
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeType": "while-statement",
+                            "children": [
+                                {
+                                    "nodeType": "block-statment",
+                                    "children": []
+                                }
+                            ],
+                            "body": {
+                                "nodeType": "block-statment",
+                                "children": [
+                                    {
+                                        "nodeType": "block-statment",
+                                        "children": []
+                                    },
+                                    {
+                                        "nodeType": "block-statment",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+    });
+
+    test("can parse for loop with constant declaration", () => {
+
+        const ast = parseOk("for (const x = 3;;)\n{\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statment",
+            "children": [
+                {
+                    "nodeType": "block-statment",
+                    "children": [
+                        {
+                            "nodeType": "declare-variable",
+                            "name": "x",
+                            "symbolType": 1,
+                            "children": [
+                                {
+                                    "nodeType": "operation",
+                                    "opcode": "int",
+                                    "type": "integer",
+                                    "args": [
+                                        3
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "nodeType": "while-statement",
+                            "children": [
+                                {
+                                    "nodeType": "block-statment",
+                                    "children": []
+                                }
+                            ],
+                            "body": {
+                                "nodeType": "block-statment",
+                                "children": [
+                                    {
+                                        "nodeType": "block-statment",
+                                        "children": []
+                                    },
+                                    {
+                                        "nodeType": "block-statment",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        });
+    });
+
     test("can parse assignment expression", () => {
 
         const ast = parseExpressionOk("x = 3");

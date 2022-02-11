@@ -162,10 +162,14 @@ export class Parser implements IParser {
             };
         }
         else if (this.match(TokenType.CONST)) {
-            return this.variableDeclaration(true);
+            const decl = this.variableDeclaration(true);
+            this.expect(TokenType.SEMICOLON);
+            return decl;
         }
         else if (this.match(TokenType.LET)) {
-            return this.variableDeclaration(false);
+            const decl = this.variableDeclaration(false);
+            this.expect(TokenType.SEMICOLON);
+            return decl;
         }
         else if (this.match(TokenType.OPEN_BRACKET)) {
             return this.blockStatement();
@@ -196,9 +200,7 @@ export class Parser implements IParser {
         let initializer: ASTNode | undefined;
 
         if (this.match(TokenType.ASSIGNMENT)) {
-            initializer = this.expression();       
-    
-            this.expect(TokenType.SEMICOLON);
+            initializer = this.expression();          
         }
         else if (isConstant) {
             //
@@ -313,7 +315,20 @@ export class Parser implements IParser {
 
         let initializer: ASTNode | undefined;
         if (!this.peek(TokenType.SEMICOLON)) {
-            initializer = this.expression();
+            if (this.match(TokenType.CONST)) {
+                initializer = this.variableDeclaration(true);
+            }
+            else if (this.match(TokenType.LET)) {
+                initializer = this.variableDeclaration(false);
+            }
+            else {
+                initializer = {
+                    nodeType: "expr-statement",
+                    children: [
+                        this.expression()
+                    ],
+                };
+            }
         }
 
         this.expect(TokenType.SEMICOLON);
@@ -338,12 +353,7 @@ export class Parser implements IParser {
             nodeType: "block-statment",
             children: [
                 (initializer !== undefined //TODO: This code can do with some revision.
-                    ? {
-                        nodeType: "expr-statement",
-                        children: [
-                            initializer
-                        ],
-                    }
+                    ? initializer
                     : {
                         nodeType: "block-statment",
                         children: [],
