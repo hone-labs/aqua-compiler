@@ -1576,4 +1576,15 @@ describe("parser", () => {
             ]
         });
     });
+
+    test("can parse TypeEnum expression", () => {
+        const ast = parseExpressionOk("TypeEnum.Foo");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "int",
+            "args": [
+                "Foo"
+            ]
+        });
+    });
 });

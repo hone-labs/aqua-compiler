@@ -709,6 +709,10 @@ export class Parser implements IParser {
             return this.dot("int");
         }
 
+        if (this.match(TokenType.TYPEENUM)) {
+            return this.dot("int");
+        }
+
         const identifierToken = this.match(TokenType.IDENTIFIER);
         if (identifierToken) {
 
