@@ -691,6 +691,16 @@ export class Parser implements IParser {
             if (this.match(TokenType.OPEN_PAREN)) {
                 return this.functionCall(identifierToken.value!);
             }
+            else if (this.match(TokenType.DOT)) {
+                const nextIdentifier = this.expect(TokenType.IDENTIFIER);
+                return {
+                    nodeType: "operation",
+                    opcode: identifierToken.value!,
+                    args: [
+                        nextIdentifier.value!,
+                    ],
+                };
+            }
             else {
                 return {
                     nodeType: "access-variable",

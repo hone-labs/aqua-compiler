@@ -1482,5 +1482,16 @@ describe("parser", () => {
                 }
             ]
         });
-    });    
+    });
+    
+    test("can parse txn expression", () => {
+        const ast = parseExpressionOk("txn.Foo");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "txn",
+            "args": [
+              "Foo"
+            ]
+        });
+    });
 });
