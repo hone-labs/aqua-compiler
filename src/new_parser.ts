@@ -564,11 +564,11 @@ export class Parser implements IParser {
     // Parses an addition/subtraction expression.
     //
     private term(): ASTNode {
-        let working = this.primary();
+        let working = this.factor();
 
         while (true) {
             if (this.match(TokenType.PLUS)) {
-                const right = this.primary();
+                const right = this.factor();
                 working = {
                     nodeType: "operation",
                     opcode: "+",
@@ -582,13 +582,54 @@ export class Parser implements IParser {
             }
 
             if (this.match(TokenType.MINUS)) {
-                const right = this.primary();
+                const right = this.factor();
                 working = {
                     nodeType: "operation",
                     opcode: "-",
                     type: "integer",
                     children: [
                         working, 
+                        right,
+                    ],
+                };
+                continue;
+            }
+
+            break;
+        }
+
+        return working;
+    }
+
+    //
+    // Parses a multiplication or division expression.
+    //
+    private factor(): ASTNode {
+        let working = this.primary();
+
+        while (true) {
+            if (this.match(TokenType.MULTIPLY)) {
+                const right = this.primary();
+                working = {
+                    nodeType: "operation",
+                    opcode: "*",
+                    type: "integer",
+                    children: [
+                        working,
+                        right,
+                    ],
+                };
+                continue;
+            }
+
+            if (this.match(TokenType.DIVIDE)) {
+                const right = this.primary();
+                working = {
+                    nodeType: "operation",
+                    opcode: "/",
+                    type: "integer",
+                    children: [
+                        working,
                         right,
                     ],
                 };
