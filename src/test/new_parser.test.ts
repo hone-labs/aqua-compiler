@@ -1499,7 +1499,7 @@ describe("parser", () => {
         const ast = parseExpressionOk("txn.Foo[1]");
         expect(ast).toEqual({
             "nodeType": "operation",
-            "opcode": "txn",
+            "opcode": "txna",
             "args": [
                 "Foo",
                 1

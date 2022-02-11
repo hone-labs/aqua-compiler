@@ -697,7 +697,7 @@ export class Parser implements IParser {
 
                 return {
                     nodeType: "operation",
-                    opcode: "txn",
+                    opcode: "txna",
                     args: [
                         nextIdentifier.value!,
                         numberToken.value!,
