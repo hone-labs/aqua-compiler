@@ -66,7 +66,9 @@ async function main() {
         else if (command === "ast") {
             // Parse and dump AST.
             console.log(`== AST ==`);
-            const ast = parse(fileData);
+            const ast = parse(fileData, err => {
+                console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
+            });
             console.log(colorJson(ast));
         }
         else {

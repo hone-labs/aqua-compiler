@@ -264,7 +264,7 @@ describe("parser", () => {
 
     test("erroneous statement is omitted", () => {
 
-        const ast = parse("1");
+        const ast = parse("1", () => {});
         expect(ast).toEqual({
             nodeType: "block-statment",
             children: [] // No children, the broken statement is omitted.
@@ -334,7 +334,7 @@ describe("parser", () => {
 
     test("error causes resync to next statement", () => {
 
-        const ast = parse("=;2;");
+        const ast = parse("=;2;", () => {});
         expect(ast).toEqual({
             "nodeType": "block-statment",
             "children": [

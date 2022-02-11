@@ -26,9 +26,9 @@ export class Parser implements IParser {
     //
     // A simple interface that allows the tokenizer to report an error and continue scanning.
     //
-    private onError?: OnErrorFn;
+    private onError: OnErrorFn;
 
-    constructor(code: string, onError?: OnErrorFn) {
+    constructor(code: string, onError: OnErrorFn) {
         this.tokenizer = new Tokenizer(code, onError);
         this.tokenizer.readNext(); // Read first token.
         this.onError = onError;
@@ -976,7 +976,7 @@ export class Parser implements IParser {
 //
 // Helper function for testing.
 //
-export function parseExpression(code: string, onError?: OnErrorFn): ASTNode {
+export function parseExpression(code: string, onError: OnErrorFn): ASTNode {
     const parser = new Parser(code, onError);
     return parser.expression();
 }
@@ -984,7 +984,7 @@ export function parseExpression(code: string, onError?: OnErrorFn): ASTNode {
 //
 // Helper function for testing.
 //
-export function parse(code: string, onError?: OnErrorFn): ASTNode {
+export function parse(code: string, onError: OnErrorFn): ASTNode {
     const parser = new Parser(code, onError);
     return parser.program();
 }

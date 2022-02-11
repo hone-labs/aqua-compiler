@@ -16,7 +16,9 @@ export interface ICompilerOptions {
 // Compiles an Aqua script to TEAL.
 //
 export function compile(input: string, options?: ICompilerOptions): string {
-    const ast = parse(input);
+    const ast = parse(input, err => {
+        console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
+    });
 
     const symbolResolution = new SymbolResolution();
     symbolResolution.resolveSymbols(ast);
@@ -39,7 +41,9 @@ export function compile(input: string, options?: ICompilerOptions): string {
 // Compiles an expression to TEAL.
 //
 export function compileExpression(input: string): string {
-    const ast = parseExpression(input);
+    const ast = parseExpression(input, err => {
+        console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
+    });
 
     const symbolResolution = new SymbolResolution();
     symbolResolution.resolveSymbols(ast);
