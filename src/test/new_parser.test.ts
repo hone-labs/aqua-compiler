@@ -1541,6 +1541,17 @@ describe("parser", () => {
                 1
             ]
         });
+    });
 
+    test("can parse addr expression", () => {
+        const ast = parseExpressionOk("addr \"1234\"");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "addr",
+            "type": "addr",
+            "args": [
+                "1234"
+            ]
+        });
     });
 });

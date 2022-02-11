@@ -697,6 +697,10 @@ export class Parser implements IParser {
             return this.arg();
         }
 
+        if (this.match(TokenType.ADDR)) {
+            return this.addr();
+        }
+
         const identifierToken = this.match(TokenType.IDENTIFIER);
         if (identifierToken) {
 
@@ -810,6 +814,21 @@ export class Parser implements IParser {
             opcode: "arg",
             args: [
                 argIndexToken.value!,
+            ],
+        };
+    }
+
+    //
+    // Parses an addr expressions.
+    //
+    private addr(): ASTNode {
+        const stringLiteral = this.expect(TokenType.STRING);
+        return {
+            nodeType:"operation",
+            opcode: "addr",
+            type: "addr",
+            args: [
+                stringLiteral.value!,
             ],
         };
     }
