@@ -192,19 +192,36 @@ export class Parser implements IParser {
     private variableDeclaration(isConstant: boolean): ASTNode {
 
         const identifier = this.expect(TokenType.IDENTIFIER);
-        this.expect(TokenType.ASSIGNMENT);
 
-        const initializer = this.expression();       
+        let initializer: ASTNode | undefined;
 
-        this.expect(TokenType.SEMICOLON);
+        if (this.match(TokenType.ASSIGNMENT)) {
+            initializer = this.expression();       
+    
+            this.expect(TokenType.SEMICOLON);
+        }
+        else if (isConstant) {
+            //
+            // Constants must be initialised!
+            //
+            const msg = `Constant ${identifier.value!} must be initialized.`;
+            this.onError({
+                msg: msg,
+                line: identifier.line,
+                column: identifier.column,
+            });
+            throw new Error(msg);
+        }
+
+        const children = initializer !== undefined
+            ? [ initializer ]
+            : undefined;
 
         return {
             nodeType: "declare-variable",
             name: identifier.value!,
             symbolType: isConstant ? 1 : 0, // Constant. TOOD: This shouldn't be hardcoded - after new parser is finished.
-            children: [
-                initializer,
-            ],
+            children: children,
         };
     }
 
@@ -741,7 +758,7 @@ export class Parser implements IParser {
 
         const token = this.tokenizer.getCurrent();
         const msg = `Unexpected token "${token!.string}"`;
-        this.raiseError({
+        this.onError({
             msg: msg,
             line: token!.line,
             column: token!.column,
@@ -939,24 +956,14 @@ export class Parser implements IParser {
         const token = this.tokenizer.getCurrent()!;
         if (!this.match(type)) {
             const msg = `Expected token "${TOKEN_NAME[type]}", found token "${TOKEN_NAME[token.type]}"`;
-            this.raiseError({ 
+            this.onError({
                 msg: msg,
                 line: token.line,
                 column: token.column,
             });
-
-            throw new Error(msg); 
+            throw new Error(msg);
         }
         return token;
-    }
-
-    //
-    // Reports an error to the next level up.
-    //
-    private raiseError(err: IError): void {
-        if (this.onError) {
-            this.onError(err);
-        }
     }
 
     //

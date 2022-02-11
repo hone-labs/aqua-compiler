@@ -1599,4 +1599,13 @@ describe("parser", () => {
             ]
         });
     });
+
+    it("must initialize a constant", () => {
+        expectArray(retreiveErrors("const a;"), [
+            {
+                msg: `Constant a must be initialized.`,
+            },
+        ]);
+    });
+
 });
