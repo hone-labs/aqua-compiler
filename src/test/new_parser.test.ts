@@ -1525,10 +1525,22 @@ describe("parser", () => {
             "nodeType": "operation",
             "opcode": "gtxna",
             "args": [
-              1,
-              "Foo",
-              2
+                1,
+                "Foo",
+                2
             ]
         });
+    });
+
+    test("can parse arg expression", () => {
+        const ast = parseExpressionOk("arg[1]");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "arg",
+            "args": [
+                1
+            ]
+        });
+
     });
 });

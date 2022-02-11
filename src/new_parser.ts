@@ -686,11 +686,15 @@ export class Parser implements IParser {
         }
 
         if (this.match(TokenType.TXN)) {
-            return this.txnExpression();
+            return this.txn();
         }
 
         if (this.match(TokenType.GTXN)) {
-            return this.gtxnExpression();
+            return this.gtxn();
+        }
+
+        if (this.match(TokenType.ARG)) {
+            return this.arg();
         }
 
         const identifierToken = this.match(TokenType.IDENTIFIER);
@@ -720,7 +724,7 @@ export class Parser implements IParser {
     //
     // Parses a txn expression.
     //
-    private txnExpression(): ASTNode {
+    private txn(): ASTNode {
         this.expect(TokenType.DOT);
 
         const nextIdentifier = this.expect(TokenType.IDENTIFIER);
@@ -753,7 +757,7 @@ export class Parser implements IParser {
     //
     // Parses a gtxn expression.
     //
-    private gtxnExpression(): ASTNode {
+    private gtxn(): ASTNode {
 
         this.expect(TokenType.OPEN_BRACE);
 
@@ -789,7 +793,25 @@ export class Parser implements IParser {
                 fieldIdentifier.value!,
             ],
         };
+    }
 
+    //
+    // Parses an arg expression.
+    //
+    private arg(): ASTNode {
+        this.expect(TokenType.OPEN_BRACE);
+
+        const argIndexToken = this.expect(TokenType.NUMBER);
+
+        this.expect(TokenType.CLOSE_BRACE);
+
+        return {
+            nodeType: "operation",
+            opcode: "arg",
+            args: [
+                argIndexToken.value!,
+            ],
+        };
     }
 
     //
