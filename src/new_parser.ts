@@ -454,11 +454,11 @@ export class Parser implements IParser {
     // Parses an equality expression.
     //
     private equality(): ASTNode {
-        let working = this.term();
+        let working = this.comparison();
 
         while (true) {
             if (this.match(TokenType.EQ)) {
-                const right = this.term();
+                const right = this.comparison();
                 working = {
                     nodeType: "operation",
                     opcode: "==",
@@ -472,10 +472,79 @@ export class Parser implements IParser {
             }
 
             if (this.match(TokenType.NE)) {
-                const right = this.term();
+                const right = this.comparison();
                 working = {
                     nodeType: "operation",
                     opcode: "!=",
+                    type: "integer",
+                    children: [
+                        working,
+                        right,
+                    ],
+                };
+                continue;
+            }
+
+            break;
+        }
+
+        return working;
+    }
+
+    //
+    // Parses a comparison expression.
+    //
+    private comparison(): ASTNode {
+        let working = this.term();
+
+        while (true) {
+            if (this.match(TokenType.LT)) {
+                const right = this.term();
+                working = {
+                    nodeType: "operation",
+                    opcode: "<",
+                    type: "integer",
+                    children: [
+                        working,
+                        right,
+                    ],
+                };
+                continue;
+            }
+
+            if (this.match(TokenType.LTE)) {
+                const right = this.term();
+                working = {
+                    nodeType: "operation",
+                    opcode: "<=",
+                    type: "integer",
+                    children: [
+                        working,
+                        right,
+                    ],
+                };
+                continue;
+            }
+
+            if (this.match(TokenType.GT)) {
+                const right = this.term();
+                working = {
+                    nodeType: "operation",
+                    opcode: ">",
+                    type: "integer",
+                    children: [
+                        working,
+                        right,
+                    ],
+                };
+                continue;
+            }
+
+            if (this.match(TokenType.GTE)) {
+                const right = this.term();
+                working = {
+                    nodeType: "operation",
+                    opcode: ">=",
                     type: "integer",
                     children: [
                         working,

@@ -1295,4 +1295,116 @@ describe("parser", () => {
             ]
         });
     });    
+
+    test("can parse gt expression", () => {
+
+        const ast = parseExpressionOk("1 > 2");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": ">",
+            "type": "integer",
+            "children": [
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        1
+                    ]
+                },
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        2
+                    ]
+                }
+            ]
+        });
+    });    
+
+    test("can parse gte expression", () => {
+
+        const ast = parseExpressionOk("1 >= 2");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": ">=",
+            "type": "integer",
+            "children": [
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        1
+                    ]
+                },
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        2
+                    ]
+                }
+            ]
+        });
+    });        
+
+    test("can parse lt expression", () => {
+
+        const ast = parseExpressionOk("1 < 2");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "<",
+            "type": "integer",
+            "children": [
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        1
+                    ]
+                },
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        2
+                    ]
+                }
+            ]
+        });
+    });    
+
+    test("can parse lte expression", () => {
+
+        const ast = parseExpressionOk("1 <= 2");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "<=",
+            "type": "integer",
+            "children": [
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        1
+                    ]
+                },
+                {
+                    "nodeType": "operation",
+                    "opcode": "int",
+                    "type": "integer",
+                    "args": [
+                        2
+                    ]
+                }
+            ]
+        });
+    });    
 });
