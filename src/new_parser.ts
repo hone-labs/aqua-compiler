@@ -409,12 +409,15 @@ export class Parser implements IParser {
         }
     }
 
+    //
+    // Parses a logical expression.
+    //
     private logical(): ASTNode {
-        let working = this.term();
+        let working = this.equality();
 
         while (true) {
             if (this.match(TokenType.AND)) {
-                const right = this.term();
+                const right = this.equality();
                 working = {
                     nodeType: "operation",
                     opcode: "&&",
@@ -428,10 +431,51 @@ export class Parser implements IParser {
             }
 
             if (this.match(TokenType.OR)) {
-                const right = this.term();
+                const right = this.equality();
                 working = {
                     nodeType: "operation",
                     opcode: "||",
+                    type: "integer",
+                    children: [
+                        working,
+                        right,
+                    ],
+                };
+                continue;
+            }
+
+            break;
+        }
+
+        return working;
+    }
+
+    //
+    // Parses an equality expression.
+    //
+    private equality(): ASTNode {
+        let working = this.term();
+
+        while (true) {
+            if (this.match(TokenType.EQ)) {
+                const right = this.term();
+                working = {
+                    nodeType: "operation",
+                    opcode: "==",
+                    type: "integer",
+                    children: [
+                        working,
+                        right,
+                    ],
+                };
+                continue;
+            }
+
+            if (this.match(TokenType.NE)) {
+                const right = this.term();
+                working = {
+                    nodeType: "operation",
+                    opcode: "!=",
                     type: "integer",
                     children: [
                         working,
