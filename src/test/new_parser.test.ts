@@ -1266,7 +1266,7 @@ describe("parser", () => {
                 }
             ]
         });
-    });    
+    });
 
     test("can parse not equal expression", () => {
 
@@ -1294,7 +1294,7 @@ describe("parser", () => {
                 }
             ]
         });
-    });    
+    });
 
     test("can parse gt expression", () => {
 
@@ -1322,7 +1322,7 @@ describe("parser", () => {
                 }
             ]
         });
-    });    
+    });
 
     test("can parse gte expression", () => {
 
@@ -1350,7 +1350,7 @@ describe("parser", () => {
                 }
             ]
         });
-    });        
+    });
 
     test("can parse lt expression", () => {
 
@@ -1378,7 +1378,7 @@ describe("parser", () => {
                 }
             ]
         });
-    });    
+    });
 
     test("can parse lte expression", () => {
 
@@ -1406,7 +1406,7 @@ describe("parser", () => {
                 }
             ]
         });
-    });    
+    });
 
     test("can parse multiply expression", () => {
 
@@ -1434,7 +1434,7 @@ describe("parser", () => {
                 }
             ]
         });
-    });    
+    });
 
     test("can parse divide expression", () => {
 
@@ -1462,7 +1462,7 @@ describe("parser", () => {
                 }
             ]
         });
-    });    
+    });
 
     test("can parse not expression", () => {
 
@@ -1483,14 +1483,26 @@ describe("parser", () => {
             ]
         });
     });
-    
+
     test("can parse txn expression", () => {
         const ast = parseExpressionOk("txn.Foo");
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "txn",
             "args": [
-              "Foo"
+                "Foo"
+            ]
+        });
+    });
+
+    test("can parse indexed txn expression", () => {
+        const ast = parseExpressionOk("txn.Foo[1]");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "txn",
+            "args": [
+                "Foo",
+                1
             ]
         });
     });
