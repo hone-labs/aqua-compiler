@@ -685,37 +685,40 @@ export class Parser implements IParser {
             };
         }
 
+        if (this.match(TokenType.TXN)) {
+            this.expect(TokenType.DOT);
+
+            const nextIdentifier = this.expect(TokenType.IDENTIFIER);
+
+            if (this.match(TokenType.OPEN_BRACE)) {
+                const numberToken = this.expect(TokenType.NUMBER);
+
+                this.expect(TokenType.CLOSE_BRACE);
+
+                return {
+                    nodeType: "operation",
+                    opcode: "txn",
+                    args: [
+                        nextIdentifier.value!,
+                        numberToken.value!,
+                    ],
+                };
+            }
+
+            return {
+                nodeType: "operation",
+                opcode: "txn",
+                args: [
+                    nextIdentifier.value!,
+                ],
+            };
+        }
+
         const identifierToken = this.match(TokenType.IDENTIFIER);
         if (identifierToken) {
 
             if (this.match(TokenType.OPEN_PAREN)) {
                 return this.functionCall(identifierToken.value!);
-            }
-            else if (this.match(TokenType.DOT)) {
-                const nextIdentifier = this.expect(TokenType.IDENTIFIER);
-
-                if (this.match(TokenType.OPEN_BRACE)) {
-                    const numberToken = this.expect(TokenType.NUMBER);
-
-                    this.expect(TokenType.CLOSE_BRACE);
-
-                    return {
-                        nodeType: "operation",
-                        opcode: identifierToken.value!,
-                        args: [
-                            nextIdentifier.value!,
-                            numberToken.value!,
-                        ],
-                    };
-                }
-
-                return {
-                    nodeType: "operation",
-                    opcode: identifierToken.value!,
-                    args: [
-                        nextIdentifier.value!,
-                    ],
-                };
             }
             else {
                 return {
