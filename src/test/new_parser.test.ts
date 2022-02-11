@@ -1587,4 +1587,16 @@ describe("parser", () => {
             ]
         });
     });
+
+    test("can parse a string literal expression", () => {
+        const ast = parseExpressionOk("\"a string\"");
+        expect(ast).toEqual({
+            "nodeType": "operation",
+            "opcode": "byte",
+            "type": "byte",
+            "args": [
+                "\"a string\""
+            ]
+        });
+    });
 });

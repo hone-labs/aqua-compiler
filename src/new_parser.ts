@@ -685,6 +685,18 @@ export class Parser implements IParser {
             };
         }
 
+        const stringLiteral = this.match(TokenType.STRING);
+        if (stringLiteral) {
+            return {
+                nodeType: "operation",
+                opcode: "byte",
+                type: "byte",
+                args: [
+                    `"${stringLiteral.value!}"`,
+                ],
+            };
+        }
+
         if (this.match(TokenType.TXN)) {
             return this.txn();
         }
