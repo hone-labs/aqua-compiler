@@ -377,14 +377,21 @@ export class Tokenizer implements ITokenizer {
 
             // Report error, then continue scanning at the next character.
 
-            if (this.onError) {
-                this.onError({
-                    msg: `Encountered unexpected character "${ch}"`,
-                    line: this.curTokenLine,
-                    column: this.curTokenColumn,
-                });
-            }
+            this.raiseError({
+                msg: `Encountered unexpected character "${ch}"`,
+                line: this.curTokenLine,
+                column: this.curTokenColumn,
+            });
         }    
+    }
+
+    //
+    // Raises an error.
+    //
+    private raiseError(err: IError) {
+        if (this.onError) {
+            this.onError(err);
+        }
     }
 
     //
@@ -563,11 +570,26 @@ export class Tokenizer implements ITokenizer {
         while (true) {
             const ch = this.peek();
             if (ch === undefined) {
-                //todo: Should be an error, unterminated.
+                // End of file!
+                this.raiseError({
+                    msg: "Unterminated string literal.",
+                    line: this.curTokenLine!,
+                    column: this.curTokenColumn!,
+                });
+                break;
+            }
+            if (ch === "\n") {
+                // End of file!
+                this.raiseError({
+                    msg: "String literal was terminated by a new line.",
+                    line: this.curTokenLine!,
+                    column: this.curTokenColumn!,
+                });
+                break;
             }
             this.advance();
             if (ch === "\"") {
-                break; // Send of string literal.
+                break; // End of string literal.
             }
         }
 
@@ -580,7 +602,5 @@ export class Tokenizer implements ITokenizer {
             column: this.curTokenColumn!,
             string: value,
         }); 
-
     }
-
 }

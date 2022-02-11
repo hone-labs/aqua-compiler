@@ -228,6 +228,20 @@ describe("tokenizer", () => {
         expectArray(tokenize("\"\""), [{ type: TokenType.STRING, value: "" }]);
     });
 
-    //todo: error for unterminated string
+    test("error for unterminated string", () => {
+        expectArray(retreiveErrors("\"unterminated string"), [{ 
+            msg: "Unterminated string literal.",
+            line: 1, 
+            column: 0 
+        }]);
+    });
+
+    test("error for string that crosses a line break", () => {
+        expectArray(retreiveErrors("\"bad string\n"), [{ 
+            msg: "String literal was terminated by a new line.",
+            line: 1, 
+            column: 0 
+        }]);
+    });
 
 });
