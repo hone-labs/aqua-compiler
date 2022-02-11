@@ -33,6 +33,7 @@ export enum TokenType {
     GT,
     MULTIPLY,
     DIVIDE,
+    NOT,
 };
 
 //
@@ -69,6 +70,7 @@ export const TOKEN_NAME = [
     ">",
     "*",
     "/",
+    "!",
 ];
 
 //
@@ -88,6 +90,7 @@ const SINGLE_CHARACTER_OPERATORS = {
     ">": TokenType.GT,
     "*": TokenType.MULTIPLY,
     "/": TokenType.DIVIDE,
+    "!": TokenType.NOT,
 }
 
 //
