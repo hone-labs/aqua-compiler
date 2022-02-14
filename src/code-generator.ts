@@ -373,8 +373,11 @@ export class CodeGenerator {
             pre: (node) => {
                 const builtin = this.builtins[node.name!];
                 if (!builtin) {
-                    for (const argument of node.functionArgs || []) {
-                        this.internalGenerateCode(argument);
+                    //
+                    // If not a builtin function generate code for arguments immediately.
+                    //
+                    for (const arg of node.functionArgs || []) {
+                        this.internalGenerateCode(arg);
                     }                
                 }
             },
