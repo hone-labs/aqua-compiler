@@ -395,42 +395,78 @@ export class CodeGenerator {
     //
     private builtins: IBuiltinsLookupMap = {
         appGlobalPut: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
             this.codeEmitter.add(`app_global_put`);
             this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
         },
 
         appGlobalGet: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
             this.codeEmitter.add(`app_global_get`);
         },
 
         appGlobalDel: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
             this.codeEmitter.add(`app_global_del`);
             this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
         },
 
         appLocalPut: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
             this.codeEmitter.add(`app_local_put`);
             this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
         },
 
         appLocalGet: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
             this.codeEmitter.add(`app_local_get`);
         },
 
         appLocalDel: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
             this.codeEmitter.add(`app_local_del`);
             this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
         },
 
         btoi: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
             this.codeEmitter.add(`btoi`);
         },
 
         itob: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
             this.codeEmitter.add(`btoi`);
         },
 
         exit: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
             this.codeEmitter.add(`return`);
         },
     };
