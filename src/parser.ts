@@ -2,10 +2,8 @@
 // Parser for the Aqua language.
 //
 
-import { toLength } from "lodash";
-import { AST } from "yaml";
 import { ASTNode } from "./ast";
-import { IError, IToken, ITokenizer, OnErrorFn, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
+import { IToken, ITokenizer, OnErrorFn, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
 
 export interface IParser {
 
