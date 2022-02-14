@@ -3,7 +3,6 @@
   "description": "An expressive high level language for the Algorand block chain that compiles to TEAL code.",
   "main": "build/index.js",
   "scripts": {
-    "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
     "start": "ts-node ./src/cli.ts exec examples/test.aqua",
     "start:file": "ts-node ./src/cli.ts examples/test.aqua > examples/test.teal",
     "start1": "ts-node ./src/cli.ts exec examples/function.aqua",
