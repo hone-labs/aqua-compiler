@@ -69,11 +69,8 @@ describe("parser", () => {
                     nodeType: "expr-statement",
                     children: [
                         {
-                            nodeType: "operation",
-                            opcode: "int",
-                            args: [
-                                1
-                            ]
+                            nodeType: "number",
+                            value: 1,
                         }
                     ]
                 }
@@ -135,11 +132,8 @@ describe("parser", () => {
                     "nodeType": "expr-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         }
                     ]
                 },
@@ -147,11 +141,8 @@ describe("parser", () => {
                     "nodeType": "expr-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                2
-                            ]
+                            "nodeType": "number",
+                            "value": 2,
                         }
                     ]
                 }
@@ -169,11 +160,8 @@ describe("parser", () => {
                     "nodeType": "expr-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                2
-                            ]
+                            "nodeType": "number",
+                            "value": 2,
                         }
                     ]
                 }
@@ -193,11 +181,8 @@ describe("parser", () => {
                     "symbolType": 1,
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                3
-                            ]
+                            "nodeType": "number",
+                            "value": 3,
                         }
                     ]
                 }
@@ -217,11 +202,8 @@ describe("parser", () => {
                     "symbolType": 0,
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                3
-                            ]
+                            "nodeType": "number",
+                            "value": 3,
                         }
                     ]
                 }
@@ -257,11 +239,8 @@ describe("parser", () => {
                             "nodeType": "expr-statement",
                             "children": [
                                 {
-                                    "nodeType": "operation",
-                                    "opcode": "int",
-                                    "args": [
-                                        1
-                                    ]
+                                    "nodeType": "number",
+                                    "value": 1,
                                 }
                             ]
                         }
@@ -345,11 +324,8 @@ describe("parser", () => {
                                 "nodeType": "expr-statement",
                                 "children": [
                                     {
-                                        "nodeType": "operation",
-                                        "opcode": "int",
-                                        "args": [
-                                            1
-                                        ]
+                                        "nodeType": "number",
+                                        "value": 1,
                                     }
                                 ]
                             }
@@ -383,11 +359,8 @@ describe("parser", () => {
                     "nodeType": "return-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         }
                     ]
                 }
@@ -405,11 +378,8 @@ describe("parser", () => {
                     "nodeType": "if-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         }
                     ],
                     "ifBlock": {
@@ -419,11 +389,8 @@ describe("parser", () => {
                                 "nodeType": "expr-statement",
                                 "children": [
                                     {
-                                        "nodeType": "operation",
-                                        "opcode": "int",
-                                        "args": [
-                                            2
-                                        ]
+                                        "nodeType": "number",
+                                        "value": 2,
                                     }
                                 ]
                             }
@@ -445,22 +412,16 @@ describe("parser", () => {
                     "nodeType": "if-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         }
                     ],
                     "ifBlock": {
                         "nodeType": "expr-statement",
                         "children": [
                             {
-                                "nodeType": "operation",
-                                "opcode": "int",
-                                "args": [
-                                    2
-                                ]
+                                "nodeType": "number",
+                                "value": 2,
                             }
                         ]
                     }
@@ -480,11 +441,8 @@ describe("parser", () => {
                     "nodeType": "if-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         }
                     ],
                     "ifBlock": {
@@ -494,11 +452,8 @@ describe("parser", () => {
                                 "nodeType": "expr-statement",
                                 "children": [
                                     {
-                                        "nodeType": "operation",
-                                        "opcode": "int",
-                                        "args": [
-                                            2
-                                        ]
+                                        "nodeType": "number",
+                                        "value": 2,
                                     }
                                 ]
                             }
@@ -511,11 +466,8 @@ describe("parser", () => {
                                 "nodeType": "expr-statement",
                                 "children": [
                                     {
-                                        "nodeType": "operation",
-                                        "opcode": "int",
-                                        "args": [
-                                            3
-                                        ]
+                                        "nodeType": "number",
+                                        "value": 3,
                                     }
                                 ]
                             }
@@ -536,22 +488,16 @@ describe("parser", () => {
                     "nodeType": "if-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         }
                     ],
                     "ifBlock": {
                         "nodeType": "expr-statement",
                         "children": [
                             {
-                                "nodeType": "operation",
-                                "opcode": "int",
-                                "args": [
-                                    2
-                                ]
+                                "nodeType": "number",
+                                "value": 2,
                             }
                         ]
                     },
@@ -559,11 +505,8 @@ describe("parser", () => {
                         "nodeType": "expr-statement",
                         "children": [
                             {
-                                "nodeType": "operation",
-                                "opcode": "int",
-                                "args": [
-                                    3
-                                ]
+                                "nodeType": "number",
+                                "value": 3,
                             }
                         ]
                     }
@@ -583,11 +526,8 @@ describe("parser", () => {
                     "nodeType": "if-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         }
                     ],
                     "ifBlock": {
@@ -597,11 +537,8 @@ describe("parser", () => {
                                 "nodeType": "expr-statement",
                                 "children": [
                                     {
-                                        "nodeType": "operation",
-                                        "opcode": "int",
-                                        "args": [
-                                            2
-                                        ]
+                                        "nodeType": "number",
+                                        "value": 2,
                                     }
                                 ]
                             }
@@ -611,11 +548,8 @@ describe("parser", () => {
                         "nodeType": "if-statement",
                         "children": [
                             {
-                                "nodeType": "operation",
-                                "opcode": "int",
-                                "args": [
-                                    3
-                                ]
+                                "nodeType": "number",
+                                "value": 3,
                             }
                         ],
                         "ifBlock": {
@@ -625,11 +559,8 @@ describe("parser", () => {
                                     "nodeType": "expr-statement",
                                     "children": [
                                         {
-                                            "nodeType": "operation",
-                                            "opcode": "int",
-                                            "args": [
-                                                4
-                                            ]
+                                            "nodeType": "number",
+                                            "value": 4,
                                         }
                                     ]
                                 }
@@ -651,11 +582,8 @@ describe("parser", () => {
                     "nodeType": "while-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         }
                     ],
                     "body": {
@@ -665,11 +593,8 @@ describe("parser", () => {
                                 "nodeType": "expr-statement",
                                 "children": [
                                     {
-                                        "nodeType": "operation",
-                                        "opcode": "int",
-                                        "args": [
-                                            2
-                                        ]
+                                        "nodeType": "number",
+                                        "value": 2,
                                     }
                                 ]
                             }
@@ -690,22 +615,16 @@ describe("parser", () => {
                     "nodeType": "while-statement",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         }
                     ],
                     "body": {
                         "nodeType": "expr-statement",
                         "children": [
                             {
-                                "nodeType": "operation",
-                                "opcode": "int",
-                                "args": [
-                                    2
-                                ]
+                                "nodeType": "number",
+                                "value": 2,
                             }
                         ]
                     }
@@ -727,11 +646,8 @@ describe("parser", () => {
                             "nodeType": "expr-statement",
                             "children": [
                                 {
-                                    "nodeType": "operation",
-                                    "opcode": "int",
-                                    "args": [
-                                        1
-                                    ]
+                                    "nodeType": "number",
+                                    "value": 1,
                                 }
                             ]
                         },
@@ -739,11 +655,8 @@ describe("parser", () => {
                             "nodeType": "while-statement",
                             "children": [
                                 {
-                                    "nodeType": "operation",
-                                    "opcode": "int",
-                                    "args": [
-                                        2
-                                    ]
+                                    "nodeType": "number",
+                                    "value": 2,
                                 }
                             ],
                             "body": {
@@ -756,11 +669,8 @@ describe("parser", () => {
                                                 "nodeType": "expr-statement",
                                                 "children": [
                                                     {
-                                                        "nodeType": "operation",
-                                                        "opcode": "int",
-                                                        "args": [
-                                                            4
-                                                        ]
+                                                        "nodeType": "number",
+                                                        "value": 4,
                                                     }
                                                 ]
                                             }
@@ -770,11 +680,8 @@ describe("parser", () => {
                                         "nodeType": "expr-statement",
                                         "children": [
                                             {
-                                                "nodeType": "operation",
-                                                "opcode": "int",
-                                                "args": [
-                                                    3
-                                                ]
+                                                "nodeType": "number",
+                                                "value": 3,
                                             }
                                         ]
                                     }
@@ -818,11 +725,8 @@ describe("parser", () => {
                                                 "nodeType": "expr-statement",
                                                 "children": [
                                                     {
-                                                        "nodeType": "operation",
-                                                        "opcode": "int",
-                                                        "args": [
-                                                            4
-                                                        ]
+                                                        "nodeType": "number",
+                                                        "value": 4,
                                                     }
                                                 ]
                                             }
@@ -869,11 +773,8 @@ describe("parser", () => {
                                         "nodeType": "expr-statement",
                                         "children": [
                                             {
-                                                "nodeType": "operation",
-                                                "opcode": "int",
-                                                "args": [
-                                                    4
-                                                ]
+                                                "nodeType": "number",
+                                                "value": 4,
                                             }
                                         ]
                                     },
@@ -905,11 +806,8 @@ describe("parser", () => {
                             "symbolType": 0,
                             "children": [
                                 {
-                                    "nodeType": "operation",
-                                    "opcode": "int",
-                                    "args": [
-                                        3
-                                    ]
+                                    "nodeType": "number",
+                                    "value": 3,
                                 }
                             ]
                         },
@@ -956,11 +854,8 @@ describe("parser", () => {
                             "symbolType": 1,
                             "children": [
                                 {
-                                    "nodeType": "operation",
-                                    "opcode": "int",
-                                    "args": [
-                                        3
-                                    ]
+                                    "nodeType": "number",
+                                    "value": 3,
                                 }
                             ]
                         },

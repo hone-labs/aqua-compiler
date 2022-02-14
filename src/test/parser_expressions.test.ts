@@ -25,11 +25,8 @@ describe("parser", () => {
     test("can parse number expression", () => {
 
         expect(parseExpressionOk("12")).toEqual({
-            nodeType: "operation",
-            opcode: "int",
-            args: [
-                12
-            ],
+            nodeType: "number",
+            value: 12,
         });
     });
 
@@ -40,18 +37,12 @@ describe("parser", () => {
             opcode: "+",
             children: [
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [
-                        1
-                    ],
+                    nodeType: "number",
+                    value: 1,
                 },
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [
-                        2
-                    ],
+                    nodeType: "number",
+                    value: 2,
                 }
             ],
         });
@@ -68,27 +59,18 @@ describe("parser", () => {
                     "opcode": "+",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         },
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                2
-                            ]
+                            "nodeType": "number",
+                            "value": 2,
                         }
                     ]
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        3
-                    ]
+                    "nodeType": "number",
+                    "value": 3,
                 }
             ]
         });
@@ -101,18 +83,12 @@ describe("parser", () => {
             opcode: "-",
             children: [
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [
-                        1
-                    ],
+                    nodeType: "number",
+                    value: 1,
                 },
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [
-                        2
-                    ],
+                    nodeType: "number",
+                    value: 2,
                 }
             ],
         });
@@ -130,27 +106,18 @@ describe("parser", () => {
                     "opcode": "-",
                     "children": [
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                1
-                            ]
+                            "nodeType": "number",
+                            "value": 1,
                         },
                         {
-                            "nodeType": "operation",
-                            "opcode": "int",
-                            "args": [
-                                2
-                            ]
+                            "nodeType": "number",
+                            "value": 2,
                         }
                     ]
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        3
-                    ]
+                    "nodeType": "number",
+                    "value": 3,
                 }
             ]
         });
@@ -184,25 +151,16 @@ describe("parser", () => {
             "name": "foo",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        3
-                    ]
+                    "nodeType": "number",
+                    "value": 3,
                 }
             ]
         });
@@ -212,11 +170,8 @@ describe("parser", () => {
 
         const ast = parseExpressionOk("(1)");
         expect(ast).toEqual({
-            "nodeType": "operation",
-            "opcode": "int",
-            "args": [
-                1
-            ]
+            "nodeType": "number",
+            "value": 1,
         });
     });
 
@@ -231,11 +186,8 @@ describe("parser", () => {
             },
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        3
-                    ]
+                    "nodeType": "number",
+                    "value": 3,
                 }
             ]
         });
@@ -249,18 +201,12 @@ describe("parser", () => {
             "opcode": "&&",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 }
             ]
         });
@@ -274,18 +220,12 @@ describe("parser", () => {
             "opcode": "||",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 }
             ]
         });
@@ -299,18 +239,12 @@ describe("parser", () => {
             "opcode": "==",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 }
             ]
         });
@@ -324,18 +258,12 @@ describe("parser", () => {
             "opcode": "!=",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 }
             ]
         });
@@ -349,18 +277,12 @@ describe("parser", () => {
             "opcode": ">",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 }
             ]
         });
@@ -374,18 +296,12 @@ describe("parser", () => {
             "opcode": ">=",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 }
             ]
         });
@@ -399,18 +315,12 @@ describe("parser", () => {
             "opcode": "<",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 }
             ]
         });
@@ -424,18 +334,12 @@ describe("parser", () => {
             "opcode": "<=",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 }
             ]
         });
@@ -449,18 +353,12 @@ describe("parser", () => {
             "opcode": "*",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 }
             ]
         });
@@ -474,18 +372,12 @@ describe("parser", () => {
             "opcode": "/",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 },
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        2
-                    ]
+                    "nodeType": "number",
+                    "value": 2,
                 }
             ]
         });
@@ -499,11 +391,8 @@ describe("parser", () => {
             "opcode": "!",
             "children": [
                 {
-                    "nodeType": "operation",
-                    "opcode": "int",
-                    "args": [
-                        1
-                    ]
+                    "nodeType": "number",
+                    "value": 1,
                 }
             ]
         });
@@ -615,11 +504,8 @@ describe("parser", () => {
     test("can parse a string literal expression", () => {
         const ast = parseExpressionOk("\"a string\"");
         expect(ast).toEqual({
-            "nodeType": "operation",
-            "opcode": "byte",
-            "args": [
-                "\"a string\""
-            ]
+            nodeType: "string-literal",
+            value: "a string",
         });
     });
 

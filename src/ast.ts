@@ -22,6 +22,11 @@ export interface ASTNode {
     children?: ASTNode[];
 
     //
+    // The value at at this node.
+    //
+    value?: any;
+
+    //
     // If this node references a symbol, this is the name of that symbol.
     //
     name?: string;

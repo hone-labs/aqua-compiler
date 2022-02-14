@@ -218,6 +218,18 @@ export class CodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
+        "number": {
+            post: (node) => {
+                this.codeEmitter.add(`int ${node.value!}`);
+            },
+        },
+
+        "string-literal": {
+            post: (node) => {
+                this.codeEmitter.add(`byte \"${node.value!}\"`);
+            },
+        },
+
         "operation": {
             post: (node) => {
                 let output = node.opcode!;

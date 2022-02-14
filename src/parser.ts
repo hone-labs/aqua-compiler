@@ -690,22 +690,16 @@ export class Parser implements IParser {
         const numberToken = this.match(TokenType.NUMBER);
         if (numberToken) {
             return {
-                nodeType: "operation",
-                opcode: "int",
-                args: [
-                    numberToken.value!,
-                ]
+                nodeType: "number",                
+                value: numberToken.value!,
             };
         }
 
         const stringLiteral = this.match(TokenType.STRING);
         if (stringLiteral) {
             return {
-                nodeType: "operation",
-                opcode: "byte",
-                args: [
-                    `"${stringLiteral.value!}"`,
-                ],
+                nodeType: "string-literal",
+                value: stringLiteral.value!,
             };
         }
 
