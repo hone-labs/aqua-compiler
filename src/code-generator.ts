@@ -479,8 +479,9 @@ export class CodeGenerator {
         },
 
         itxn_field: (node) => {
+            console.log(node); //fio:
             //todo: this should really remove the first argument from the code generator.
-            this.codeEmitter.add(`itxn_field ${unquote(node.children![0].args![0])}`);
+            this.codeEmitter.add(`itxn_field ${unquote(node.functionArgs![0].value)}`);
             // Don't need the extra item on the stack here because we are discarding the first parameter which is on the stack.
         },
 
