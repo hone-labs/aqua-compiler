@@ -18,7 +18,7 @@
 
 import { execute } from "teal-interpreter";
 import { compile } from ".";
-import { parse } from "./new_parser";
+import { parse } from "./parser";
 
 const packageJson = require("../package.json");
 const fs = require("fs/promises");
