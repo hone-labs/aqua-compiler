@@ -274,8 +274,7 @@ describe("code generator", () => {
             children: [
                 {
                     nodeType: "number",                  // Conditon.
-                    opcode: "int",
-                    args: [ 1 ],
+                    value: 1,
                 },
             ],
             ifBlock: {
