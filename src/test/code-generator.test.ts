@@ -120,9 +120,8 @@ describe("code generator", () => {
             nodeType: "return-statement",
             children: [
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [ 1 ],
+                    nodeType: "number",
+                    value: 1,
                 },
             ],
         };
@@ -166,9 +165,8 @@ describe("code generator", () => {
             },
             children: [
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [ 3 ],
+                    nodeType: "number",
+                    value: 3
                 },
             ],
         };
@@ -203,18 +201,16 @@ describe("code generator", () => {
             nodeType: "if-statement",
             children: [
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [ 4 ],
+                    nodeType: "number",
+                    value: 4,
                 },
             ],
             ifBlock: {
                 nodeType: "block-statement",
                 children: [
                     {
-                        nodeType: "operation",
-                        opcode: "int",
-                        args: [ 5 ],
+                        nodeType: "number",
+                        value: 5,
                     },
                 ],
             },
@@ -222,9 +218,8 @@ describe("code generator", () => {
                 nodeType: "block-statement",
                 children: [
                     {
-                        nodeType: "operation",
-                        opcode: "int",
-                        args: [ 6 ],
+                        nodeType: "number",
+                        value: 6,
                     },   
                 ],
             },
@@ -247,18 +242,16 @@ describe("code generator", () => {
             nodeType: "if-statement",
             children: [
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [ 4 ],
+                    nodeType: "number",
+                    value: 4,
                 },
             ],
             ifBlock: {
                 nodeType: "block-statement",
                 children: [
                     {
-                        nodeType: "operation",
-                        opcode: "int",
-                        args: [ 5 ],
+                        nodeType: "number",
+                        value: 5,
                     },
                 ],
             },
@@ -280,7 +273,7 @@ describe("code generator", () => {
             nodeType: "if-statement",                       // If stmt.
             children: [
                 {
-                    nodeType: "operation",                  // Conditon.
+                    nodeType: "number",                  // Conditon.
                     opcode: "int",
                     args: [ 1 ],
                 },
@@ -292,18 +285,16 @@ describe("code generator", () => {
                         nodeType: "if-statement",           // Nested if stmt.
                         children: [
                             {
-                                nodeType: "operation",      // Nested condition.
-                                opcode: "int",
-                                args: [ 2 ],
+                                nodeType: "number",      // Nested condition.
+                                value: 2,
                             },
                         ],
                         ifBlock: {
                             nodeType: "block-statement",
                             children: [
                                 {
-                                    nodeType: "operation",   // Nested body.
-                                    opcode: "int",
-                                    args: [ 3 ],
+                                    nodeType: "number",   // Nested body.
+                                    value: 3,
                                 },
                             ],
                         },
@@ -333,15 +324,13 @@ describe("code generator", () => {
             nodeType: "while-statement",
             children: [
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [ 4 ],
+                    nodeType: "number",
+                    value: 4,
                 },
             ],
             body: {
-                nodeType: "operation",
-                opcode: "int",
-                args: [ 5 ],
+                nodeType: "number",
+                value: 5,
             },
         };
 
@@ -361,24 +350,21 @@ describe("code generator", () => {
             nodeType: "while-statement",
             children: [
                 {
-                    nodeType: "operation",          // Condition.
-                    opcode: "int",
-                    args: [ 1 ],
+                    nodeType: "number",          // Condition.
+                    value: 1,
                 },
             ],
             body: {                                 // Nested loop.
                 nodeType: "while-statement",        
                 children: [
                     {
-                        nodeType: "operation",      // Nested condition.
-                        opcode: "int",
-                        args: [ 2 ],
+                        nodeType: "number",      // Nested condition.
+                        value: 2,
                     },
                 ],
                 body: {                             // Nested body
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [ 3 ],
+                    nodeType: "number",
+                    value: 3,
                 },
             },
         };
@@ -417,9 +403,8 @@ describe("code generator", () => {
                     },
                     children: [
                         {
-                            nodeType: "operation",
-                            opcode: "int",
-                            args: [ 2 ],
+                            nodeType: "number",
+                            value: 2,
                         },
                     ],
                     assignee: {
@@ -455,9 +440,8 @@ describe("code generator", () => {
                     },
                     children: [
                         {
-                            nodeType: "operation",
-                            opcode: "int",
-                            args: [ 2 ],
+                            nodeType: "number",
+                            value: 2,
                         },
                     ],
                     assignee: {
@@ -499,14 +483,12 @@ describe("code generator", () => {
             name: "myFunction",
             children: [
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [ 1 ],
+                    nodeType: "number",
+                    value: 1,
                 },
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [ 2 ],
+                    nodeType: "number",
+                    value: 2,
                 },
             ],
         };
@@ -530,9 +512,8 @@ describe("code generator", () => {
                 nodeType: "return-statement",
                 children: [
                     {
-                        nodeType: "operation",
-                        opcode: "int",
-                        args: [ 1 ],
+                        nodeType: "number",
+                        value: 1,
                     },        
                 ],
             },
@@ -580,9 +561,8 @@ describe("code generator", () => {
                 getNumSymbols: () => 0,
             },
             body: {
-                nodeType: "operation",
-                opcode: "int",
-                args: [ 1 ],
+                nodeType: "number",
+                value: 1,
             },
         };
 
