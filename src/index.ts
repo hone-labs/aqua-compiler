@@ -2,6 +2,7 @@ import { CodeEmitter } from "./code-emitter";
 import { CodeGenerator } from "./code-generator";
 import { SymbolResolution } from "./symbol-resolution";
 import { parse, parseExpression } from "./parser";
+export { parse, parseExpression } from "./parser";
 
 const packageJson = require("../package.json");
 
