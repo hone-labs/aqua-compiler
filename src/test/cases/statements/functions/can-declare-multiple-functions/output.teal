@@ -1,5 +1,5 @@
 #pragma version 5
-int 256
+int 255
 store 0
 b program_end
 fn1:

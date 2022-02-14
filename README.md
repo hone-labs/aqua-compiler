@@ -1,150 +1,171 @@
 # Aqua-compiler
 
-An expressive high level language for the Algorand block chain that compiles to TEAL code.
+An expressive high level language for [the Algorand blockchain](https://en.wikipedia.org/wiki/Algorand) smart contracts that compiles to [TEAL](https://developer.algorand.org/docs/get-details/dapps/avm/teal/specification/) code.
 
-This is a working in progress. Please report issues and help set the direction for this project.
+This is a work in progress. Please report issues and help set the direction for this project.
 
-## Quick setup
+## Using the Aqua command
 
-Clone the repo:
+Download the latest executable for your platform from [the releases page](https://github.com/optio-labs/aqua-compiler/releases).
 
-```bash
-git clone git@github.com:sovereign-labs/aqua-compiler.git
-```
+Add the executable to your path. If you are on MacOS or Linux you should rename the executable from `aqua-mac` or `aqua-linux` to just be called `aqua` (so the rest of the instructions make sense).
 
-Install dependencies:
+You can also install Aqua using npm:
 
 ```bash
-cd aqua-compiler
-npm install
+npm install -g aqua-compiler
 ```
 
-Then run it:
+## REPL
 
-```bash
-npm start
-```
-
-Or with live reload:
-
-```bash
-npm run start:dev
-```
-
-## Build Aqua
-
-Build the parser:
-
-```bash
-npm run build-parse
-```
-
-Build TypeScript code:
-
-```bash
-npm run build 
-```
-
-## Compile a file
-
-```bash
-aqua test.aqua
-```
-
-Or:
-
-```bash
-npx ts-node src/cli.ts examples/test.aqua
-```
-
-## Executing a file
-
-```bash
-aqua exec test.aqua
-```
-
-Or:
-
-```bash
-npx ts-node src/cli.ts exec examples/test.aqua
-```
-
-## Run the REPL
+Running the executable with no arguments starts the REPL:
 
 ```bash
 aqua
 ```
 
-Or:
-
-```bash
-npx ts-node src/cli.ts
-```
-
-Or 
-
-```bash
-npm run start:repl
-```
-
+You can type Aqua expressions and statements at the REPL and see the TEAL code that is generated.
 
 Trying entering expressions at the REPL prompt:
 
-- `txn Amount >= 1000;`
-- `15 + txn Amount >= 1000;`
-- `txn Amount <= arg 0;`
-- `txn Amount + arg0 > 1000 && arg1 > 30;`
-- `txn Receiver == addr ABC123;`
-- `"a string" == txn Something;`
+- `txn.Amount >= 1000;`
+- `15 + txn.Amount >= 1000;`
+- `txn.Amount <= arg[0];`
+- `txn.Amount + arg[0] > 1000 && arg[1] > 30;`
+- `txn.Receiver == addr ABC123;`
+- `"a string" == txn.Something;`
 - `return 1+2;`
 
-## Visualise the AST
+
+## Compiling an Aqua file
+
+To compile an Aqua file to TEAL code, input the Aqua filename:
 
 ```bash
-npm run start:ast
+aqua my-smart-contract.aqua
 ```
 
-## Run tests
+That prints the generated TEAL code to standard output.
+
+Typically you'll want to capture the TEAL code to a file (so you can run it against the blockchain):
 
 ```bash
-npm test
+aqua my-smart-contact.aqua > my-smart-contract.teal
 ```
 
-Or 
+## Examples of Aqua code
+
+See the `examples` subdirectory for various examples of Aqua code.
+
+## Using the Aqua API
+
+You can compile Aqua to TEAL code using Aqua's JavaScript/TypesScript API.
+
+First install Aqua in your Node.js project:
 
 ```bash
-npm run test:watch
+npm install --save aqua-compiler
 ```
 
-## Build the binary executables
+Then import Aqua's `compile` function:
 
-Make sure to have use Node.js v12.15.0 which is known to work with Nexe.
-
-Use `nvm` to install and swap between different versions of Node.js:
-
-```bash
-nvm install 12.15.0
-nvm use 12.15.0
+```javascript
+const { compile } = require("aqua-compiler");
 ```
 
-!! Build the TypeScript code:
+Or in TypeScript:
 
-```bash
-npm run build
+```typescript
+import { compile } from "aqua-compiler";
 ```
 
-Build for each platform:
+Now use `compile` to compile Aqua to TEAL:
 
-```bash
-npm run build-macos
-npm run build-linux
-npm run build-win
+```javascript
+const aquaCode = "return 1 + 2;"
+const tealCode = compiler(aquaCode);
+console.log(tealCode);
 ```
 
-Or 
+## Testing Aqua code with Jest
 
-```bash
-npm run build-all
+One reason why you might want to use Aqua's API is to enable automated testing.
+
+For example, here's a Jest test that compiles Aqua to TEAL:
+
+```javascript
+import { compile } from "aqua-compiler";
+import { readFile } from "fs/promises";
+
+describe("My smart contract test suite", () => {
+
+    test("My first test", async () => {
+
+        const tealCode = await compileAquaFile("my-smart-contract.aqua");
+
+        // ... test that you can execute teal code against your sandbox blockchain ...
+    });
+
+    // ... other tests go here ...
+
+});
+
+//
+// Loads and compiles an Aqua file.
+//
+async function compileAquaFile(fileName) {
+    const fileContent = await readFile(join(tealPath, tealFileName), { encoding: "utf8" });
+    return compile(fileContent);
+}
 ```
 
-**NOTE:** Linux and MacOS builds should be built on Linux.
+After compiling an Aqua file to TEAL code you can then deploy that code against your sandbox Algorand blockchain.
+
+Another way of testing that is faster and doesn't require having an actual Algorand node instance is to use [the TEAL interpreter](https://www.npmjs.com/package/teal-interpreter) to simulate the Algorand virtual machine.
+
+A Jest test that runs Aqua code against the TEAL interpreter might look like this:
+
+```javascript
+import { compile } from "aqua-compiler";
+import { readFile } from "fs/promises";
+import { execute } from "teal-interpreter";
+
+describe("My smart contract test suite", () => {
+
+    test("My first test", async () => {
+
+        const config = {
+            // ... configure the initial state of the TEAL interpreter ...
+        }
+        const result = await executeAqua("my-smart-contract.aqua", config);
+
+        // ... run expectations against the result to check that execution of the aqua code has expected results ...
+        
+    });
+
+    // ... other tests go here ...
+
+});
+
+//
+// Loads and compiles an Aqua file.
+//
+async function compileAquaFile(fileName) {
+    const fileContent = await readFile(join(tealPath, tealFileName), { encoding: "utf8" });
+    return compile(fileContent);
+}
+
+//
+// Executes Aqua code against the TEAL interpreter.
+//
+async function executeAqua(fileName, config) {
+    const tealCode = await compileAquaFile(fileName);
+    return await execute(tealCode, config);
+}
+````
+
+
+
+## Development
+
+See [the development guide](docs/DEVELOPMENT.md) for instructions on development of Aqua.

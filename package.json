@@ -1,8 +1,8 @@
 {
   "name": "aqua-compiler",
-  "version": "0.0.1",
+  "version": "0.0.8",
   "description": "An expressive high level language for the Algorand block chain that compiles to TEAL code.",
-  "main": "build/cli.js",
+  "main": "build/index.js",
   "scripts": {
     "build-parser": "pegjs -o src/parser.js  --allowed-start-rules start,expression src/grammar.pegjs",
     "start": "ts-node ./src/cli.ts exec examples/test.aqua",
@@ -32,6 +32,9 @@
     "build-linux": "nexe build/cli.js -t linux-x64-14.15.3 -n aqua-linux",
     "build-all": "npm run build-win && npm run build-mac && npm run build-linux",
     "build-test": "npm run build && npm run build-win && mv aqua.exe c:\\tools"
+  },
+  "bin": {
+    "aqua": "./bin/cli"
   },
   "keywords": [],
   "author": "ashley@codecapers.com.au",
