@@ -71,7 +71,6 @@ describe("parser", () => {
                         {
                             nodeType: "operation",
                             opcode: "int",
-                            type: "integer",
                             args: [
                                 1
                             ]
@@ -138,7 +137,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -151,7 +149,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 2
                             ]
@@ -174,7 +171,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 2
                             ]
@@ -199,7 +195,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 3
                             ]
@@ -224,7 +219,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 3
                             ]
@@ -265,7 +259,6 @@ describe("parser", () => {
                                 {
                                     "nodeType": "operation",
                                     "opcode": "int",
-                                    "type": "integer",
                                     "args": [
                                         1
                                     ]
@@ -354,7 +347,6 @@ describe("parser", () => {
                                     {
                                         "nodeType": "operation",
                                         "opcode": "int",
-                                        "type": "integer",
                                         "args": [
                                             1
                                         ]
@@ -393,7 +385,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -416,7 +407,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -431,7 +421,6 @@ describe("parser", () => {
                                     {
                                         "nodeType": "operation",
                                         "opcode": "int",
-                                        "type": "integer",
                                         "args": [
                                             2
                                         ]
@@ -458,7 +447,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -470,7 +458,6 @@ describe("parser", () => {
                             {
                                 "nodeType": "operation",
                                 "opcode": "int",
-                                "type": "integer",
                                 "args": [
                                     2
                                 ]
@@ -495,7 +482,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -510,7 +496,6 @@ describe("parser", () => {
                                     {
                                         "nodeType": "operation",
                                         "opcode": "int",
-                                        "type": "integer",
                                         "args": [
                                             2
                                         ]
@@ -528,7 +513,6 @@ describe("parser", () => {
                                     {
                                         "nodeType": "operation",
                                         "opcode": "int",
-                                        "type": "integer",
                                         "args": [
                                             3
                                         ]
@@ -554,7 +538,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -566,7 +549,6 @@ describe("parser", () => {
                             {
                                 "nodeType": "operation",
                                 "opcode": "int",
-                                "type": "integer",
                                 "args": [
                                     2
                                 ]
@@ -579,7 +561,6 @@ describe("parser", () => {
                             {
                                 "nodeType": "operation",
                                 "opcode": "int",
-                                "type": "integer",
                                 "args": [
                                     3
                                 ]
@@ -604,7 +585,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -619,7 +599,6 @@ describe("parser", () => {
                                     {
                                         "nodeType": "operation",
                                         "opcode": "int",
-                                        "type": "integer",
                                         "args": [
                                             2
                                         ]
@@ -634,7 +613,6 @@ describe("parser", () => {
                             {
                                 "nodeType": "operation",
                                 "opcode": "int",
-                                "type": "integer",
                                 "args": [
                                     3
                                 ]
@@ -649,7 +627,6 @@ describe("parser", () => {
                                         {
                                             "nodeType": "operation",
                                             "opcode": "int",
-                                            "type": "integer",
                                             "args": [
                                                 4
                                             ]
@@ -676,7 +653,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -691,7 +667,6 @@ describe("parser", () => {
                                     {
                                         "nodeType": "operation",
                                         "opcode": "int",
-                                        "type": "integer",
                                         "args": [
                                             2
                                         ]
@@ -717,7 +692,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -729,7 +703,6 @@ describe("parser", () => {
                             {
                                 "nodeType": "operation",
                                 "opcode": "int",
-                                "type": "integer",
                                 "args": [
                                     2
                                 ]
@@ -756,7 +729,6 @@ describe("parser", () => {
                                 {
                                     "nodeType": "operation",
                                     "opcode": "int",
-                                    "type": "integer",
                                     "args": [
                                         1
                                     ]
@@ -769,7 +741,6 @@ describe("parser", () => {
                                 {
                                     "nodeType": "operation",
                                     "opcode": "int",
-                                    "type": "integer",
                                     "args": [
                                         2
                                     ]
@@ -787,7 +758,6 @@ describe("parser", () => {
                                                     {
                                                         "nodeType": "operation",
                                                         "opcode": "int",
-                                                        "type": "integer",
                                                         "args": [
                                                             4
                                                         ]
@@ -802,7 +772,6 @@ describe("parser", () => {
                                             {
                                                 "nodeType": "operation",
                                                 "opcode": "int",
-                                                "type": "integer",
                                                 "args": [
                                                     3
                                                 ]
@@ -851,7 +820,6 @@ describe("parser", () => {
                                                     {
                                                         "nodeType": "operation",
                                                         "opcode": "int",
-                                                        "type": "integer",
                                                         "args": [
                                                             4
                                                         ]
@@ -903,7 +871,6 @@ describe("parser", () => {
                                             {
                                                 "nodeType": "operation",
                                                 "opcode": "int",
-                                                "type": "integer",
                                                 "args": [
                                                     4
                                                 ]
@@ -940,7 +907,6 @@ describe("parser", () => {
                                 {
                                     "nodeType": "operation",
                                     "opcode": "int",
-                                    "type": "integer",
                                     "args": [
                                         3
                                     ]
@@ -992,7 +958,6 @@ describe("parser", () => {
                                 {
                                     "nodeType": "operation",
                                     "opcode": "int",
-                                    "type": "integer",
                                     "args": [
                                         3
                                     ]

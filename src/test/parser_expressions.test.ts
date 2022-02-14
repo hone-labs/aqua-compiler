@@ -27,7 +27,6 @@ describe("parser", () => {
         expect(parseExpressionOk("12")).toEqual({
             nodeType: "operation",
             opcode: "int",
-            type: "integer",
             args: [
                 12
             ],
@@ -39,12 +38,10 @@ describe("parser", () => {
         expect(parseExpressionOk("1+2")).toEqual({
             nodeType: "operation",
             opcode: "+",
-            type: "integer",
             children: [
                 {
                     nodeType: "operation",
                     opcode: "int",
-                    type: "integer",
                     args: [
                         1
                     ],
@@ -52,7 +49,6 @@ describe("parser", () => {
                 {
                     nodeType: "operation",
                     opcode: "int",
-                    type: "integer",
                     args: [
                         2
                     ],
@@ -66,17 +62,14 @@ describe("parser", () => {
         expect(parseExpressionOk("1+2+3")).toEqual({
             "nodeType": "operation",
             "opcode": "+",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "+",
-                    "type": "integer",
                     "children": [
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -84,7 +77,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 2
                             ]
@@ -94,7 +86,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         3
                     ]
@@ -108,12 +99,10 @@ describe("parser", () => {
         expect(parseExpressionOk("1-2")).toEqual({
             nodeType: "operation",
             opcode: "-",
-            type: "integer",
             children: [
                 {
                     nodeType: "operation",
                     opcode: "int",
-                    type: "integer",
                     args: [
                         1
                     ],
@@ -121,7 +110,6 @@ describe("parser", () => {
                 {
                     nodeType: "operation",
                     opcode: "int",
-                    type: "integer",
                     args: [
                         2
                     ],
@@ -136,17 +124,14 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "-",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "-",
-                    "type": "integer",
                     "children": [
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 1
                             ]
@@ -154,7 +139,6 @@ describe("parser", () => {
                         {
                             "nodeType": "operation",
                             "opcode": "int",
-                            "type": "integer",
                             "args": [
                                 2
                             ]
@@ -164,7 +148,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         3
                     ]
@@ -203,7 +186,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -211,7 +193,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -219,7 +200,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         3
                     ]
@@ -234,7 +214,6 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "int",
-            "type": "integer",
             "args": [
                 1
             ]
@@ -254,7 +233,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         3
                     ]
@@ -269,12 +247,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "&&",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -282,7 +258,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -297,12 +272,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "||",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -310,7 +283,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -325,12 +297,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "==",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -338,7 +308,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -353,12 +322,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "!=",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -366,7 +333,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -381,12 +347,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": ">",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -394,7 +358,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -409,12 +372,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": ">=",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -422,7 +383,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -437,12 +397,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "<",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -450,7 +408,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -465,12 +422,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "<=",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -478,7 +433,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -493,12 +447,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "*",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -506,7 +458,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -521,12 +472,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "/",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -534,7 +483,6 @@ describe("parser", () => {
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         2
                     ]
@@ -549,12 +497,10 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "!",
-            "type": "integer",
             "children": [
                 {
                     "nodeType": "operation",
                     "opcode": "int",
-                    "type": "integer",
                     "args": [
                         1
                     ]
@@ -627,7 +573,6 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "addr",
-            "type": "addr",
             "args": [
                 "1234"
             ]
@@ -672,7 +617,6 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "byte",
-            "type": "byte",
             "args": [
                 "\"a string\""
             ]

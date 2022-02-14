@@ -448,7 +448,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: "&&",
-                    type: "integer",
                     children: [
                         working,
                         right,
@@ -462,7 +461,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: "||",
-                    type: "integer",
                     children: [
                         working,
                         right,
@@ -489,7 +487,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: "==",
-                    type: "integer",
                     children: [
                         working,
                         right,
@@ -503,7 +500,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: "!=",
-                    type: "integer",
                     children: [
                         working,
                         right,
@@ -530,7 +526,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: "<",
-                    type: "integer",
                     children: [
                         working,
                         right,
@@ -544,7 +539,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: "<=",
-                    type: "integer",
                     children: [
                         working,
                         right,
@@ -558,7 +552,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: ">",
-                    type: "integer",
                     children: [
                         working,
                         right,
@@ -572,7 +565,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: ">=",
-                    type: "integer",
                     children: [
                         working,
                         right,
@@ -599,7 +591,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: "+",
-                    type: "integer",
                     children: [
                         working, 
                         right,
@@ -613,7 +604,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: "-",
-                    type: "integer",
                     children: [
                         working, 
                         right,
@@ -640,7 +630,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: "*",
-                    type: "integer",
                     children: [
                         working,
                         right,
@@ -654,7 +643,6 @@ export class Parser implements IParser {
                 working = {
                     nodeType: "operation",
                     opcode: "/",
-                    type: "integer",
                     children: [
                         working,
                         right,
@@ -678,7 +666,6 @@ export class Parser implements IParser {
             return {
                 nodeType: "operation",
                 opcode: "!",
-                type: "integer",
                 children: [
                     expression,
                 ],
@@ -705,7 +692,6 @@ export class Parser implements IParser {
             return {
                 nodeType: "operation",
                 opcode: "int",
-                type: "integer",
                 args: [
                     numberToken.value!,
                 ]
@@ -717,7 +703,6 @@ export class Parser implements IParser {
             return {
                 nodeType: "operation",
                 opcode: "byte",
-                type: "byte",
                 args: [
                     `"${stringLiteral.value!}"`,
                 ],
@@ -877,7 +862,6 @@ export class Parser implements IParser {
         return {
             nodeType:"operation",
             opcode: "addr",
-            type: "addr",
             args: [
                 stringLiteral.value!,
             ],
