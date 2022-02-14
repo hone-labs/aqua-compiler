@@ -63,7 +63,7 @@ describe("parser", () => {
     test("can parse expression statement", () => {
 
         expect(parseOk("1;")).toEqual({
-            nodeType: "block-statment",
+            nodeType: "block-statement",
             children: [
                 {
                     nodeType: "expr-statement",
@@ -95,7 +95,7 @@ describe("parser", () => {
 
         const ast = parse("1", () => {});
         expect(ast).toEqual({
-            nodeType: "block-statment",
+            nodeType: "block-statement",
             children: [] // No children, the broken statement is omitted.
         });
     });
@@ -125,11 +125,11 @@ describe("parser", () => {
         expectArray(retreiveErrors("\n @"), [{ line: 2, column: 1 }]);
     });
 
-    test("can parse multiple statments", () => {
+    test("can parse multiple statements", () => {
 
         const ast = parseOk("1;\n2;");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "expr-statement",
@@ -163,7 +163,7 @@ describe("parser", () => {
 
         const ast = parse("=;2;", () => {});
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "expr-statement",
@@ -185,7 +185,7 @@ describe("parser", () => {
 
         const ast = parseOk("const a = 3;");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "declare-variable",
@@ -209,7 +209,7 @@ describe("parser", () => {
 
         const ast = parseOk("let a = 3;");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "declare-variable",
@@ -233,10 +233,10 @@ describe("parser", () => {
 
         const ast = parseOk("{}");
         expect(ast).toEqual({
-            "nodeType": "block-statment", // Program level.
+            "nodeType": "block-statement", // Program level.
             "children": [
                 {
-                    "nodeType": "block-statment",
+                    "nodeType": "block-statement",
                     "children": [
                     ]
                 }
@@ -248,10 +248,10 @@ describe("parser", () => {
 
         const ast = parseOk("{\n1;\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment", // Program level.
+            "nodeType": "block-statement", // Program level.
             "children": [
                 {
-                    "nodeType": "block-statment",
+                    "nodeType": "block-statement",
                     "children": [
                         {
                             "nodeType": "expr-statement",
@@ -275,13 +275,13 @@ describe("parser", () => {
 
         const ast = parseOk("{\n{\n}\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment", // Program level.
+            "nodeType": "block-statement", // Program level.
             "children": [
                 {
-                    "nodeType": "block-statment",
+                    "nodeType": "block-statement",
                     "children": [
                         {
-                            "nodeType": "block-statment",
+                            "nodeType": "block-statement",
                             "children": []
                         }
                     ]
@@ -294,14 +294,14 @@ describe("parser", () => {
 
         const ast = parseOk("function test () {\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "function-declaration",
                     "name": "test",
                     "params": [],
                     "body": {
-                        "nodeType": "block-statment",
+                        "nodeType": "block-statement",
                         "children": []
                     }
                 }
@@ -313,14 +313,14 @@ describe("parser", () => {
 
         const ast = parseOk("function test( a, b, c ) {}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "function-declaration",
                     "name": "test",
                     "params": ["a", "b", "c"],
                     "body": {
-                        "nodeType": "block-statment",
+                        "nodeType": "block-statement",
                         "children": []
                     }
                 }
@@ -332,14 +332,14 @@ describe("parser", () => {
 
         const ast = parseOk("function test () {\n1;\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "function-declaration",
                     "name": "test",
                     "params": [],
                     "body": {
-                        "nodeType": "block-statment",
+                        "nodeType": "block-statement",
                         "children": [
                             {
                                 "nodeType": "expr-statement",
@@ -363,10 +363,10 @@ describe("parser", () => {
     test("can parse empty statement", () => {
         const ast = parseOk(";");
         expect(ast).toEqual({
-            "nodeType": "block-statment", // Program level.
+            "nodeType": "block-statement", // Program level.
             "children": [
                 {
-                    "nodeType": "block-statment", // Empty statement.
+                    "nodeType": "block-statement", // Empty statement.
                     "children": []
                 }
             ]
@@ -377,7 +377,7 @@ describe("parser", () => {
 
         const ast = parseOk("return 1;");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "return-statement",
@@ -399,7 +399,7 @@ describe("parser", () => {
 
         const ast = parseOk("if (1) {\n2;\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "if-statement",
@@ -413,7 +413,7 @@ describe("parser", () => {
                         }
                     ],
                     "ifBlock": {
-                        "nodeType": "block-statment",
+                        "nodeType": "block-statement",
                         "children": [
                             {
                                 "nodeType": "expr-statement",
@@ -439,7 +439,7 @@ describe("parser", () => {
 
         const ast = parseOk("if (1)\n2;");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "if-statement",
@@ -474,7 +474,7 @@ describe("parser", () => {
 
         const ast = parseOk("if (1) {\n2;\n}\nelse {\n 3;\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "if-statement",
@@ -488,7 +488,7 @@ describe("parser", () => {
                         }
                     ],
                     "ifBlock": {
-                        "nodeType": "block-statment",
+                        "nodeType": "block-statement",
                         "children": [
                             {
                                 "nodeType": "expr-statement",
@@ -505,7 +505,7 @@ describe("parser", () => {
                         ]
                     },
                     "elseBlock": {
-                        "nodeType": "block-statment",
+                        "nodeType": "block-statement",
                         "children": [
                             {
                                 "nodeType": "expr-statement",
@@ -530,7 +530,7 @@ describe("parser", () => {
 
         const ast = parseOk("if (1)\n2;\nelse\n 3;");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "if-statement",
@@ -577,7 +577,7 @@ describe("parser", () => {
 
         const ast = parseOk("if (1) {\n2;\n}\nelse if (3) {\n4;\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "if-statement",
@@ -591,7 +591,7 @@ describe("parser", () => {
                         }
                     ],
                     "ifBlock": {
-                        "nodeType": "block-statment",
+                        "nodeType": "block-statement",
                         "children": [
                             {
                                 "nodeType": "expr-statement",
@@ -619,7 +619,7 @@ describe("parser", () => {
                             }
                         ],
                         "ifBlock": {
-                            "nodeType": "block-statment",
+                            "nodeType": "block-statement",
                             "children": [
                                 {
                                     "nodeType": "expr-statement",
@@ -645,7 +645,7 @@ describe("parser", () => {
 
         const ast = parseOk("while (1) {\n2;\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "while-statement",
@@ -659,7 +659,7 @@ describe("parser", () => {
                         }
                     ],
                     "body": {
-                        "nodeType": "block-statment",
+                        "nodeType": "block-statement",
                         "children": [
                             {
                                 "nodeType": "expr-statement",
@@ -684,7 +684,7 @@ describe("parser", () => {
 
         const ast = parseOk("while (1)\n2;");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
                     "nodeType": "while-statement",
@@ -718,10 +718,10 @@ describe("parser", () => {
 
         const ast = parseOk("for (1; 2; 3)\n{\n4;\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
-                    "nodeType": "block-statment",
+                    "nodeType": "block-statement",
                     "children": [
                         {
                             "nodeType": "expr-statement",
@@ -747,10 +747,10 @@ describe("parser", () => {
                                 }
                             ],
                             "body": {
-                                "nodeType": "block-statment",
+                                "nodeType": "block-statement",
                                 "children": [
                                     {
-                                        "nodeType": "block-statment",
+                                        "nodeType": "block-statement",
                                         "children": [
                                             {
                                                 "nodeType": "expr-statement",
@@ -791,28 +791,28 @@ describe("parser", () => {
 
         const ast = parseOk("for (;;)\n{\n4;\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
-                    "nodeType": "block-statment",
+                    "nodeType": "block-statement",
                     "children": [
                         {
-                            "nodeType": "block-statment",
+                            "nodeType": "block-statement",
                             "children": []
                         },
                         {
                             "nodeType": "while-statement",
                             "children": [
                                 {
-                                    "nodeType": "block-statment",
+                                    "nodeType": "block-statement",
                                     "children": []
                                 }
                             ],
                             "body": {
-                                "nodeType": "block-statment",
+                                "nodeType": "block-statement",
                                 "children": [
                                     {
-                                        "nodeType": "block-statment",
+                                        "nodeType": "block-statement",
                                         "children": [
                                             {
                                                 "nodeType": "expr-statement",
@@ -829,7 +829,7 @@ describe("parser", () => {
                                         ]
                                     },
                                     {
-                                        "nodeType": "block-statment",
+                                        "nodeType": "block-statement",
                                         "children": []
                                     }
                                 ]
@@ -845,25 +845,25 @@ describe("parser", () => {
 
         const ast = parseOk("for (;;)\n4;");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
-                    "nodeType": "block-statment",
+                    "nodeType": "block-statement",
                     "children": [
                         {
-                            "nodeType": "block-statment",
+                            "nodeType": "block-statement",
                             "children": []
                         },
                         {
                             "nodeType": "while-statement",
                             "children": [
                                 {
-                                    "nodeType": "block-statment",
+                                    "nodeType": "block-statement",
                                     "children": []
                                 }
                             ],
                             "body": {
-                                "nodeType": "block-statment",
+                                "nodeType": "block-statement",
                                 "children": [
                                     {
                                         "nodeType": "expr-statement",
@@ -878,7 +878,7 @@ describe("parser", () => {
                                         ]
                                     },
                                     {
-                                        "nodeType": "block-statment",
+                                        "nodeType": "block-statement",
                                         "children": []
                                     }
                                 ]
@@ -894,10 +894,10 @@ describe("parser", () => {
 
         const ast = parseOk("for (let x = 3;;)\n{\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
-                    "nodeType": "block-statment",
+                    "nodeType": "block-statement",
                     "children": [
                         {
                             "nodeType": "declare-variable",
@@ -917,19 +917,19 @@ describe("parser", () => {
                             "nodeType": "while-statement",
                             "children": [
                                 {
-                                    "nodeType": "block-statment",
+                                    "nodeType": "block-statement",
                                     "children": []
                                 }
                             ],
                             "body": {
-                                "nodeType": "block-statment",
+                                "nodeType": "block-statement",
                                 "children": [
                                     {
-                                        "nodeType": "block-statment",
+                                        "nodeType": "block-statement",
                                         "children": []
                                     },
                                     {
-                                        "nodeType": "block-statment",
+                                        "nodeType": "block-statement",
                                         "children": []
                                     }
                                 ]
@@ -945,10 +945,10 @@ describe("parser", () => {
 
         const ast = parseOk("for (const x = 3;;)\n{\n}");
         expect(ast).toEqual({
-            "nodeType": "block-statment",
+            "nodeType": "block-statement",
             "children": [
                 {
-                    "nodeType": "block-statment",
+                    "nodeType": "block-statement",
                     "children": [
                         {
                             "nodeType": "declare-variable",
@@ -968,19 +968,19 @@ describe("parser", () => {
                             "nodeType": "while-statement",
                             "children": [
                                 {
-                                    "nodeType": "block-statment",
+                                    "nodeType": "block-statement",
                                     "children": []
                                 }
                             ],
                             "body": {
-                                "nodeType": "block-statment",
+                                "nodeType": "block-statement",
                                 "children": [
                                     {
-                                        "nodeType": "block-statment",
+                                        "nodeType": "block-statement",
                                         "children": []
                                     },
                                     {
-                                        "nodeType": "block-statment",
+                                        "nodeType": "block-statement",
                                         "children": []
                                     }
                                 ]

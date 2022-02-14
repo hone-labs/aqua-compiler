@@ -276,7 +276,7 @@ describe("code generator", () => {
         ]);
     });
 
-    it("can generate code for nested if statment", () => {
+    it("can generate code for nested if statement", () => {
 
         const node: ASTNode = {
             nodeType: "if-statement",                       // If stmt.

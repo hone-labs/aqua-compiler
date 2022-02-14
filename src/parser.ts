@@ -39,7 +39,7 @@ export class Parser implements IParser {
     //
     program(): ASTNode {
         return {
-            nodeType: "block-statment", //TODO: fix spelling later.
+            nodeType: "block-statement",
             children: this.declarations(),
         };
     }
@@ -157,7 +157,7 @@ export class Parser implements IParser {
     private statement(): ASTNode {
         if (this.match(TokenType.SEMICOLON)) {
             return {
-                nodeType: "block-statment", // Empty statement.
+                nodeType: "block-statement", // Empty statement.
                 children: [],
             };
         }
@@ -236,7 +236,7 @@ export class Parser implements IParser {
         this.expect(TokenType.CLOSE_BRACKET);
 
         return {
-            nodeType: "block-statment", // TODO: Fix spelling later.
+            nodeType: "block-statement",
             children: stmts,
         };
     }
@@ -350,12 +350,12 @@ export class Parser implements IParser {
         const forBody = this.statement();
 
         return {
-            nodeType: "block-statment",
+            nodeType: "block-statement",
             children: [
                 (initializer !== undefined //TODO: This code can do with some revision.
                     ? initializer
                     : {
-                        nodeType: "block-statment",
+                        nodeType: "block-statement",
                         children: [],
                     }
                 ),
@@ -365,13 +365,13 @@ export class Parser implements IParser {
                         (conditional !== undefined //TODO: This code can do with some revision.
                             ? conditional
                             : {
-                                nodeType: "block-statment",
+                                nodeType: "block-statement",
                                 children: []
                             }
                         ),
                     ],
                     body: {
-                        nodeType: "block-statment",
+                        nodeType: "block-statement",
                         children: [
                             forBody,
                             (increment !== undefined //TODO: This code can do with some revision.
@@ -382,7 +382,7 @@ export class Parser implements IParser {
                                     ],
                                 }
                                 : {
-                                    nodeType: "block-statment",
+                                    nodeType: "block-statement",
                                     children: [],
                                 }
                             ),
