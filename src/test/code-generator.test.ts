@@ -96,14 +96,12 @@ describe("code generator", () => {
             nodeType: "expr-statement",
             children: [
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [ 1 ],
+                    nodeType: "number",
+                    value: 1,
                 },
                 {
-                    nodeType: "operation",
-                    opcode: "int",
-                    args: [ 2 ],
+                    nodeType: "number",
+                    value: 2,
                 },
             ],
         };
