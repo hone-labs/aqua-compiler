@@ -114,6 +114,10 @@ describe("tokenizer", () => {
         expectArray(tokenize("TypeEnum"), [{ type: TokenType.TYPEENUM }]);
     });
 
+    test("can skip comments", () => {
+        expectArray(tokenize("//\n+"), [{ type: TokenType.PLUS }]);
+    });
+
     test("can scan identifier", () => {
         expectArray(tokenize("abc"), [{ 
             type: TokenType.IDENTIFIER,

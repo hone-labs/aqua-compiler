@@ -331,8 +331,15 @@ export class Tokenizer implements ITokenizer {
             this.curTokenStart = this.curPosition;
             this.curTokenLine = this.curLine;
             this.curTokenColumn = this.curColumn;
-    
+
             const ch = this.advance();
+
+            if (ch === "/" && this.peek() === "/") {
+                // Single line comment.
+                this.skipToNewLine();
+                continue;
+            }
+
             const twoCharacterTokenLookup = (TWO_CHARACTER_OPERATORS as any)[ch];
             if (twoCharacterTokenLookup !== undefined) {
                 const nextCh = this.peek();
@@ -468,6 +475,22 @@ export class Tokenizer implements ITokenizer {
             else {                
                 break;
             }
+        } 
+    }
+
+    //
+    // Skips to the next new line.
+    //
+    private skipToNewLine(): void {
+        while (true) {
+            const ch = this.peek();
+            if (ch === "\n") {
+                break;
+            }
+            if (ch === undefined) {
+                break;
+            }
+            this.advance();
         } 
     }
 
