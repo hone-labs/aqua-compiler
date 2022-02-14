@@ -891,7 +891,7 @@ export class Parser implements IParser {
         return {
             nodeType: "function-call",
             name: functionName,
-            children: args,
+            functionArgs: args,
         };
     }
 

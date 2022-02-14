@@ -113,6 +113,12 @@ export class SymbolResolution {
             this.internalResolveSymbols(node.body!, symbolTable);
         },
 
+        "function-call": (node, symbolTable) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalResolveSymbols(arg, symbolTable);
+            }
+        },
+
     };
 
 }

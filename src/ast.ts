@@ -86,4 +86,9 @@ export interface ASTNode {
     //
     controlStatementId?: number;
 
+    //
+    // Arguments to the function, for function calls.
+    //
+    functionArgs?: ASTNode[];
+
 }

@@ -370,6 +370,14 @@ export class CodeGenerator {
         },
 
         "function-call": {
+            pre: (node) => {
+                const builtin = this.builtins[node.name!];
+                if (!builtin) {
+                    for (const argument of node.functionArgs || []) {
+                        this.internalGenerateCode(argument);
+                    }                
+                }
+            },
             post: (node) => {
                 const builtin = this.builtins[node.name!];
                 if (builtin) {

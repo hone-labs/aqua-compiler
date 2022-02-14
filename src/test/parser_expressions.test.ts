@@ -138,9 +138,8 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "function-call",
             "name": "foo",
-            "children": []
+            "functionArgs": []
         });
-
     });
 
     test("can parse function call with arguments", () => {
@@ -149,7 +148,7 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "function-call",
             "name": "foo",
-            "children": [
+            "functionArgs": [
                 {
                     "nodeType": "number",
                     "value": 1,
