@@ -18,10 +18,12 @@ export interface ICompilerOptions {
 //
 // Compiles an Aqua script to TEAL.
 //
-export function compile(input: string, onError: OnErrorFn, options?: ICompilerOptions): string {
+export function compile(input: string, onError?: OnErrorFn, options?: ICompilerOptions): string {
     let errors = 0;
     const ast = parse(input, err => {
-        onError(err);
+        if (onError) {
+            onError(err); 
+        }
         errors += 1;
     });
 

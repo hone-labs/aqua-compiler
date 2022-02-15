@@ -23,7 +23,7 @@ describe("test cases", () => {
             const dirPath = path.dirname(testCaseFile);
             const tealFilePath = path.join(dirPath, "output.teal");
             const input = await fs.readFile(testCaseFile, "utf8");
-            const compiled = normalize(compile(input, { disableVersionStamp: true }));
+            const compiled = normalize(compile(input, undefined, { disableVersionStamp: true }));
             const outputFileExists = await fs.pathExists(tealFilePath);
             if (outputFileExists) {
                 const expected = normalize(await fs.readFile(tealFilePath, "utf8"));
