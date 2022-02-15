@@ -2,6 +2,10 @@ import { compile } from "..";
 
 describe("statement", () => {
 
+    it("can handle unterminated function body", () => {
+        expect(() => compile("function main() {", () => {})).toThrow();
+    })
+
     it("can't assign to a number", () => {
         expect(() => compile("1=1;")).toThrow();
     });

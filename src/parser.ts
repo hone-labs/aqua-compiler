@@ -121,7 +121,8 @@ export class Parser implements IParser {
     private statements(endToken: TokenType): ASTNode[] {
         const stmts: ASTNode[] = [];
 
-        while (!this.peek(endToken)) {
+        while (!this.peek(TokenType.EOF) 
+            && !this.peek(endToken)) { 
             try {
                 stmts.push(this.statement());
             }
