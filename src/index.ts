@@ -24,6 +24,9 @@ export function compile(input: string, onError?: OnErrorFn, options?: ICompilerO
         if (onError) {
             onError(err); 
         }
+        else {
+            console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
+        }
         errors += 1;
     });
 
