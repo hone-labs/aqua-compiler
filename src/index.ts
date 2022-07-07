@@ -2,6 +2,8 @@ import { CodeEmitter } from "./code-emitter";
 import { CodeGenerator } from "./code-generator";
 import { SymbolResolution } from "./symbol-resolution";
 import { parse, parseExpression } from "./parser";
+import { OnErrorFn } from "./tokenizer";
+export { IError, OnErrorFn } from "./tokenizer";
 export { parse, parseExpression } from "./parser";
 
 const packageJson = require("../package.json");
@@ -16,10 +18,15 @@ export interface ICompilerOptions {
 //
 // Compiles an Aqua script to TEAL.
 //
-export function compile(input: string, options?: ICompilerOptions): string {
+export function compile(input: string, onError?: OnErrorFn, options?: ICompilerOptions): string {
     let errors = 0;
     const ast = parse(input, err => {
-        console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
+        if (onError) {
+            onError(err); 
+        }
+        else {
+            console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
+        }
         errors += 1;
     });
 
