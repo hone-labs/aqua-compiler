@@ -18,6 +18,16 @@ export interface IInstruction {
     // The number of items removed from the stack by this instruction.
     //
     numItemsRemoved: number;
+
+    //
+    // The number of items on the stack before this instruction executes.
+    //
+    numItemsOnStackBefore: number;
+
+    //
+    // The number of items on the stack after this instruction executes.
+    //
+    numItemsOnStackAfter: number;
 }
 
 //
@@ -105,22 +115,23 @@ export class CodeEmitter implements ICodeEmitter {
             comment,
             numItemsAdded,
             numItemsRemoved,
+            numItemsOnStackBefore: this.numItemsOnStack,
+            numItemsOnStackAfter: this.numItemsOnStack + numItemsAdded -  numItemsRemoved,
         });
         this.numItemsOnStack += numItemsAdded;
         this.numItemsOnStack -= numItemsRemoved;
 
         if (this.numItemsOnStack < 0) {
-            //TODO: This should be an exception.
-            console.error(`Now have negative items on the stack, this should not be possible.`);
+            throw new Error(`Now have negative items on the stack, this should not be possible.`);
         }
-        }
+    }
 
     //
     // Starts a new section in the generated code.
     //
     section(comment?: string): void {
         this.add(``, 0, 0, comment);
-        }
+    }
 
     //
     // Labels forth coming code.
@@ -134,6 +145,10 @@ export class CodeEmitter implements ICodeEmitter {
     //
     getOutput(): string[] {
         return this.output.map(instruction => {
+            // Useful debugging code:
+            // return `${this.padString(instruction.code)} // BEFORE: ${instruction.numItemsOnStackBefore}, AFTER: ${instruction.numItemsOnStackAfter}`;
+
+
             if (this.debugMode && instruction.comment) {
                 return `${this.padString(instruction.code)} // ${instruction.comment}`
             }
