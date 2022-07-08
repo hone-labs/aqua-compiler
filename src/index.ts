@@ -12,7 +12,15 @@ const packageJson = require("../package.json");
 // Options to control the compiler.
 //
 export interface ICompilerOptions {
+    //
+    // Disables output of the TEAL version pragma.
+    //
     disableVersionStamp?: boolean;
+
+    //
+    // Enables comments in the generated TEAL code.
+    //
+    outputComments?: boolean;
 }
 
 //
@@ -37,7 +45,7 @@ export function compile(input: string, onError?: OnErrorFn, options?: ICompilerO
     const symbolResolution = new SymbolResolution();
     symbolResolution.resolveSymbols(ast);
 
-    const codeEmitter = new CodeEmitter(false);
+    const codeEmitter = new CodeEmitter(!!options?.outputComments);
     const codeGenerator = new CodeGenerator(codeEmitter);
     codeGenerator.generateCode(ast);
 
