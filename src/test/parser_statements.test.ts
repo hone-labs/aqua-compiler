@@ -709,12 +709,7 @@ describe("parser", () => {
                         },
                         {
                             "nodeType": "while-statement",
-                            "children": [
-                                {
-                                    "nodeType": "block-statement",
-                                    "children": []
-                                }
-                            ],
+                            "children": [],
                             "body": {
                                 "nodeType": "block-statement",
                                 "children": [
@@ -760,12 +755,7 @@ describe("parser", () => {
                         },
                         {
                             "nodeType": "while-statement",
-                            "children": [
-                                {
-                                    "nodeType": "block-statement",
-                                    "children": []
-                                }
-                            ],
+                            "children": [],
                             "body": {
                                 "nodeType": "block-statement",
                                 "children": [
@@ -813,12 +803,7 @@ describe("parser", () => {
                         },
                         {
                             "nodeType": "while-statement",
-                            "children": [
-                                {
-                                    "nodeType": "block-statement",
-                                    "children": []
-                                }
-                            ],
+                            "children": [],
                             "body": {
                                 "nodeType": "block-statement",
                                 "children": [
@@ -861,12 +846,7 @@ describe("parser", () => {
                         },
                         {
                             "nodeType": "while-statement",
-                            "children": [
-                                {
-                                    "nodeType": "block-statement",
-                                    "children": []
-                                }
-                            ],
+                            "children": [],
                             "body": {
                                 "nodeType": "block-statement",
                                 "children": [

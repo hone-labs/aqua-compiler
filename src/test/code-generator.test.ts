@@ -21,14 +21,20 @@ describe("code generator", () => {
         const node = {
             nodeType: "operation",
             opcode: "op-parent",
+            numItemsAdded: 1,
+            numItemsRemoved: 2,
             children: [
                 {
                     nodeType: "operation",
                     opcode: "op-child-1",
+                    numItemsAdded: 1,
+                    numItemsRemoved: 0,
                 },
                 {
                     nodeType: "operation",
                     opcode: "op-child-2",
+                    numItemsAdded: 1,
+                    numItemsRemoved: 0,
                 },
             ],
         };
@@ -45,6 +51,8 @@ describe("code generator", () => {
         const node = {
             nodeType: "operation",
             opcode: "op",
+            numItemsAdded: 1,
+            numItemsRemoved: 0,
         };
 
         expect(generateCode(node)).toEqual([
@@ -59,6 +67,8 @@ describe("code generator", () => {
         const node = {
             nodeType: "operation",
             opcode: opcode,
+            numItemsAdded: 1,
+            numItemsRemoved: 0,
             args: [ value ],
         };
 
@@ -72,6 +82,8 @@ describe("code generator", () => {
         const node = {
             nodeType: "operation",
             opcode: "op",
+            numItemsAdded: 1,
+            numItemsRemoved: 0,
             args: [ 1, 2, 3 ],
         };
 

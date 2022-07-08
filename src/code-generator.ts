@@ -90,10 +90,10 @@ export class CodeGenerator {
         // Setup the initial stack pointer to the end of the scratch space.
         //
         if (this.functions.length > 0) {
-            this.codeEmitter.add(``, `Function data stack setup.`);
-            this.codeEmitter.add(`int ${MAX_SCRATCH}`, `Initial stack pointer.`);
-            this.codeEmitter.add(`store 0`, `Set stack_pointer`);
-            this.codeEmitter.add(``);
+            this.codeEmitter.section(`Function data stack setup.`);
+            this.codeEmitter.add(`int ${MAX_SCRATCH}`, 1, 0, `Initial stack pointer.`);
+            this.codeEmitter.add(`store 0`, 0, 1, `Set stack_pointer`);
+            this.codeEmitter.section();
         }
 
         //
@@ -105,7 +105,7 @@ export class CodeGenerator {
             //
             // Ensures the code for functions is never executed unless we specifically call the function.
             //
-            this.codeEmitter.add(`b program_end`); 
+            this.codeEmitter.add(`b program_end`, 0, 0); 
 
             //
             // Now generating code within functions.
@@ -119,8 +119,8 @@ export class CodeGenerator {
                 this.generateFunctionCode(functionNode);
             }    
 
-            this.codeEmitter.add(``);
-            this.codeEmitter.add(`program_end:`);
+            this.codeEmitter.section();
+            this.codeEmitter.label(`program_end`);
         }
     }
 
@@ -134,44 +134,43 @@ export class CodeGenerator {
         //
         this.curFunction = functionNode;
 
-        this.codeEmitter.add(`${functionNode.name}:`);
+        this.codeEmitter.label(functionNode.name!);
 
-        this.codeEmitter.add(``, `Function setup.`)
-
-        this.codeEmitter.add(`load 0`, `Take copy of current stack_pointer on stack so that we can save it as the "previous stack pointer" in the new stack frame.`);
+        this.codeEmitter.section(`Function setup.`);
+        this.codeEmitter.add(`load 0`, 1, 0, `Take copy of current stack_pointer on stack so that we can save it as the "previous stack pointer" in the new stack frame.`);
 
         // 
         // Decrement the stack pointer by the amount of variables used by the function.
         //
-        this.codeEmitter.add(``, `Allocate stack frame for the function being called and update the stack_pointer.`);
-        this.codeEmitter.add(``, `stack_pointer = stack_pointer - (num_locals+1)`)
-        this.codeEmitter.add(`load 0`, `stack_pointer`);
-        this.codeEmitter.add(`int ${functionNode.scope!.getNumSymbols()+1}`, `num_locals+1`); // Amount used by this function + 1 for saved stack_pointer.
-        this.codeEmitter.add(`-`, `stack_pointer - (num_locals+1)`); // stack_pointer - (num_locals+1)
-        this.codeEmitter.add(`store 0`, `stack_pointer = stack_pointer - (num_locals+1)`); // stack_pointer = stack_pointer - (num_locals+1)
+        this.codeEmitter.section(`Allocate stack frame for the function being called and update the stack_pointer.`);
+        this.codeEmitter.section(`stack_pointer = stack_pointer - (num_locals+1)`);
+        this.codeEmitter.add(`load 0`, 1, 0, `stack_pointer`);
+        this.codeEmitter.add(`int ${functionNode.scope!.getNumSymbols()+1}`, 1, 0, `num_locals+1`); // Amount used by this function + 1 for saved stack_pointer.
+        this.codeEmitter.add(`-`, 2, 1, `stack_pointer - (num_locals+1)`); // stack_pointer - (num_locals+1)
+        this.codeEmitter.add(`store 0`, 0, 1, `stack_pointer = stack_pointer - (num_locals+1)`); // stack_pointer = stack_pointer - (num_locals+1)
 
         //
         // Store previous stack pointer at position one in the new stack frame 
         // (so that the previous stack frame can be restored after this function has returned).
         //
-        this.codeEmitter.add(`load 0`, `Loads the stack_pointer for the new stack frame, this is where we'll store the previous stack pointer.`); // Loads the stack_pointer for the new stack frame, this is where we'll store the previous stack pointer.
-        this.codeEmitter.add(`swap`, `The values on the compute stack are in the wrong order, swap so they are in the right order.`); // The values on the compute stack are in the wrong order, swap so they are in the right order.
-        this.codeEmitter.add(`stores`, `Stores previous stack pointer at the first position in the new stack frame.`); // Stores previous stack pointer at the first position in the new stack frame.
-        this.codeEmitter.add(``);
+        this.codeEmitter.add(`load 0`, 1, 0, `Loads the stack_pointer for the new stack frame, this is where we'll store the previous stack pointer.`); // Loads the stack_pointer for the new stack frame, this is where we'll store the previous stack pointer.
+        this.codeEmitter.add(`swap`, 2, 2, `The values on the compute stack are in the wrong order, swap so they are in the right order.`); // The values on the compute stack are in the wrong order, swap so they are in the right order.
+        this.codeEmitter.add(`stores`, 0, 2, `Stores previous stack pointer at the first position in the new stack frame.`); // Stores previous stack pointer at the first position in the new stack frame.
+        this.codeEmitter.section();
 
         if (functionNode.params) {
-            this.codeEmitter.add(``, `Setup arguments.`);
+            this.codeEmitter.section(`Setup arguments.`);
 
             for (const param of functionNode.params.reverse()) { // Parameters are popped from the stack in reverse order to what they are pushed.
                 const symbol = functionNode.scope!.get(param); 
-                this.codeEmitter.add(`int ${symbol!.position}`); // Variable position within stack frame.                    
-                this.codeEmitter.add(`load 0`); // stack_pointer
-                this.codeEmitter.add(`+`); // stack_pointer + variable_position
-                this.codeEmitter.add(`stores`, `Stores "${param}".`);
+                this.codeEmitter.add(`int ${symbol!.position}`, 1, 0); // Variable position within stack frame.                    
+                this.codeEmitter.add(`load 0`, 1, 0); // stack_pointer
+                this.codeEmitter.add(`+`, 2, 1); // stack_pointer + variable_position
+                this.codeEmitter.add(`stores`, 0, 2, `Stores "${param}".`);
             }
         }
 
-        this.codeEmitter.add(``, `Function body.`)
+        this.codeEmitter.section(`Function body.`);
 
         //
         // Now we can generate code for the function.
@@ -181,15 +180,15 @@ export class CodeGenerator {
         // 
         // Restore the original stack pointer.
         //
-        this.codeEmitter.add(`${functionNode.name}-cleanup:`, `Function cleanup. Restores the previous stack frame`);
-        this.codeEmitter.add(`load 0`, `Loads current stack_pointer`)
-        this.codeEmitter.add(`loads`, `Loads previous_stack_pointer`);
-        this.codeEmitter.add(`store 0`, `stack_pointer = previous_stack_pointer`); // Restore stack_pointer to previous_stack_pointer.
+        this.codeEmitter.label(`${functionNode.name}-cleanup`, `Function cleanup. Restores the previous stack frame`);
+        this.codeEmitter.add(`load 0`, 1, 0, `Loads current stack_pointer`)
+        this.codeEmitter.add(`loads`, 1, 1, `Loads previous_stack_pointer`);
+        this.codeEmitter.add(`store 0`, 0, 1, `stack_pointer = previous_stack_pointer`); // Restore stack_pointer to previous_stack_pointer.
 
         //
         // Return from the function if not already done so explicitly.
         //
-        this.codeEmitter.add(`retsub`, `Catch all return.`);
+        this.codeEmitter.add(`retsub`, 0, 0, `Catch all return.`);
     }
 
     //
@@ -220,64 +219,67 @@ export class CodeGenerator {
 
         "number": {
             post: (node) => {
-                this.codeEmitter.add(`int ${node.value!}`);
+                this.codeEmitter.add(`int ${node.value!}`, 1, 0);
             },
         },
 
         "string-literal": {
             post: (node) => {
-                this.codeEmitter.add(`byte \"${node.value!}\"`);
+                this.codeEmitter.add(`byte \"${node.value!}\"`, 1, 0);
             },
         },
 
-        "operation": {
+        "operation": { //TODO: Want to get rid of this.
             post: (node) => {
                 let output = node.opcode!;
                 if (node.args) {
                     output += ` ${node.args.join(" ")}`;
                 }
-                this.codeEmitter.add(output);
+                this.codeEmitter.add(output, node.numItemsAdded !== undefined ? node.numItemsAdded : 1, node.numItemsRemoved !== undefined ? node.numItemsRemoved : 2);
             },
         },
 
         "expr-statement": {
+            pre: () => {
+                this.codeEmitter.resetStack();
+            },
             post: (node) => {
-                if (node.children) {
-                    // Assume each child has pushed a value on the stack that must be undone.
-                    for (const child of node.children) {
-                        this.codeEmitter.add(`pop`, `Clean the stack after expression statements.`);
-                    }
-                }
+                this.codeEmitter.popAll();
             },
         },
 
         "return-statement": {
+            pre: () => {
+                this.codeEmitter.resetStack();
+            },
             post: (node) => {
                 if (this.inFunction) {
                     //
                     // End of function! Jump to function cleanup code.
                     //
-                    this.codeEmitter.add(`b ${this.curFunction!.name}-cleanup`);
+                    this.codeEmitter.add(`b ${this.curFunction!.name}-cleanup`, 0, 0);
                 }
                 else {
                     //
                     // Global code executes the "return" opcode to finish the entire program.
                     //
-                    this.codeEmitter.add(`return`);
+                    this.codeEmitter.add(`return`, 0, 0);
                 }
             },
         },
         
         "declare-variable": {
             pre: (node) => {
+                this.codeEmitter.resetStack();
+                
                 if (node.children && node.children.length > 0) {
                     if (!node.symbol!.isGlobal) {                    
                         // 
                         // Prepare a reference to the stack frame location for the variable being assigned.
                         //
-                        this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
-                        this.codeEmitter.add(`load 0`); // stack_pointer
-                        this.codeEmitter.add(`+`); // stack_pointer + variable_position.
+                        this.codeEmitter.add(`int ${node.symbol!.position}`, 1, 0); // Variable position within stack frame.                    
+                        this.codeEmitter.add(`load 0`, 1, 0); // stack_pointer
+                        this.codeEmitter.add(`+`, 1, 2); // stack_pointer + variable_position.
                     }                
                 }
             },
@@ -285,25 +287,27 @@ export class CodeGenerator {
             post: (node) => {
                 if (node.children && node.children.length > 0) {
                     if (node.symbol!.isGlobal) {                    
-                        this.codeEmitter.add(`store ${node.symbol!.position}`);
+                        this.codeEmitter.add(`store ${node.symbol!.position}`, 0, 1);
                     }
                     else {
-                        this.codeEmitter.add(`stores`);
+                        this.codeEmitter.add(`stores`, 0, 2);
                     }                
                 }
+
+                this.codeEmitter.popAll();
             },
         },
 
         "access-variable": {
             post: (node) => {
                 if (node.symbol!.isGlobal) {                    
-                    this.codeEmitter.add(`load ${node.symbol!.position}`);
+                    this.codeEmitter.add(`load ${node.symbol!.position}`, 1, 0);
                 }
                 else {
-                    this.codeEmitter.add(`load 0`); // stack_pointer
-                    this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
-                    this.codeEmitter.add(`+`); // stack_pointer + variable_position
-                    this.codeEmitter.add(`loads`); // Loads variable onto stack.
+                    this.codeEmitter.add(`load 0`, 1, 0); // stack_pointer
+                    this.codeEmitter.add(`int ${node.symbol!.position}`, 1, 0); // Variable position within stack frame.                    
+                    this.codeEmitter.add(`+`, 2, 1); // stack_pointer + variable_position
+                    this.codeEmitter.add(`loads`, 1, 1); // Loads variable onto stack.
                 }
             },
         },
@@ -315,16 +319,16 @@ export class CodeGenerator {
                     // 
                     // Prepare a reference to the stack frame location for the variable being assigned.
                     //
-                    this.codeEmitter.add(`int ${node.symbol!.position}`); // Variable position within stack frame.                    
-                    this.codeEmitter.add(`load 0`); // stack_pointer
-                    this.codeEmitter.add(`+`); // stack_pointer + variable_position
-
-                    this.codeEmitter.add(`dig 1`); // Copies the earlier value to the top of stack. This is the value to be stored.
-                    this.codeEmitter.add(`stores`);
-                }
-                else {
-                    this.codeEmitter.add(`dup`); // Copies the value to be stored to top of stack. This is so that the earlier value can be used in higher expressions.
-                    this.codeEmitter.add(`store ${node.symbol!.position}`);
+                    this.codeEmitter.add(`int ${node.symbol!.position}`, 1, 0); // Variable position within stack frame.                    
+                    this.codeEmitter.add(`load 0`, 1, 0); // stack_pointer
+                    this.codeEmitter.add(`+`, 1, 2); // stack_pointer + variable_position
+    
+                    this.codeEmitter.add(`dig 1`, 1, 0); // Copies the earlier value to the top of stack. This is the value to be stored.
+                    this.codeEmitter.add(`stores`, 0, 2);
+                    }
+                    else {
+                    this.codeEmitter.add(`dup`, 1, 0); // Copies the value to be stored to top of stack. This is so that the earlier value can be used in higher expressions.
+                    this.codeEmitter.add(`store ${node.symbol!.position}`, 0, 1);
                 }
             },
         },
@@ -334,19 +338,19 @@ export class CodeGenerator {
                 this.controlStatementId += 1;
                 node.controlStatementId = this.controlStatementId;
 
-                this.codeEmitter.add(`bz else_${node.controlStatementId}`);
+                this.codeEmitter.add(`bz else_${node.controlStatementId}`, 0, 1);
 
                 this.internalGenerateCode(node.ifBlock!);
 
-                this.codeEmitter.add(`b end_${node.controlStatementId}`);
+                this.codeEmitter.add(`b end_${node.controlStatementId}`, 0, 0);
 
-                this.codeEmitter.add(`else_${node.controlStatementId}:`);
+                this.codeEmitter.label(`else_${node.controlStatementId}`);
 
                 if (node.elseBlock) {
                     this.internalGenerateCode(node.elseBlock);
                 }
 
-                this.codeEmitter.add(`end_${node.controlStatementId}:`);
+                this.codeEmitter.label(`end_${node.controlStatementId}`);
             },
         },
 
@@ -356,16 +360,16 @@ export class CodeGenerator {
                 this.controlStatementId += 1;
                 node.controlStatementId = this.controlStatementId;
 
-                this.codeEmitter.add(`loop_start_${node.controlStatementId}:`);
+                this.codeEmitter.label(`loop_start_${node.controlStatementId}`);
             },
 
             post: (node) => {
-                this.codeEmitter.add(`bz loop_end_${node.controlStatementId}`);
+                this.codeEmitter.add(`bz loop_end_${node.controlStatementId}`, 0, node.children!.length > 0 ? 1 : 0);
     
                 this.internalGenerateCode(node.body!);
     
-                this.codeEmitter.add(`b loop_start_${node.controlStatementId}`);
-                this.codeEmitter.add(`loop_end_${node.controlStatementId}:`)
+                this.codeEmitter.add(`b loop_start_${node.controlStatementId}`, 0, 0);
+                this.codeEmitter.label(`loop_end_${node.controlStatementId}`)
             },
         },
 
@@ -384,11 +388,14 @@ export class CodeGenerator {
             post: (node) => {
                 const builtin = this.builtins[node.name!];
                 if (builtin) {
-                    builtin(node);
-                    return;
+                    builtin(node); // Builtin functions generate inline code.
+                }
+                else {
+                    // Otherwise we "call" the user's function.
+                    this.codeEmitter.add(`callsub ${node.name}`, 1, node.functionArgs?.length || 0); //TODO: Always assuming a function returns one value. This will have to change.
                 }
 
-                this.codeEmitter.add(`callsub ${node.name}`);
+                //todo: at this point we need to let the emitter know how many items have been push on the stack as a result of this function.
             },
         },
     };
@@ -402,8 +409,8 @@ export class CodeGenerator {
                 this.internalGenerateCode(arg);
             }                
 
-            this.codeEmitter.add(`app_global_put`);
-            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
+            this.codeEmitter.add(`app_global_put`, 0, 2);
+            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.
         },
 
         appGlobalGet: (node) => {
@@ -411,7 +418,7 @@ export class CodeGenerator {
                 this.internalGenerateCode(arg);
             }                
 
-            this.codeEmitter.add(`app_global_get`);
+            this.codeEmitter.add(`app_global_get`, 1, 1);
         },
 
         appGlobalDel: (node) => {
@@ -419,8 +426,8 @@ export class CodeGenerator {
                 this.internalGenerateCode(arg);
             }                
 
-            this.codeEmitter.add(`app_global_del`);
-            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
+            this.codeEmitter.add(`app_global_del`, 0, 1);
+            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.
         },
 
         appLocalPut: (node) => {
@@ -428,8 +435,8 @@ export class CodeGenerator {
                 this.internalGenerateCode(arg);
             }                
 
-            this.codeEmitter.add(`app_local_put`);
-            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
+            this.codeEmitter.add(`app_local_put`, 0, 2);
+            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.
         },
 
         appLocalGet: (node) => {
@@ -437,7 +444,7 @@ export class CodeGenerator {
                 this.internalGenerateCode(arg);
             }                
 
-            this.codeEmitter.add(`app_local_get`);
+            this.codeEmitter.add(`app_local_get`, 1, 2);
         },
 
         appLocalDel: (node) => {
@@ -445,8 +452,8 @@ export class CodeGenerator {
                 this.internalGenerateCode(arg);
             }                
 
-            this.codeEmitter.add(`app_local_del`);
-            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
+            this.codeEmitter.add(`app_local_del`, 0, 2);
+            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.
         },
 
         btoi: (node) => {
@@ -454,7 +461,7 @@ export class CodeGenerator {
                 this.internalGenerateCode(arg);
             }                
 
-            this.codeEmitter.add(`btoi`);
+            this.codeEmitter.add(`btoi`, 1, 1);
         },
 
         itob: (node) => {
@@ -462,7 +469,7 @@ export class CodeGenerator {
                 this.internalGenerateCode(arg);
             }                
 
-            this.codeEmitter.add(`btoi`);
+            this.codeEmitter.add(`itob`, 1, 1);
         },
 
         exit: (node) => {
@@ -470,24 +477,23 @@ export class CodeGenerator {
                 this.internalGenerateCode(arg);
             }                
 
-            this.codeEmitter.add(`return`);
+            this.codeEmitter.add(`return`, 0, 0);
         },
 
         itxn_begin: (node) => {
-            this.codeEmitter.add(`itxn_begin`);
-            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.            
+            this.codeEmitter.add(`itxn_begin`, 0, 0);
+            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.            
         },
 
         itxn_field: (node) => {
-            console.log(node); //fio:
             //todo: this should really remove the first argument from the code generator.
-            this.codeEmitter.add(`itxn_field ${unquote(node.functionArgs![0].value)}`);
+            this.codeEmitter.add(`itxn_field ${unquote(node.functionArgs![0].value)}`, 0, 1);
             // Don't need the extra item on the stack here because we are discarding the first parameter which is on the stack.
         },
 
         itxn_submit: (node) => {
-            this.codeEmitter.add(`itxn_submit`);
-            this.codeEmitter.add(`int 0`); // Need to balance the stack here even though this value should never be used.
+            this.codeEmitter.add(`itxn_submit`, 0, 0);
+            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.
         },
     };
 

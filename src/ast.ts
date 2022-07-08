@@ -74,7 +74,17 @@ export interface ASTNode {
     //
     // For any nodes that output a TEAL opcode directly... this is the opcode.
     //
-    opcode?: string;
+    opcode?: string; //TODO: The parser really shouldn't care about opcodes.
+
+    //
+    // The number of items added to the stack for an opcode.
+    //
+    numItemsAdded?: number;
+
+    //
+    // The number of items removed from the stack for an opcode.
+    //
+    numItemsRemoved?: number;
 
     //
     // Arguments for the TEAL opcode, if any.

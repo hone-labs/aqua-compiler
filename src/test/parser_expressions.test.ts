@@ -401,6 +401,8 @@ describe("parser", () => {
         const ast = parseExpressionOk("txn.Foo");
         expect(ast).toEqual({
             "nodeType": "operation",
+            "numItemsAdded": 1,
+            "numItemsRemoved": 0,
             "opcode": "txn",
             "args": [
                 "Foo"
@@ -413,6 +415,8 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "txna",
+            "numItemsAdded": 1,
+            "numItemsRemoved": 0,
             "args": [
                 "Foo",
                 1
@@ -425,6 +429,8 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "gtxn",
+            "numItemsAdded": 1,
+            "numItemsRemoved": 0,
             "args": [
                 1,
                 "Foo"
@@ -437,6 +443,8 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "gtxna",
+            "numItemsAdded": 1,
+            "numItemsRemoved": 0,
             "args": [
                 1,
                 "Foo",
@@ -450,6 +458,8 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "arg",
+            "numItemsAdded": 1,
+            "numItemsRemoved": 0,
             "args": [
                 1
             ]
@@ -461,6 +471,8 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "addr",
+            "numItemsAdded": 1,
+            "numItemsRemoved": 0,
             "args": [
                 "1234"
             ]
@@ -472,6 +484,8 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "global",
+            "numItemsAdded": 1,
+            "numItemsRemoved": 0,
             "args": [
                 "Foo"
             ]
@@ -483,6 +497,8 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "int",
+            "numItemsAdded": 1,
+            "numItemsRemoved": 0,
             "args": [
                 "Foo"
             ]
@@ -494,6 +510,8 @@ describe("parser", () => {
         expect(ast).toEqual({
             "nodeType": "operation",
             "opcode": "int",
+            "numItemsAdded": 1,
+            "numItemsRemoved": 0,
             "args": [
                 "Foo"
             ]

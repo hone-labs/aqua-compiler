@@ -360,15 +360,9 @@ export class Parser implements IParser {
                 ),
                 {
                     nodeType: "while-statement",
-                    children: [
-                        (conditional !== undefined //TODO: This code can do with some revision.
-                            ? conditional
-                            : {
-                                nodeType: "block-statement",
-                                children: []
-                            }
-                        ),
-                    ],
+                    children: conditional !== undefined
+                        ? [ conditional ]
+                        : [],
                     body: {
                         nodeType: "block-statement",
                         children: [
@@ -770,6 +764,8 @@ export class Parser implements IParser {
             return {
                 nodeType: "operation",
                 opcode: "txna",
+                numItemsAdded: 1,
+                numItemsRemoved: 0,
                 args: [
                     nextIdentifier.value!,
                     numberToken.value!,
@@ -780,6 +776,8 @@ export class Parser implements IParser {
         return {
             nodeType: "operation",
             opcode: "txn",
+            numItemsAdded: 1,
+            numItemsRemoved: 0,
             args: [
                 nextIdentifier.value!,
             ],
@@ -810,6 +808,8 @@ export class Parser implements IParser {
             return {
                 nodeType: "operation",
                 opcode: "gtxna",
+                numItemsAdded: 1,
+                numItemsRemoved: 0,
                 args: [
                     gtxnIndexToken.value!,
                     fieldIdentifier.value!,
@@ -821,6 +821,8 @@ export class Parser implements IParser {
         return {
             nodeType: "operation",
             opcode: "gtxn",
+            numItemsAdded: 1,
+            numItemsRemoved: 0,
             args: [
                 gtxnIndexToken.value!,
                 fieldIdentifier.value!,
@@ -841,6 +843,8 @@ export class Parser implements IParser {
         return {
             nodeType: "operation",
             opcode: "arg",
+            numItemsAdded: 1,
+            numItemsRemoved: 0,
             args: [
                 argIndexToken.value!,
             ],
@@ -855,6 +859,8 @@ export class Parser implements IParser {
         return {
             nodeType:"operation",
             opcode: "addr",
+            numItemsAdded: 1,
+            numItemsRemoved: 0,
             args: [
                 stringLiteral.value!,
             ],
@@ -872,6 +878,8 @@ export class Parser implements IParser {
         return {
             nodeType: "operation",
             opcode: opcode,
+            numItemsAdded: 1, 
+            numItemsRemoved: 0,
             args: [
                 fieldName.value!,
             ],

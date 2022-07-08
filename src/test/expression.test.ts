@@ -157,7 +157,7 @@ describe("expression", () => {
 
     it("can get global field", () => {
         check("global.Something", "global Something");
-    })
+    });
 
     it("can compile addr", () => {
         check(
