@@ -1,5 +1,6 @@
 import { ASTNode } from "../ast";
 import { parse } from "../parser";
+import { SymbolType } from "../symbol-table";
 import { IError } from "../tokenizer";
 
 describe("parser", () => {
@@ -177,14 +178,25 @@ describe("parser", () => {
             "children": [
                 {
                     "nodeType": "declare-variable",
-                    "name": "a",
+                    "assignee": {
+                        "nodeType": "access-variable",
+                        "name": "a",
+                    },
                     "symbolType": 1,
-                    "children": [
-                        {
-                            "nodeType": "number",
-                            "value": 3,
-                        }
-                    ]
+                    "initializer": {
+                        "nodeType": "assignment-statement",
+                        "checkConstantAssignment": false,
+                        "assignee": {
+                            "nodeType": "access-variable",
+                            "name": "a",
+                        },
+                        "children": [
+                            {
+                                "nodeType": "number",
+                                "value": 3,
+                            }
+                        ]
+                    }
                 }
             ]
         });
@@ -198,14 +210,170 @@ describe("parser", () => {
             "children": [
                 {
                     "nodeType": "declare-variable",
-                    "name": "a",
+                    "assignee": {
+                        "nodeType": "access-variable",
+                        "name": "a",
+                    },
                     "symbolType": 0,
-                    "children": [
-                        {
-                            "nodeType": "number",
-                            "value": 3,
-                        }
-                    ]
+                    "initializer": {
+                        "nodeType": "assignment-statement",
+                        "checkConstantAssignment": false,
+                        "assignee": {
+                            "nodeType": "access-variable",
+                            "name": "a",
+                        },
+                        "children": [
+                            {
+                                "nodeType": "number",
+                                "value": 3,
+                            }
+                        ]
+                    }
+                }
+            ]
+        });
+    });
+
+    test("can declare an uninitialised tuple", () => {
+
+        const ast = parseOk("let (a, b);");
+        expect(ast).toEqual({
+            "nodeType": "block-statement",
+            "children": [
+                {
+                    "nodeType": "declare-variable",
+                    "assignee": {
+                        "nodeType": "tuple",
+                        "children": [
+                            {
+                                "nodeType": "access-variable",
+                                "name": "a"
+                            },
+                            {
+                                "nodeType": "access-variable",
+                                "name": "b"
+                            }
+                        ]
+                    },
+                    "symbolType": SymbolType.Variable
+                }
+            ]
+        });
+    });
+
+    test("can declare an initialised tuple", () => {
+
+        const ast = parseOk("let (a, b) = (1, 2);");
+        expect(ast).toEqual({
+            "nodeType": "block-statement",
+            "children": [
+                {
+                    "nodeType": "declare-variable",
+                    "assignee": {
+                        "nodeType": "tuple",
+                        "children": [
+                            {
+                                "nodeType": "access-variable",
+                                "name": "a"
+                            },
+                            {
+                                "nodeType": "access-variable",
+                                "name": "b"
+                            }
+                        ]
+                    },
+                    "symbolType": 0,
+                    "initializer": {
+                        "nodeType": "assignment-statement",
+                        "assignee": {
+                            "nodeType": "tuple",
+                            "children": [
+                                {
+                                    "nodeType": "access-variable",
+                                    "name": "a"
+                                },
+                                {
+                                    "nodeType": "access-variable",
+                                    "name": "b"
+                                }
+                            ]
+                        },
+                        "checkConstantAssignment": false,
+                        "children": [
+                            {
+                                "nodeType": "tuple",
+                                "children": [
+                                    {
+                                        "nodeType": "number",
+                                        "value": 1
+                                    },
+                                    {
+                                        "nodeType": "number",
+                                        "value": 2
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        });
+    });
+
+    test("can declare a constant tuple", () => {
+
+        const ast = parseOk("const (a, b) = (1, 2);");
+        expect(ast).toEqual({
+            "nodeType": "block-statement",
+            "children": [
+                {
+                    "nodeType": "declare-variable",
+                    "assignee": {
+                        "nodeType": "tuple",
+                        "children": [
+                            {
+                                "nodeType": "access-variable",
+                                "name": "a"
+                            },
+                            {
+                                "nodeType": "access-variable",
+                                "name": "b"
+                            }
+                        ]
+                    },
+                    "symbolType": 1,
+                    "initializer": {
+                        "nodeType": "assignment-statement",
+                        "assignee": {
+                            "nodeType": "tuple",
+                            "children": [
+                                {
+                                    "nodeType": "access-variable",
+                                    "name": "a"
+                                },
+                                {
+                                    "nodeType": "access-variable",
+                                    "name": "b"
+                                }
+                            ]
+                        },
+                        "checkConstantAssignment": false,
+                        "children": [
+                            {
+                                "nodeType": "tuple",
+                                "children": [
+                                    {
+                                        "nodeType": "number",
+                                        "value": 1
+                                    },
+                                    {
+                                        "nodeType": "number",
+                                        "value": 2
+                                    }
+                                ]
+                            }
+                        ]
+                    }
                 }
             ]
         });
@@ -792,14 +960,25 @@ describe("parser", () => {
                     "children": [
                         {
                             "nodeType": "declare-variable",
-                            "name": "x",
+                            "assignee": {
+                                "nodeType": "access-variable",
+                                "name": "x",
+                            },
                             "symbolType": 0,
-                            "children": [
-                                {
-                                    "nodeType": "number",
-                                    "value": 3,
-                                }
-                            ]
+                            "initializer": {
+                                "nodeType": "assignment-statement",
+                                "checkConstantAssignment": false,
+                                "assignee": {
+                                    "nodeType": "access-variable",
+                                    "name": "x",
+                                },
+                                "children": [
+                                    {
+                                        "nodeType": "number",
+                                        "value": 3,
+                                    }
+                                ]
+                            }
                         },
                         {
                             "nodeType": "while-statement",
@@ -835,14 +1014,25 @@ describe("parser", () => {
                     "children": [
                         {
                             "nodeType": "declare-variable",
-                            "name": "x",
+                            "assignee": {
+                                "nodeType": "access-variable",
+                                "name": "x",
+                            },
                             "symbolType": 1,
-                            "children": [
-                                {
-                                    "nodeType": "number",
-                                    "value": 3,
-                                }
-                            ]
+                            "initializer": {
+                                "nodeType": "assignment-statement",
+                                "checkConstantAssignment": false,
+                                "assignee": {
+                                    "nodeType": "access-variable",
+                                    "name": "x",
+                                },
+                                "children": [
+                                    {
+                                        "nodeType": "number",
+                                        "value": 3,
+                                    }
+                                ]
+                            }
                         },
                         {
                             "nodeType": "while-statement",
@@ -870,7 +1060,7 @@ describe("parser", () => {
     it("must initialize a constant", () => {
         expectArray(retreiveErrors("const a;"), [
             {
-                msg: `Constant a must be initialized.`,
+                msg: `Constant must be initialized.`,
             },
         ]);
     });

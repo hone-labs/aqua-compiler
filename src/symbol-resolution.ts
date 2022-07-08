@@ -65,16 +65,49 @@ export class SymbolResolution {
             this.internalResolveSymbols(node.body!, localSymbolTable);
         },
         "declare-variable": (node, symbolTable) => {
-            if (symbolTable.isDefinedLocally(node.name!)) {
-                throw new Error(`${node.name} is already declared!`);
-            }
+
+            const assignee = node.assignee!;
+            if (assignee.nodeType == "tuple") {
+
+                node.symbols = [];
+
+                for (const child of assignee.children!)  {
+
+                    if (child.nodeType !== "access-variable") {
+                        throw new Error(`Expected tuple element to be an lvalue.`);
+                    }
+                    else {
+                        if (symbolTable.isDefinedLocally(child.name!)) {
+                            throw new Error(`${child.name!} is already declared!`);
+                        }
         
-            //
-            // Allocate a position for the variable in scratch.
-            //
-            node.symbol = symbolTable.define(node.name!, node.symbolType!);
+                        //
+                        // Allocates a position for the variable in scratch.
+                        //
+                        node.symbols.push(symbolTable.define(child.name!, node.symbolType!));
+                    }
+                }
+            }
+            else if (assignee.nodeType !== "access-variable") {
+                throw new Error(`Expected assignee to be an lvalue.`);
+            }
+            else {
+                if (symbolTable.isDefinedLocally(assignee.name!)) {
+                    throw new Error(`${assignee.name!} is already declared!`);
+                }
+
+                //
+                // Allocates a position for the variable in scratch.
+                //
+                node.symbol = symbolTable.define(assignee.name!, node.symbolType!);
+            }      
+
+            if (node.initializer) {
+                this.internalResolveSymbols(node.initializer, symbolTable);
+            }
         },
         "access-variable": (node, symbolTable) => {
+            
             const symbol = symbolTable.get(node.name!);
             if (symbol === undefined) {
                 throw new Error(`Variable ${node.name} is not declared!`);
@@ -83,21 +116,46 @@ export class SymbolResolution {
             node.symbol = symbol;
         },
         "assignment-statement": (node, symbolTable) => {
-        
-            if (node.assignee!.nodeType !== "access-variable") {
+
+            const assignee = node.assignee!;
+            if (assignee.nodeType == "tuple") {
+
+                node.symbols = [];
+
+                for (const child of assignee.children!)  {
+
+                    if (child.nodeType !== "access-variable") {
+                        throw new Error(`Expected tuple element to be an lvalue.`);
+                    }
+                    else {
+                        const symbol = symbolTable.get(child.name!);
+                        if (symbol === undefined) {
+                            throw new Error(`Variable ${child.name} is not declared!`);
+                        }
+
+                        if (node.checkConstantAssignment && symbol.type !== SymbolType.Variable) {
+                            throw new Error(`Can't set ${symbol.name} because it is not a variable.`);
+                        }
+                    
+                        node.symbols.push(symbol);
+                    }
+                }
+            }
+            else if (assignee.nodeType !== "access-variable") {
                 throw new Error(`Expected assignee to be an lvalue.`);
             }
-        
-            const symbol = symbolTable.get(node.assignee!.name!);
-            if (symbol === undefined) {
-                throw new Error(`Variable ${node.assignee!.name} is not declared!`);
-            }
-        
-            if (symbol.type !== SymbolType.Variable) {
-                throw new Error(`Can't set ${symbol.name} because it is not a variable.`);
-            }
-        
-            node.symbol = symbol;
+            else {
+                const symbol = symbolTable.get(assignee.name!);
+                if (symbol === undefined) {
+                    throw new Error(`Variable ${assignee.name} is not declared!`);
+                }
+
+                if (node.checkConstantAssignment && symbol.type !== SymbolType.Variable) {
+                    throw new Error(`Can't set ${symbol.name} because it is not a variable.`);
+                }
+            
+                node.symbol = symbol;
+            }       
         },
         "if-statement": (node, symbolTable) => {
             //TODO: if statements should have their own symbol tables.

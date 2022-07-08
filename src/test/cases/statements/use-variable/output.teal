@@ -1,5 +1,7 @@
 #pragma version 5
 int 2
+dup
 store 1
+pop
 load 1
 return

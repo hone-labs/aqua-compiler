@@ -6,9 +6,13 @@ dup
 store 1
 pop
 int 5
+dup
 store 2
+pop
 int 8
+dup
 store 3
+pop
 load 2
 load 3
 +

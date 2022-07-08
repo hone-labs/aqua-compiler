@@ -16,7 +16,10 @@ describe("symbol resolution", () => {
 
         const ast: ASTNode = {
             nodeType: "declare-variable",
-            name: "myVar2",
+            assignee: {
+                nodeType: "access-variable",
+                name: "myVar2",
+            },
         };
 
         resolveSymbols(ast);
@@ -36,7 +39,10 @@ describe("symbol resolution", () => {
             children: [
                 {
                     nodeType: "declare-variable",
-                    name: "myVar",
+                    assignee: {
+                        nodeType: "access-variable",
+                        name: "myVar",
+                    },
                 },                
                 variableAccess,
             ],
@@ -75,7 +81,10 @@ describe("symbol resolution", () => {
             children: [
                 {
                     nodeType: "declare-variable",
-                    name: "myVar",
+                    assignee: {
+                        nodeType: "access-variable",
+                        name: "myVar",
+                    },
                 },                
             ],
         };
@@ -89,7 +98,10 @@ describe("symbol resolution", () => {
 
         const ast: ASTNode = {
             nodeType: "declare-variable",
-            name: "myVar2",
+            assignee: {
+                nodeType: "access-variable",
+                name: "myVar2",
+            },
         };
 
         resolveSymbols(ast);
@@ -101,7 +113,10 @@ describe("symbol resolution", () => {
 
         const declareSecondVariable: ASTNode = {
             nodeType: "declare-variable",
-            name: "myVar2",
+            assignee: {
+                nodeType: "access-variable",
+                name: "myVar2",
+            },
         };
 
         const ast = {
@@ -109,7 +124,10 @@ describe("symbol resolution", () => {
             children: [
                 {
                     nodeType: "declare-variable",
-                    name: "myVar1",
+                    assignee: {
+                        nodeType: "access-variable",
+                        name: "myVar1",
+                    },        
                 },                
                 declareSecondVariable,                
             ],
@@ -124,7 +142,10 @@ describe("symbol resolution", () => {
 
         const declareVariable: ASTNode = {
             nodeType: "declare-variable",
-            name: "myVar",
+            assignee: {
+                nodeType: "access-variable",
+                name: "myVar",
+            },
         };
 
         const ast = {
@@ -142,7 +163,10 @@ describe("symbol resolution", () => {
 
         const declareVariable: ASTNode = {
             nodeType: "declare-variable",
-            name: "myVar",
+            assignee: {
+                nodeType: "access-variable",
+                name: "myVar",
+            },
         };
 
         const ast = {
@@ -160,7 +184,10 @@ describe("symbol resolution", () => {
 
         const declareVariable: ASTNode = {
             nodeType: "declare-variable",
-            name: "myVar",
+            assignee: {
+                nodeType: "access-variable",
+                name: "myVar",
+            },
         };
 
         const ast = {
@@ -182,7 +209,10 @@ describe("symbol resolution", () => {
     it("symbols within while body are resolved", () => {
         const declareVariable: ASTNode = {
             nodeType: "declare-variable",
-            name: "myVar",
+            assignee: {
+                nodeType: "access-variable",
+                name: "myVar",
+            },
         };
 
         const ast = {

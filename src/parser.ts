@@ -190,11 +190,53 @@ export class Parser implements IParser {
     }
 
     //
+    // Parses the target of an assignment. 
+    //
+    private parseAssignee(): ASTNode {
+        if (this.match(TokenType.OPEN_PAREN)) {
+            // It's a tuple destructuring.
+
+            const identifier = this.expect(TokenType.IDENTIFIER);
+
+            const identifiers: ASTNode[] = [
+                {
+                    nodeType: "access-variable",
+                    name: identifier.value,
+                },
+            ];
+
+            while (this.match(TokenType.COMMA)) {
+                const nextIdentifier = this.expect(TokenType.IDENTIFIER);
+
+                identifiers.push({
+                    nodeType: "access-variable",
+                    name: nextIdentifier.value,
+                });
+            }            
+
+            this.expect(TokenType.CLOSE_PAREN);
+
+            return {
+                nodeType: "tuple",
+                children: identifiers,
+            };           
+        }
+        else {
+            const identifier = this.expect(TokenType.IDENTIFIER);
+
+            return {
+                nodeType: "access-variable",
+                name: identifier.value,
+            };
+        }
+    }
+
+    //
     // Parses a constant declaration.
     //
     private variableDeclaration(isConstant: boolean): ASTNode {
 
-        const identifier = this.expect(TokenType.IDENTIFIER);
+        let assignee = this.parseAssignee();
 
         let initializer: ASTNode | undefined;
 
@@ -205,24 +247,30 @@ export class Parser implements IParser {
             //
             // Constants must be initialised!
             //
-            const msg = `Constant ${identifier.value!} must be initialized.`;
+            const msg = `Constant must be initialized.`; //TODO: Be great to extract the name from the assignee.
+            const token = this.tokenizer.getCurrent();
             this.onError({
                 msg: msg,
-                line: identifier.line,
-                column: identifier.column,
+                line: token!.line,
+                column: token!.column,
             });
             throw new Error(msg);
         }
 
-        const children = initializer !== undefined
-            ? [ initializer ]
+        const assignment = initializer !== undefined
+            ? {
+                nodeType: "assignment-statement",
+                assignee: assignee,
+                checkConstantAssignment: false,
+                children: [ initializer ],
+            }
             : undefined;
 
-        return {
+        return  {
             nodeType: "declare-variable",
-            name: identifier.value!,
+            assignee: assignee,
             symbolType: isConstant ? 1 : 0, // Constant. TOOD: This shouldn't be hardcoded - after new parser is finished.
-            children: children,
+            initializer: assignment,
         };
     }
 
@@ -419,6 +467,7 @@ export class Parser implements IParser {
             return {
                 nodeType: "assignment-statement",
                 assignee: assignee,
+                checkConstantAssignment: true,
                 children: [
                     initializer,
                 ],
@@ -675,7 +724,28 @@ export class Parser implements IParser {
     private primary(): ASTNode {
 
         if (this.match(TokenType.OPEN_PAREN)) {
-            const expr = this.expression();
+
+            let expr = this.expression();
+
+            if (this.match(TokenType.COMMA)) {
+                // 
+                // It's a tuple expression.
+                //
+                const tupleValues = [
+                    expr,
+                ];
+
+                do {
+                    tupleValues.push(this.expression());
+
+                } while (this.match(TokenType.COMMA))
+
+                expr = {
+                    nodeType: "tuple",
+                    children: tupleValues,
+                };
+            }
+
             this.expect(TokenType.CLOSE_PAREN);
             return expr;
         }

@@ -229,7 +229,7 @@ export class CodeGenerator {
             },
         },
 
-        "operation": { //TODO: Want to get rid of this.
+        "operation": {
             post: (node) => {
                 let output = node.opcode!;
                 if (node.args) {
@@ -271,27 +271,11 @@ export class CodeGenerator {
         "declare-variable": {
             pre: (node) => {
                 this.codeEmitter.resetStack();
-                
-                if (node.children && node.children.length > 0) {
-                    if (!node.symbol!.isGlobal) {                    
-                        // 
-                        // Prepare a reference to the stack frame location for the variable being assigned.
-                        //
-                        this.codeEmitter.add(`int ${node.symbol!.position}`, 1, 0); // Variable position within stack frame.                    
-                        this.codeEmitter.add(`load 0`, 1, 0); // stack_pointer
-                        this.codeEmitter.add(`+`, 1, 2); // stack_pointer + variable_position.
-                    }                
-                }
             },
 
             post: (node) => {
-                if (node.children && node.children.length > 0) {
-                    if (node.symbol!.isGlobal) {                    
-                        this.codeEmitter.add(`store ${node.symbol!.position}`, 0, 1);
-                    }
-                    else {
-                        this.codeEmitter.add(`stores`, 0, 2);
-                    }                
+                if (node.initializer) {
+                    this.internalGenerateCode(node.initializer);
                 }
 
                 this.codeEmitter.popAll();
@@ -315,20 +299,48 @@ export class CodeGenerator {
         "assignment-statement": {
             post: (node) => {
 
-                if (!node.symbol!.isGlobal) {
-                    // 
-                    // Prepare a reference to the stack frame location for the variable being assigned.
+                if (node.symbol) {
                     //
-                    this.codeEmitter.add(`int ${node.symbol!.position}`, 1, 0); // Variable position within stack frame.                    
-                    this.codeEmitter.add(`load 0`, 1, 0); // stack_pointer
-                    this.codeEmitter.add(`+`, 1, 2); // stack_pointer + variable_position
+                    // Assign top stack item to the variable.
+                    //
+                    if (!node.symbol!.isGlobal) {
+                        // 
+                        // Prepare a reference to the stack frame location for the variable being assigned.
+                        //
+                        this.codeEmitter.add(`int ${node.symbol!.position}`, 1, 0); // Variable position within stack frame.                    
+                        this.codeEmitter.add(`load 0`, 1, 0); // stack_pointer
+                        this.codeEmitter.add(`+`, 2, 1); // stack_pointer + variable_position
     
-                    this.codeEmitter.add(`dig 1`, 1, 0); // Copies the earlier value to the top of stack. This is the value to be stored.
-                    this.codeEmitter.add(`stores`, 0, 2);
+                        this.codeEmitter.add(`dig 1`, 1, 0); // Copies the earlier value to the top of stack. This is the value to be stored.
+                        this.codeEmitter.add(`stores`, 0, 2);
                     }
                     else {
-                    this.codeEmitter.add(`dup`, 1, 0); // Copies the value to be stored to top of stack. This is so that the earlier value can be used in higher expressions.
-                    this.codeEmitter.add(`store ${node.symbol!.position}`, 0, 1);
+                        this.codeEmitter.add(`dup`, 1, 0); // Copies the value to be stored to top of stack. This is so that the earlier value can be used in higher expressions.
+                        this.codeEmitter.add(`store ${node.symbol!.position}`, 0, 1);
+                    }
+                }
+                else if (node.symbols) {
+                    //
+                    // Assign stack items to symbols in reverse.
+                    //
+                    for (const symbol of node.symbols.reverse()) { //TODO: This can be integrated with the above!
+                        //todo: not sure how correct this!
+                        if (!symbol.isGlobal) {
+                            this.codeEmitter.add(`int ${symbol.position}`, 1, 0); // Variable position within stack frame.                    
+                            this.codeEmitter.add(`load 0`, 1, 0); // stack_pointer
+                            this.codeEmitter.add(`+`, 2, 1); // stack_pointer + variable_position
+        
+                            this.codeEmitter.add(`dig 1`, 1, 0); // Copies the earlier value to the top of stack. This is the value to be stored.
+                            this.codeEmitter.add(`stores`, 0, 2);
+                        }
+                        else {
+                            this.codeEmitter.add(`dup`, 1, 0); // Copies the value to be stored to top of stack. This is so that the earlier value can be used in higher expressions.
+                            this.codeEmitter.add(`store ${symbol.position}`, 0, 1);
+                        }
+                    }
+                }
+                else {
+                    throw new Error(`No symbol or symbols set for assignment statement.`);
                 }
             },
         },

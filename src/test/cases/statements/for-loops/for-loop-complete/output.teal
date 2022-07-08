@@ -1,8 +1,12 @@
 #pragma version 5
 int 0
+dup
 store 1
+pop
 int 3
+dup
 store 2
+pop
 loop_start_1:
 load 2
 int 5

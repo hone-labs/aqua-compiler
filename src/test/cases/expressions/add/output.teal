@@ -2,9 +2,13 @@
 int 255
 store 0
 int 3
+dup
 store 1
+pop
 int 4
+dup
 store 2
+pop
 load 1
 load 2
 callsub add

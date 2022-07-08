@@ -30,6 +30,24 @@ describe("parser", () => {
         });
     });
 
+    test("can parse tuple expression", () => {
+
+        const ast = parseExpressionOk("(1, 2)");
+        expect(ast).toEqual( {
+            nodeType: 'tuple',
+            children: [
+                { 
+                    nodeType: 'number', 
+                    value: 1 
+                },
+                { 
+                    nodeType: 'number', 
+                    value: 2 
+                }
+            ]
+        });
+    });
+
     test("can parse addition expression", () => {
 
         expect(parseExpressionOk("1+2")).toEqual({
@@ -179,6 +197,7 @@ describe("parser", () => {
         const ast = parseExpressionOk("x = 3");
         expect(ast).toEqual({
             "nodeType": "assignment-statement",
+            "checkConstantAssignment": true,
             "assignee": {
                 "nodeType": "access-variable",
                 "name": "x"

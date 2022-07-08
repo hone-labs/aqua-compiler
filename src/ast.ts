@@ -37,9 +37,24 @@ export interface ASTNode {
     symbol?: ISymbol;
 
     //
+    // If this node references multiple symbols, the symbols are attached to the node by the symbol resolution pass.
+    //
+    symbols?: ISymbol[];
+
+    //
     // If this node defines a symbol, this specifies the type of the symbol.
     //
     symbolType?: SymbolType;
+
+    // 
+    // Enables checking for assignemtn to con
+    //
+    checkConstantAssignment?: boolean;
+
+    //
+    // Initializer for a declaration.
+    //
+    initializer?: ASTNode;
 
     //
     // If this node defines a new scope, the scope is attached to the node by the symbol resolution pass.

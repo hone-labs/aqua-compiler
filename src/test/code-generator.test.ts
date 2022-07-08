@@ -166,26 +166,40 @@ describe("code generator", () => {
 
     it("can declare variable with initialiser", () => {
 
+        const assignee = {
+            nodeType: "access-variable",
+            name: "myVar",
+        };
+
+        const symbol = {
+            name: "myVar",
+            type: SymbolType.Variable,
+            position: 4,
+            isGlobal: true,
+        };
+
         const node: ASTNode = {
             nodeType: "declare-variable",
-            name: "myVar",
-            symbol: {
-                name: "myVar",
-                type: SymbolType.Variable,
-                position: 4,
-                isGlobal: true,
-            },
-            children: [
-                {
-                    nodeType: "number",
-                    value: 3
-                },
-            ],
+            symbol: symbol,
+            assignee: assignee,
+            initializer: {
+                nodeType: "assignment-statement",
+                symbol: symbol,
+                assignee: assignee,
+                children: [ 
+                    {
+                        nodeType: "number",
+                        value: 3,
+                    },
+                ],
+            },   
         };
 
         expect(generateCode(node)).toEqual([
             `int 3`,
+            `dup`,      //TODO: Converting "declarate-variable" to reuse "assignment-statement" added extra instructions here.
             `store 4`,
+            `pop`,
         ]);
     });
 
