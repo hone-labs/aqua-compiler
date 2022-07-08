@@ -17,7 +17,7 @@
 //
 
 import { execute } from "teal-interpreter";
-import { compile } from ".";
+import { compile, ICompilerOptions } from ".";
 import { parse } from "./parser";
 
 const packageJson = require("../package.json");
@@ -72,8 +72,13 @@ async function main() {
             console.log(colorJson(ast));
         }
         else {
+            const options: ICompilerOptions = {
+                outputComments: !!argv.comments,
+            };
+            const tealCode = compile(fileData, undefined, options);
+
             // Print compiled output.
-            console.log(compile(fileData));
+            console.log(tealCode);
         }
     }
     else {
