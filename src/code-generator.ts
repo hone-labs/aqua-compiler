@@ -433,6 +433,14 @@ export class CodeGenerator {
             this.codeEmitter.add(`app_global_get`, 1, 1);
         },
 
+        appGlobalGetEx: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
+            this.codeEmitter.add(`app_global_get_ex`, 2, 2);
+        },
+
         appGlobalDel: (node) => {
             for (const arg of node.functionArgs || []) {
                 this.internalGenerateCode(arg);
@@ -457,6 +465,14 @@ export class CodeGenerator {
             }                
 
             this.codeEmitter.add(`app_local_get`, 1, 2);
+        },
+
+        appLocalGetEx: (node) => {
+            for (const arg of node.functionArgs || []) {
+                this.internalGenerateCode(arg);
+            }                
+
+            this.codeEmitter.add(`app_local_get_ex`, 2, 3);
         },
 
         appLocalDel: (node) => {
