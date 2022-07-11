@@ -183,7 +183,7 @@ describe("code generator", () => {
             symbol: symbol,
             assignee: assignee,
             initializer: {
-                nodeType: "assignment-statement",
+                nodeType: "assignment",
                 symbol: symbol,
                 assignee: assignee,
                 children: [ 
@@ -197,7 +197,7 @@ describe("code generator", () => {
 
         expect(generateCode(node)).toEqual([
             `int 3`,
-            `dup`,      //TODO: Converting "declarate-variable" to reuse "assignment-statement" added extra instructions here.
+            `dup`,      //TODO: Converting "declarate-variable" to reuse "assignment" added extra instructions here.
             `store 4`,
             `pop`,
         ]);
@@ -419,7 +419,7 @@ describe("code generator", () => {
                     name: "myVar",
                 },
                 {
-                    nodeType: "assignment-statement",
+                    nodeType: "assignment",
                     symbol: {
                         name: "myVar",
                         type: SymbolType.Variable,
@@ -456,7 +456,7 @@ describe("code generator", () => {
                     name: "myVar",
                 },
                 {
-                    nodeType: "assignment-statement",
+                    nodeType: "assignment",
                     symbol: {
                         name: "myVar",
                         type: SymbolType.Variable,

@@ -184,7 +184,7 @@ describe("parser", () => {
                     },
                     "symbolType": 1,
                     "initializer": {
-                        "nodeType": "assignment-statement",
+                        "nodeType": "assignment",
                         "checkConstantAssignment": false,
                         "assignee": {
                             "nodeType": "access-variable",
@@ -216,7 +216,7 @@ describe("parser", () => {
                     },
                     "symbolType": 0,
                     "initializer": {
-                        "nodeType": "assignment-statement",
+                        "nodeType": "assignment",
                         "checkConstantAssignment": false,
                         "assignee": {
                             "nodeType": "access-variable",
@@ -284,7 +284,7 @@ describe("parser", () => {
                     },
                     "symbolType": 0,
                     "initializer": {
-                        "nodeType": "assignment-statement",
+                        "nodeType": "assignment",
                         "assignee": {
                             "nodeType": "tuple",
                             "children": [
@@ -343,7 +343,7 @@ describe("parser", () => {
                     },
                     "symbolType": 1,
                     "initializer": {
-                        "nodeType": "assignment-statement",
+                        "nodeType": "assignment",
                         "assignee": {
                             "nodeType": "tuple",
                             "children": [
@@ -966,7 +966,7 @@ describe("parser", () => {
                             },
                             "symbolType": 0,
                             "initializer": {
-                                "nodeType": "assignment-statement",
+                                "nodeType": "assignment",
                                 "checkConstantAssignment": false,
                                 "assignee": {
                                     "nodeType": "access-variable",
@@ -1020,7 +1020,7 @@ describe("parser", () => {
                             },
                             "symbolType": 1,
                             "initializer": {
-                                "nodeType": "assignment-statement",
+                                "nodeType": "assignment",
                                 "checkConstantAssignment": false,
                                 "assignee": {
                                     "nodeType": "access-variable",

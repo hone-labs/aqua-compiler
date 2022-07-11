@@ -259,7 +259,7 @@ export class Parser implements IParser {
 
         const assignment = initializer !== undefined
             ? {
-                nodeType: "assignment-statement",
+                nodeType: "assignment",
                 assignee: assignee,
                 checkConstantAssignment: false,
                 children: [ initializer ],
@@ -465,7 +465,7 @@ export class Parser implements IParser {
         if (this.match(TokenType.ASSIGNMENT)) {
             const initializer = this.expression();
             return {
-                nodeType: "assignment-statement",
+                nodeType: "assignment",
                 assignee: assignee,
                 checkConstantAssignment: true,
                 children: [

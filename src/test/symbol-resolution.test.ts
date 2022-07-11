@@ -56,7 +56,7 @@ describe("symbol resolution", () => {
     it("symbol is resolved for variable assignment", () => {
 
         const variableAssignment: ASTNode = {
-            nodeType: "assignment-statement",
+            nodeType: "assignment",
             symbol: {
                 name: "myVar",
                 type: SymbolType.Variable,

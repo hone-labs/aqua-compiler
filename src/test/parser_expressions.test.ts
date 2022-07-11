@@ -196,7 +196,7 @@ describe("parser", () => {
 
         const ast = parseExpressionOk("x = 3");
         expect(ast).toEqual({
-            "nodeType": "assignment-statement",
+            "nodeType": "assignment",
             "checkConstantAssignment": true,
             "assignee": {
                 "nodeType": "access-variable",
