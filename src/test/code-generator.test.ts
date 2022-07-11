@@ -167,7 +167,7 @@ describe("code generator", () => {
     it("can declare variable with initialiser", () => {
 
         const assignee = {
-            nodeType: "access-variable",
+            nodeType: "identifier",
             name: "myVar",
         };
 
@@ -206,7 +206,7 @@ describe("code generator", () => {
     it("can access variable", () => {
 
         const node: ASTNode = {
-            nodeType: "access-variable",
+            nodeType: "identifier",
             name: "myVar",
             symbol: {
                 name: "myVar",
@@ -433,7 +433,7 @@ describe("code generator", () => {
                         },
                     ],
                     assignee: {
-                        nodeType: "access-variable",
+                        nodeType: "identifier",
                         name: "myVar",
                     },
                 },       
@@ -470,7 +470,7 @@ describe("code generator", () => {
                         },
                     ],
                     assignee: {
-                        nodeType: "access-variable",
+                        nodeType: "identifier",
                         name: "myVar",
                     },
                 },       

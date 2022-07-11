@@ -13,7 +13,7 @@ export default function (node: ASTNode, symbolResolution: ISymbolResolution, sym
 
         for (const child of assignee.children!)  {
 
-            if (child.nodeType !== "access-variable") {
+            if (child.nodeType !== "identifier") {
                 throw new Error(`Expected tuple element to be an lvalue.`);
             }
             else {
@@ -28,7 +28,7 @@ export default function (node: ASTNode, symbolResolution: ISymbolResolution, sym
             }
         }
     }
-    else if (assignee.nodeType !== "access-variable") {
+    else if (assignee.nodeType !== "identifier") {
         throw new Error(`Expected assignee to be an lvalue.`);
     }
     else {

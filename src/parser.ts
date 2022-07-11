@@ -200,7 +200,7 @@ export class Parser implements IParser {
 
             const identifiers: ASTNode[] = [
                 {
-                    nodeType: "access-variable",
+                    nodeType: "identifier",
                     name: identifier.value,
                 },
             ];
@@ -209,7 +209,7 @@ export class Parser implements IParser {
                 const nextIdentifier = this.expect(TokenType.IDENTIFIER);
 
                 identifiers.push({
-                    nodeType: "access-variable",
+                    nodeType: "identifier",
                     name: nextIdentifier.value,
                 });
             }            
@@ -225,7 +225,7 @@ export class Parser implements IParser {
             const identifier = this.expect(TokenType.IDENTIFIER);
 
             return {
-                nodeType: "access-variable",
+                nodeType: "identifier",
                 name: identifier.value,
             };
         }
@@ -802,7 +802,7 @@ export class Parser implements IParser {
             }
             else {
                 return {
-                    nodeType: "access-variable",
+                    nodeType: "identifier",
                     name: identifierToken.value!,
                 };
             }

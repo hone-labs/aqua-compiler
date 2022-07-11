@@ -179,7 +179,7 @@ describe("parser", () => {
                 {
                     "nodeType": "declare-variable",
                     "assignee": {
-                        "nodeType": "access-variable",
+                        "nodeType": "identifier",
                         "name": "a",
                     },
                     "symbolType": 1,
@@ -187,7 +187,7 @@ describe("parser", () => {
                         "nodeType": "assignment",
                         "checkConstantAssignment": false,
                         "assignee": {
-                            "nodeType": "access-variable",
+                            "nodeType": "identifier",
                             "name": "a",
                         },
                         "children": [
@@ -211,7 +211,7 @@ describe("parser", () => {
                 {
                     "nodeType": "declare-variable",
                     "assignee": {
-                        "nodeType": "access-variable",
+                        "nodeType": "identifier",
                         "name": "a",
                     },
                     "symbolType": 0,
@@ -219,7 +219,7 @@ describe("parser", () => {
                         "nodeType": "assignment",
                         "checkConstantAssignment": false,
                         "assignee": {
-                            "nodeType": "access-variable",
+                            "nodeType": "identifier",
                             "name": "a",
                         },
                         "children": [
@@ -246,11 +246,11 @@ describe("parser", () => {
                         "nodeType": "tuple",
                         "children": [
                             {
-                                "nodeType": "access-variable",
+                                "nodeType": "identifier",
                                 "name": "a"
                             },
                             {
-                                "nodeType": "access-variable",
+                                "nodeType": "identifier",
                                 "name": "b"
                             }
                         ]
@@ -273,11 +273,11 @@ describe("parser", () => {
                         "nodeType": "tuple",
                         "children": [
                             {
-                                "nodeType": "access-variable",
+                                "nodeType": "identifier",
                                 "name": "a"
                             },
                             {
-                                "nodeType": "access-variable",
+                                "nodeType": "identifier",
                                 "name": "b"
                             }
                         ]
@@ -289,11 +289,11 @@ describe("parser", () => {
                             "nodeType": "tuple",
                             "children": [
                                 {
-                                    "nodeType": "access-variable",
+                                    "nodeType": "identifier",
                                     "name": "a"
                                 },
                                 {
-                                    "nodeType": "access-variable",
+                                    "nodeType": "identifier",
                                     "name": "b"
                                 }
                             ]
@@ -332,11 +332,11 @@ describe("parser", () => {
                         "nodeType": "tuple",
                         "children": [
                             {
-                                "nodeType": "access-variable",
+                                "nodeType": "identifier",
                                 "name": "a"
                             },
                             {
-                                "nodeType": "access-variable",
+                                "nodeType": "identifier",
                                 "name": "b"
                             }
                         ]
@@ -348,11 +348,11 @@ describe("parser", () => {
                             "nodeType": "tuple",
                             "children": [
                                 {
-                                    "nodeType": "access-variable",
+                                    "nodeType": "identifier",
                                     "name": "a"
                                 },
                                 {
-                                    "nodeType": "access-variable",
+                                    "nodeType": "identifier",
                                     "name": "b"
                                 }
                             ]
@@ -961,7 +961,7 @@ describe("parser", () => {
                         {
                             "nodeType": "declare-variable",
                             "assignee": {
-                                "nodeType": "access-variable",
+                                "nodeType": "identifier",
                                 "name": "x",
                             },
                             "symbolType": 0,
@@ -969,7 +969,7 @@ describe("parser", () => {
                                 "nodeType": "assignment",
                                 "checkConstantAssignment": false,
                                 "assignee": {
-                                    "nodeType": "access-variable",
+                                    "nodeType": "identifier",
                                     "name": "x",
                                 },
                                 "children": [
@@ -1015,7 +1015,7 @@ describe("parser", () => {
                         {
                             "nodeType": "declare-variable",
                             "assignee": {
-                                "nodeType": "access-variable",
+                                "nodeType": "identifier",
                                 "name": "x",
                             },
                             "symbolType": 1,
@@ -1023,7 +1023,7 @@ describe("parser", () => {
                                 "nodeType": "assignment",
                                 "checkConstantAssignment": false,
                                 "assignee": {
-                                    "nodeType": "access-variable",
+                                    "nodeType": "identifier",
                                     "name": "x",
                                 },
                                 "children": [

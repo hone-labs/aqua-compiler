@@ -145,7 +145,7 @@ describe("parser", () => {
 
         const ast = parseExpressionOk("foo");
         expect(ast).toEqual({
-            "nodeType": "access-variable",
+            "nodeType": "identifier",
             "name": "foo"
         });
     });
@@ -199,7 +199,7 @@ describe("parser", () => {
             "nodeType": "assignment",
             "checkConstantAssignment": true,
             "assignee": {
-                "nodeType": "access-variable",
+                "nodeType": "identifier",
                 "name": "x"
             },
             "children": [
