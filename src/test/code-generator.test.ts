@@ -492,8 +492,7 @@ describe("code generator", () => {
         const node: ASTNode = {
             nodeType: "function-call",
             name: "myFunction",
-            children: [
-            ],
+            functionArgs: [],
         };
 
         expect(generateCode(node)).toEqual([
@@ -506,7 +505,7 @@ describe("code generator", () => {
         const node: ASTNode = {
             nodeType: "function-call",
             name: "myFunction",
-            children: [
+            functionArgs: [
                 {
                     nodeType: "number",
                     value: 1,

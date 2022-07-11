@@ -140,13 +140,12 @@ export default function (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitt
     if (!builtin) {
         //
         // If not a builtin function generate code for arguments immediately.
+        // Otherwise, builtin functions deal with their own args.
         //
         for (const arg of node.functionArgs || []) {
             codeGenerator.visitNode(arg);
         }                
     }
-
-    codeGenerator.visitChildren(node);
     
     if (builtin) {
         builtin(node, codeGenerator, codeEmitter); // Builtin functions generate inline code.
