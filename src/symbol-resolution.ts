@@ -4,7 +4,7 @@ import { ISymbolTable, SymbolTable, SymbolType } from "./symbol-table";
 //
 // Defines a function that can resolve symbols for an AST node.
 //
-type NodeHandler = (node: ASTNode, symbolTable: ISymbolTable) => void;
+type NodeHandler = (node: ASTNode, symbolResolution: ISymbolResolution, symbolTable: ISymbolTable) => void;
 
 //
 // Lookup table for funtions that handle code generation for each node.
@@ -16,7 +16,29 @@ interface INodeHandlerMap {
 //
 // Handles symbol resolution for the Aqua compiler.
 //
-export class SymbolResolution {
+export interface ISymbolResolution {
+
+    //
+    // Resolve symbols, annotates the AST and binds variables (etc) to their symbol table entries.
+    // Computes space required by functions for local variables.
+    //
+    resolveSymbols(ast: ASTNode): void;
+
+    //
+    // Visits a node to resolve symbols.
+    //
+    visitNode(node: ASTNode, symbolTable: ISymbolTable): void;
+
+    //
+    // Visits each child to resolve symbols.
+    //
+    visitChildren(node: ASTNode, symbolTable: ISymbolTable): void;
+}
+
+//
+// Handles symbol resolution for the Aqua compiler.
+//
+export class SymbolResolution implements ISymbolResolution {
 
     //
     // Resolve symbols, annotates the AST and binds variables (etc) to their symbol table entries.
@@ -28,31 +50,42 @@ export class SymbolResolution {
         // Resolve symbols for the AST and compute storage space.
         //
         const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
-        this.internalResolveSymbols(ast, globalSymbolTable);
+        this.visitNode(ast, globalSymbolTable);
     }
 
     //
     // Resolves symbols and allocates space for variables.
     //
-    private internalResolveSymbols(node: ASTNode, symbolTable: ISymbolTable): void {
+    visitNode(node: ASTNode, symbolTable: ISymbolTable): void {
 
+        const visitor = this.visitors[node.nodeType];
+        if (visitor) {
+            visitor(node, this, symbolTable);
+        }
+        else {
+            this.visitChildren(node, symbolTable);
+        }
+    }
+
+    //
+    // Resolves symbols and allocates space for variables.
+    //
+    visitChildren(node: ASTNode, symbolTable: ISymbolTable): void {
         if (node.children) {
             for (const child of node.children) {
-                this.internalResolveSymbols(child, symbolTable);
+                this.visitNode(child, symbolTable);
             }
-        }
-
-        const nodeHandler = this.nodeHandlers[node.nodeType];
-        if (nodeHandler) {
-            nodeHandler(node, symbolTable);
         }
     }
 
     //
     // Lookup table for funtions that handle symbol resoluton for each node.
     //
-    nodeHandlers: INodeHandlerMap = {
-        "function-declaration": (node, symbolTable) => {
+    visitors: INodeHandlerMap = {
+        "function-declaration": (node, symbolResolution, symbolTable) => {
+
+            this.visitChildren(node, symbolTable);
+
             const localSymbolTable = new SymbolTable(1, symbolTable); // The saved stack pointer occupies position 0, so local variables are occupated from position 1 in the functions stack frame.
             node.scope = localSymbolTable;
 
@@ -62,9 +95,11 @@ export class SymbolResolution {
                 }
             }
        
-            this.internalResolveSymbols(node.body!, localSymbolTable);
+            this.visitNode(node.body!, localSymbolTable);
         },
-        "declare-variable": (node, symbolTable) => {
+        "declare-variable": (node, symbolResolution, symbolTable) => {
+
+            this.visitChildren(node, symbolTable);
 
             const assignee = node.assignee!;
             if (assignee.nodeType == "tuple") {
@@ -103,10 +138,12 @@ export class SymbolResolution {
             }      
 
             if (node.initializer) {
-                this.internalResolveSymbols(node.initializer, symbolTable);
+                this.visitNode(node.initializer, symbolTable);
             }
         },
-        "access-variable": (node, symbolTable) => {
+        "access-variable": (node, symbolResolution, symbolTable) => {
+
+            this.visitChildren(node, symbolTable);
             
             const symbol = symbolTable.get(node.name!);
             if (symbol === undefined) {
@@ -115,7 +152,9 @@ export class SymbolResolution {
         
             node.symbol = symbol;
         },
-        "assignment-statement": (node, symbolTable) => {
+        "assignment-statement": (node, symbolResolution, symbolTable) => {
+
+            this.visitChildren(node, symbolTable);
 
             const assignee = node.assignee!;
             if (assignee.nodeType == "tuple") {
@@ -157,23 +196,27 @@ export class SymbolResolution {
                 node.symbol = symbol;
             }       
         },
-        "if-statement": (node, symbolTable) => {
+        "if-statement": (node, symbolResolution, symbolTable) => {
             //TODO: if statements should have their own symbol tables.
+
+            this.visitChildren(node, symbolTable);
         
-            this.internalResolveSymbols(node.ifBlock!, symbolTable);
+            this.visitNode(node.ifBlock!, symbolTable);
         
             if (node.elseBlock) {
-                this.internalResolveSymbols(node.elseBlock, symbolTable);                
+                this.visitNode(node.elseBlock, symbolTable);                
             }
         },
 
-        "while-statement": (node, symbolTable) => {
-            this.internalResolveSymbols(node.body!, symbolTable);
+        "while-statement": (node, symbolResolution, symbolTable) => {
+            this.visitChildren(node, symbolTable);
+            this.visitNode(node.body!, symbolTable);
         },
 
-        "function-call": (node, symbolTable) => {
+        "function-call": (node, symbolResolution, symbolTable) => {
+            this.visitChildren(node, symbolTable);
             for (const arg of node.functionArgs || []) {
-                this.internalResolveSymbols(arg, symbolTable);
+                this.visitNode(arg, symbolTable);
             }
         },
 
