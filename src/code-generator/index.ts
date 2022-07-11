@@ -8,10 +8,10 @@ import { MAX_SCRATCH } from "../config";
 type NodeVisitorFn = (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitter: ICodeEmitter) => void;
 
 //
-// Lookup table for AST node visitor functions.
+// Lookup table for cached visitors.
 //
 interface INodeVisitorMap {
-    [index: string]: NodeVisitorFn;
+    [index: string]: NodeVisitorFn | undefined;
 }
 
 //

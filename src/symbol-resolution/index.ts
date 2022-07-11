@@ -2,15 +2,15 @@ import { ASTNode } from "../ast";
 import { ISymbolTable, SymbolTable, SymbolType } from "../symbol-table";
 
 //
-// Defines a function that can resolve symbols for an AST node.
+// Defines a function that can visit nodes in the AST to resolve symbols.
 //
-type NodeHandler = (node: ASTNode, symbolResolution: ISymbolResolution, symbolTable: ISymbolTable) => void;
+type NodeVisitorFn = (node: ASTNode, symbolResolution: ISymbolResolution, symbolTable: ISymbolTable) => void;
 
 //
-// Lookup table for funtions that handle code generation for each node.
+// Lookup table for cached visitors.
 //
-interface INodeHandlerMap {
-    [index: string]: NodeHandler | undefined;
+interface INodeVisitorMap {
+    [index: string]: NodeVisitorFn | undefined;
 }
 
 //
@@ -43,7 +43,7 @@ export class SymbolResolution implements ISymbolResolution {
     //
     // Lookup table to cached visitors.
     //
-    private visitors: INodeHandlerMap = {};
+    private visitors: INodeVisitorMap = {};
 
     //
     // Resolve symbols, annotates the AST and binds variables (etc) to their symbol table entries.
@@ -61,7 +61,7 @@ export class SymbolResolution implements ISymbolResolution {
     //
     // Loads a visitor function from a code module.
     //
-    private loadVisitor(filePath: string): NodeHandler | undefined {
+    private loadVisitor(filePath: string): NodeVisitorFn | undefined {
         try {
             require.resolve(filePath);
         }
