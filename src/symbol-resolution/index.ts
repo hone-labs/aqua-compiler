@@ -104,18 +104,6 @@ export class SymbolResolution implements ISymbolResolution {
     //
     visitors: INodeHandlerMap = {
         
-        "if-statement": (node, symbolResolution, symbolTable) => {
-            //TODO: if statements should have their own symbol tables.
-
-            this.visitChildren(node, symbolTable);
-        
-            this.visitNode(node.ifBlock!, symbolTable);
-        
-            if (node.elseBlock) {
-                this.visitNode(node.elseBlock, symbolTable);                
-            }
-        },
-
         "while-statement": (node, symbolResolution, symbolTable) => {
             this.visitChildren(node, symbolTable);
             this.visitNode(node.body!, symbolTable);

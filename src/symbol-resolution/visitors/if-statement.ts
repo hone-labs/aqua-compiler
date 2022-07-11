@@ -4,12 +4,13 @@ import { ISymbolTable } from "../../symbol-table";
 
 export default function (node: ASTNode, symbolResolution: ISymbolResolution, symbolTable: ISymbolTable) {
 
-    symbolResolution.visitChildren(node, symbolTable);
-            
-    const symbol = symbolTable.get(node.name!);
-    if (symbol === undefined) {
-        throw new Error(`Variable ${node.name} is not declared!`);
-    }
+    //TODO: if statements should have their own symbol tables.
 
-    node.symbol = symbol;
+    symbolResolution.visitChildren(node, symbolTable);
+
+    symbolResolution.visitNode(node.ifBlock!, symbolTable);
+
+    if (node.elseBlock) {
+        symbolResolution.visitNode(node.elseBlock, symbolTable);                
+    }
 }
