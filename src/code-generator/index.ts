@@ -5,7 +5,7 @@ import { MAX_SCRATCH } from "../config";
 //
 // Defines a function that can visit nodes in the AST to generate code.
 //
-type NodeVisitorFn = (node: ASTNode) => void;
+type NodeVisitorFn = (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitter: ICodeEmitter) => void;
 
 //
 // Lookup table for AST node visitor functions.
@@ -29,7 +29,14 @@ interface IBuiltinsLookupMap {
 //
 // Handles TEAL code generation for the Aqua compiler.
 //
-export class CodeGenerator {
+export interface ICodeGenerator {
+
+}
+
+//
+// Handles TEAL code generation for the Aqua compiler.
+//
+export class CodeGenerator implements ICodeGenerator {
 
     //
     // Used to generate unique IDs for control statements.
@@ -180,12 +187,18 @@ export class CodeGenerator {
     // Geneates code for a node.
     //
     private visitNode(node: ASTNode): void {
-        const visitor = this.visitors[node.nodeType];
+        let visitor = this.visitors[node.nodeType];
         if (!visitor) {
-            throw new Error(`No visitor for node ${node.nodeType}`);
+            //
+            // Load visitor.
+            //
+            visitor =  this.visitors[node.nodeType] = require(`./visitors/${node.nodeType}`).default;
+            if (!visitor) {
+                throw new Error(`No visitor for node ${node.nodeType}`);
+            }
         }
 
-        visitor(node);
+        visitor(node, this, this.codeEmitter);
     }
 
     //
@@ -203,12 +216,6 @@ export class CodeGenerator {
     // Code to be invoked to visit each node in the AST.
     //
     visitors: INodeVisitorMap = {
-
-        "number": (node) => {
-            this.visitChildren(node);
-
-            this.codeEmitter.add(`int ${node.value!}`, 1, 0);
-        },
 
         "string-literal": (node) => {
             this.visitChildren(node);
