@@ -104,11 +104,6 @@ export class SymbolResolution implements ISymbolResolution {
     //
     visitors: INodeHandlerMap = {
         
-        "while-statement": (node, symbolResolution, symbolTable) => {
-            this.visitChildren(node, symbolTable);
-            this.visitNode(node.body!, symbolTable);
-        },
-
         "function-call": (node, symbolResolution, symbolTable) => {
             this.visitChildren(node, symbolTable);
             for (const arg of node.functionArgs || []) {
