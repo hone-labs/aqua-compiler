@@ -41,6 +41,11 @@ export interface ISymbolResolution {
 export class SymbolResolution implements ISymbolResolution {
 
     //
+    // Lookup table to cached visitors.
+    //
+    private visitors: INodeHandlerMap = {};
+
+    //
     // Resolve symbols, annotates the AST and binds variables (etc) to their symbol table entries.
     // Computes space required by functions for local variables.
     //
@@ -98,19 +103,5 @@ export class SymbolResolution implements ISymbolResolution {
             }
         }
     }
-
-    //
-    // Lookup table for funtions that handle symbol resoluton for each node.
-    //
-    visitors: INodeHandlerMap = {
-        
-        "function-call": (node, symbolResolution, symbolTable) => {
-            this.visitChildren(node, symbolTable);
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg, symbolTable);
-            }
-        }, 
-    };
-
 }
 
