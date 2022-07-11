@@ -15,18 +15,6 @@ interface INodeVisitorMap {
 }
 
 //
-// Defines a function that generates code for builtin functions.
-//
-type BuiltinFunctionGenFn = (node: ASTNode) => void;
-
-//
-// Lookup table for builtin functions.
-//
-interface IBuiltinsLookupMap {
-    [index: string]: BuiltinFunctionGenFn;
-}
-
-//
 // Handles TEAL code generation for the Aqua compiler.
 //
 export interface ICodeGenerator {
@@ -214,30 +202,6 @@ export class CodeGenerator implements ICodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
-        "function-call": (node) => {
-            const builtin = this.builtins[node.name!];
-            if (!builtin) {
-                //
-                // If not a builtin function generate code for arguments immediately.
-                //
-                for (const arg of node.functionArgs || []) {
-                    this.visitNode(arg);
-                }                
-            }
-
-            this.visitChildren(node);
-            
-            if (builtin) {
-                builtin(node); // Builtin functions generate inline code.
-            }
-            else {
-                // Otherwise we "call" the user's function.
-                this.codeEmitter.add(`callsub ${node.name}`, 1, node.functionArgs?.length || 0); //TODO: Always assuming a function returns one value. This will have to change.
-            }
-
-            //todo: at this point we need to let the emitter know how many items have been push on the stack as a result of this function.
-        },
-
         "block-statement": (node) => {
             this.visitChildren(node);
         },
@@ -247,118 +211,6 @@ export class CodeGenerator implements ICodeGenerator {
         },
     };
 
-    //
-    // Handlers for implementing builtin functions.
-    //
-    private builtins: IBuiltinsLookupMap = {
-        appGlobalPut: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`app_global_put`, 0, 2);
-            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.
-        },
-
-        appGlobalGet: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`app_global_get`, 1, 1);
-        },
-
-        appGlobalGetEx: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`app_global_get_ex`, 2, 2);
-        },
-
-        appGlobalDel: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`app_global_del`, 0, 1);
-            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.
-        },
-
-        appLocalPut: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`app_local_put`, 0, 2);
-            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.
-        },
-
-        appLocalGet: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`app_local_get`, 1, 2);
-        },
-
-        appLocalGetEx: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`app_local_get_ex`, 2, 3);
-        },
-
-        appLocalDel: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`app_local_del`, 0, 2);
-            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.
-        },
-
-        btoi: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`btoi`, 1, 1);
-        },
-
-        itob: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`itob`, 1, 1);
-        },
-
-        exit: (node) => {
-            for (const arg of node.functionArgs || []) {
-                this.visitNode(arg);
-            }                
-
-            this.codeEmitter.add(`return`, 0, 0);
-        },
-
-        itxn_begin: (node) => {
-            this.codeEmitter.add(`itxn_begin`, 0, 0);
-            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.            
-        },
-
-        itxn_field: (node) => {
-            //todo: this should really remove the first argument from the code generator.
-            this.codeEmitter.add(`itxn_field ${unquote(node.functionArgs![0].value)}`, 0, 1);
-            // Don't need the extra item on the stack here because we are discarding the first parameter which is on the stack.
-        },
-
-        itxn_submit: (node) => {
-            this.codeEmitter.add(`itxn_submit`, 0, 0);
-            this.codeEmitter.add(`int 0`, 1, 0); // Need to balance the stack here even though this value should never be used.
-        },
-    };
 
     //
     // Walk the tree and collection functions so there code can be generated in a second pass.
@@ -376,11 +228,4 @@ export class CodeGenerator implements ICodeGenerator {
         }
     }
 
-}
-
-//
-// Removes quotes from a string.
-//
-function unquote(input: string): string {
-    return input.substring(1, input.length-1);
 }
