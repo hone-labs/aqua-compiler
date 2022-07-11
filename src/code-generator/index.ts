@@ -219,17 +219,6 @@ export class CodeGenerator implements ICodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
-        "declare-variable": (node) => {
-            this.codeEmitter.resetStack();
-
-            this.visitChildren(node);
-
-            if (node.initializer) {
-                this.visitNode(node.initializer);
-            }
-
-            this.codeEmitter.popAll();
-        },
 
         "access-variable": (node) => {
             this.visitChildren(node);
