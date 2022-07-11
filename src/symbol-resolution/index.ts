@@ -104,17 +104,6 @@ export class SymbolResolution implements ISymbolResolution {
     //
     visitors: INodeHandlerMap = {
         
-        "access-variable": (node, symbolResolution, symbolTable) => {
-
-            this.visitChildren(node, symbolTable);
-            
-            const symbol = symbolTable.get(node.name!);
-            if (symbol === undefined) {
-                throw new Error(`Variable ${node.name} is not declared!`);
-            }
-        
-            node.symbol = symbol;
-        },
         "assignment-statement": (node, symbolResolution, symbolTable) => {
 
             this.visitChildren(node, symbolTable);
