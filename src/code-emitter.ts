@@ -185,5 +185,4 @@ export class CodeEmitter implements ICodeEmitter {
         this.generatedId += 1;
         return this.generatedId;
     }
-
 }
