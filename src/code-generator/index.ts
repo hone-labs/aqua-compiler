@@ -225,14 +225,6 @@ export class CodeGenerator implements ICodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
-        "expr-statement": (node) => {
-            this.codeEmitter.resetStack();
-
-            this.visitChildren(node);
-
-            this.codeEmitter.popAll();
-        },
-
         "return-statement": (node) => {
             this.codeEmitter.resetStack();
 
