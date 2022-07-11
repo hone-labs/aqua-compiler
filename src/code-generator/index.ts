@@ -214,10 +214,6 @@ export class CodeGenerator implements ICodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
-        "function-declaration": (node) => {
-            this.visitChildren(node);
-        },
-
         "function-call": (node) => {
             const builtin = this.builtins[node.name!];
             if (!builtin) {
