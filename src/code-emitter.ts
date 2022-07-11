@@ -85,7 +85,7 @@ export class CodeEmitter implements ICodeEmitter {
     //
     // Used to generate unique IDs for control statements.
     //
-    private controlStatementId = 0;
+    private generatedId = 0;
 
     //
     // Resets the emitter knowledge of the stack to zero.
@@ -182,8 +182,8 @@ export class CodeEmitter implements ICodeEmitter {
     // Generated an id for use with control statements, etc.
     //
     genId(): number {
-        this.controlStatementId += 1;
-        return this.controlStatementId;
+        this.generatedId += 1;
+        return this.generatedId;
     }
 
 }
