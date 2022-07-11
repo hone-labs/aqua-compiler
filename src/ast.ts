@@ -107,13 +107,7 @@ export interface ASTNode {
     args?: any[];
 
     //
-    // If this node is a control statement it is allocated an id to differentuate it from others.
-    //
-    controlStatementId?: number;
-
-    //
     // Arguments to the function, for function calls.
     //
     functionArgs?: ASTNode[];
-
 }

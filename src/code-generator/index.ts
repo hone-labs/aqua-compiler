@@ -217,37 +217,37 @@ export class CodeGenerator implements ICodeGenerator {
         "if-statement": (node) => {                
             this.visitChildren(node);
             
-            node.controlStatementId = this.codeEmitter.genId();
+            const controlStatementId = this.codeEmitter.genId();
 
-            this.codeEmitter.add(`bz else_${node.controlStatementId}`, 0, 1);
+            this.codeEmitter.add(`bz else_${controlStatementId}`, 0, 1);
 
             this.visitNode(node.ifBlock!);
 
-            this.codeEmitter.add(`b end_${node.controlStatementId}`, 0, 0);
+            this.codeEmitter.add(`b end_${controlStatementId}`, 0, 0);
 
-            this.codeEmitter.label(`else_${node.controlStatementId}`);
+            this.codeEmitter.label(`else_${controlStatementId}`);
 
             if (node.elseBlock) {
                 this.visitNode(node.elseBlock);
             }
 
-            this.codeEmitter.label(`end_${node.controlStatementId}`);
+            this.codeEmitter.label(`end_${controlStatementId}`);
         },
 
         "while-statement": (node) => {
 
-            node.controlStatementId = this.codeEmitter.genId();
+            const controlStatementId = this.codeEmitter.genId();
 
-            this.codeEmitter.label(`loop_start_${node.controlStatementId}`);
+            this.codeEmitter.label(`loop_start_${controlStatementId}`);
 
             this.visitChildren(node);
 
-            this.codeEmitter.add(`bz loop_end_${node.controlStatementId}`, 0, node.children!.length > 0 ? 1 : 0);
+            this.codeEmitter.add(`bz loop_end_${controlStatementId}`, 0, node.children!.length > 0 ? 1 : 0);
 
             this.visitNode(node.body!);
 
-            this.codeEmitter.add(`b loop_start_${node.controlStatementId}`, 0, 0);
-            this.codeEmitter.label(`loop_end_${node.controlStatementId}`)
+            this.codeEmitter.add(`b loop_start_${controlStatementId}`, 0, 0);
+            this.codeEmitter.label(`loop_end_${controlStatementId}`)
         },
 
         "function-declaration": (node) => {
