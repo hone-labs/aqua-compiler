@@ -214,22 +214,6 @@ export class CodeGenerator implements ICodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
-        "while-statement": (node) => {
-
-            const controlStatementId = this.codeEmitter.genId();
-
-            this.codeEmitter.label(`loop_start_${controlStatementId}`);
-
-            this.visitChildren(node);
-
-            this.codeEmitter.add(`bz loop_end_${controlStatementId}`, 0, node.children!.length > 0 ? 1 : 0);
-
-            this.visitNode(node.body!);
-
-            this.codeEmitter.add(`b loop_start_${controlStatementId}`, 0, 0);
-            this.codeEmitter.label(`loop_end_${controlStatementId}`)
-        },
-
         "function-declaration": (node) => {
             this.visitChildren(node);
         },
