@@ -49,6 +49,11 @@ export class CodeGenerator implements ICodeGenerator {
     //
     curFunction?: ASTNode = undefined;
 
+    //
+    // Lookup table to cached visitors.
+    //
+    visitors: INodeVisitorMap = {};
+
     constructor(private codeEmitter: ICodeEmitter) {
     }
 
@@ -196,11 +201,6 @@ export class CodeGenerator implements ICodeGenerator {
             }
         }
     }
-
-    //
-    // Lookup table to cache loaded visitors.
-    //
-    visitors: INodeVisitorMap = {};
 
     //
     // Walk the tree and collection functions so there code can be generated in a second pass.
