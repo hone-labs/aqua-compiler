@@ -217,12 +217,6 @@ export class CodeGenerator implements ICodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
-        "string-literal": (node) => {
-            this.visitChildren(node);
-
-            this.codeEmitter.add(`byte \"${node.value!}\"`, 1, 0);
-        },
-
         "operation": (node) => {
             this.visitChildren(node);
 
