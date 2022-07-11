@@ -63,6 +63,11 @@ export interface ICodeEmitter {
     // Emits code to pop all items that have been pushed on the stack.
     //
     popAll(): void;    
+
+    //
+    // Generated an id for use with control statements, etc.
+    //
+    genId(): number;
 }
 
 export class CodeEmitter implements ICodeEmitter {
@@ -76,6 +81,11 @@ export class CodeEmitter implements ICodeEmitter {
     // The number of items presently known to be on the stack.
     //
     private numItemsOnStack = 0;
+
+    //
+    // Used to generate unique IDs for control statements.
+    //
+    private controlStatementId = 0;
 
     //
     // Resets the emitter knowledge of the stack to zero.
@@ -167,4 +177,13 @@ export class CodeEmitter implements ICodeEmitter {
             this.add(`pop`, 0, 1, `Popping all items.`);
         }
     }
+
+    //
+    // Generated an id for use with control statements, etc.
+    //
+    genId(): number {
+        this.controlStatementId += 1;
+        return this.controlStatementId;
+    }
+
 }

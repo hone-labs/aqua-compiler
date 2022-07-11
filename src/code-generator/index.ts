@@ -52,11 +52,6 @@ export interface ICodeGenerator {
 export class CodeGenerator implements ICodeGenerator {
 
     //
-    // Used to generate unique IDs for control statements.
-    //
-    private controlStatementId = 0;
-
-    //
     // A list of functions to be output at the end.
     //
     private functions: ASTNode[] = [];
@@ -222,8 +217,7 @@ export class CodeGenerator implements ICodeGenerator {
         "if-statement": (node) => {                
             this.visitChildren(node);
             
-            this.controlStatementId += 1;
-            node.controlStatementId = this.controlStatementId;
+            node.controlStatementId = this.codeEmitter.genId();
 
             this.codeEmitter.add(`bz else_${node.controlStatementId}`, 0, 1);
 
@@ -241,8 +235,8 @@ export class CodeGenerator implements ICodeGenerator {
         },
 
         "while-statement": (node) => {
-            this.controlStatementId += 1;
-            node.controlStatementId = this.controlStatementId;
+
+            node.controlStatementId = this.codeEmitter.genId();
 
             this.codeEmitter.label(`loop_start_${node.controlStatementId}`);
 
