@@ -201,13 +201,7 @@ export class CodeGenerator implements ICodeGenerator {
     // Code to be invoked to visit each node in the AST.
     //
     visitors: INodeVisitorMap = {
-
-
-        "tuple": (node) => {
-            this.visitChildren(node);
-        },
     };
-
 
     //
     // Walk the tree and collection functions so there code can be generated in a second pass.
