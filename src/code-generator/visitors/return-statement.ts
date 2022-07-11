@@ -11,7 +11,7 @@ export default function (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitt
         //
         // End of function! Jump to function cleanup code.
         //
-        codeEmitter.add(`b ${codeGenerator.curFunction.name}-cleanup`, 0, 0);
+        codeEmitter.add(`b ${codeGenerator.curFunction.value}-cleanup`, 0, 0);
     }
     else {
         //

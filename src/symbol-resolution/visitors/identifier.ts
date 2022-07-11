@@ -6,9 +6,9 @@ export default function (node: ASTNode, symbolResolution: ISymbolResolution, sym
 
     symbolResolution.visitChildren(node, symbolTable);
             
-    const symbol = symbolTable.get(node.name!);
+    const symbol = symbolTable.get(node.value!);
     if (symbol === undefined) {
-        throw new Error(`Variable ${node.name} is not declared!`);
+        throw new Error(`Variable ${node.value} is not declared!`);
     }
 
     node.symbol = symbol;

@@ -158,7 +158,7 @@ describe("code generator", () => {
 
         const node = {
             nodeType: "declare-variable",
-            name: "myVar",
+            value: "myVar",
         };
 
         expect(generateCode(node)).toEqual([]); // Nothing generated for an uninitialised variable.
@@ -168,7 +168,7 @@ describe("code generator", () => {
 
         const assignee = {
             nodeType: "identifier",
-            name: "myVar",
+            value: "myVar",
         };
 
         const symbol = {
@@ -207,7 +207,7 @@ describe("code generator", () => {
 
         const node: ASTNode = {
             nodeType: "identifier",
-            name: "myVar",
+            value: "myVar",
             symbol: {
                 name: "myVar",
                 type: SymbolType.Variable,
@@ -416,7 +416,7 @@ describe("code generator", () => {
             children: [
                 {
                     nodeType: "declare-variable",
-                    name: "myVar",
+                    value: "myVar",
                 },
                 {
                     nodeType: "assignment",
@@ -434,7 +434,7 @@ describe("code generator", () => {
                     ],
                     assignee: {
                         nodeType: "identifier",
-                        name: "myVar",
+                        value: "myVar",
                     },
                 },       
             ],
@@ -453,7 +453,7 @@ describe("code generator", () => {
             children: [
                 {
                     nodeType: "declare-variable",
-                    name: "myVar",
+                    value: "myVar",
                 },
                 {
                     nodeType: "assignment",
@@ -471,7 +471,7 @@ describe("code generator", () => {
                     ],
                     assignee: {
                         nodeType: "identifier",
-                        name: "myVar",
+                        value: "myVar",
                     },
                 },       
             ],
@@ -491,7 +491,7 @@ describe("code generator", () => {
 
         const node: ASTNode = {
             nodeType: "function-call",
-            name: "myFunction",
+            value: "myFunction",
             functionArgs: [],
         };
 
@@ -504,7 +504,7 @@ describe("code generator", () => {
 
         const node: ASTNode = {
             nodeType: "function-call",
-            name: "myFunction",
+            value: "myFunction",
             functionArgs: [
                 {
                     nodeType: "number",
@@ -527,7 +527,7 @@ describe("code generator", () => {
     it("can declare a function", () => {
         const ast: any = {
             nodeType: "function-declaration",
-            name: "myFunction",
+            value: "myFunction",
             params: [],
             scope: {
                 getNumSymbols: () => 0,
@@ -579,7 +579,7 @@ describe("code generator", () => {
     it("function return is synthesized when not explicit", () => {
         const node: any = {
             nodeType: "function-declaration",
-            name: "myFunction",
+            value: "myFunction",
             params: [],
             scope: {
                 getNumSymbols: () => 0,

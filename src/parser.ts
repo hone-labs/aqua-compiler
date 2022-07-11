@@ -87,7 +87,7 @@ export class Parser implements IParser {
 
         return {
             nodeType: "function-declaration",
-            name: identifier.value!,
+            value: identifier.value!,
             params: params,
             body: body,
         };
@@ -201,7 +201,7 @@ export class Parser implements IParser {
             const identifiers: ASTNode[] = [
                 {
                     nodeType: "identifier",
-                    name: identifier.value,
+                    value: identifier.value,
                 },
             ];
 
@@ -210,7 +210,7 @@ export class Parser implements IParser {
 
                 identifiers.push({
                     nodeType: "identifier",
-                    name: nextIdentifier.value,
+                    value: nextIdentifier.value,
                 });
             }            
 
@@ -226,7 +226,7 @@ export class Parser implements IParser {
 
             return {
                 nodeType: "identifier",
-                name: identifier.value,
+                value: identifier.value,
             };
         }
     }
@@ -803,7 +803,7 @@ export class Parser implements IParser {
             else {
                 return {
                     nodeType: "identifier",
-                    name: identifierToken.value!,
+                    value: identifierToken.value!,
                 };
             }
         }
@@ -967,7 +967,7 @@ export class Parser implements IParser {
 
         return {
             nodeType: "function-call",
-            name: functionName,
+            value: functionName,
             functionArgs: args,
         };
     }

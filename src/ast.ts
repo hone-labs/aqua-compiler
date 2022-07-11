@@ -27,11 +27,6 @@ export interface ASTNode {
     value?: any;
 
     //
-    // If this node references a symbol, this is the name of that symbol.
-    //
-    name?: string;
-
-    //
     // If this node references a symbol, the symbol is attached to the node by the symbol resolution pass.
     //
     symbol?: ISymbol;

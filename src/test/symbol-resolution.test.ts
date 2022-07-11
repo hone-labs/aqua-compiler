@@ -18,7 +18,7 @@ describe("symbol resolution", () => {
             nodeType: "declare-variable",
             assignee: {
                 nodeType: "identifier",
-                name: "myVar2",
+                value: "myVar2",
             },
         };
 
@@ -31,7 +31,7 @@ describe("symbol resolution", () => {
 
         const variableAccess: ASTNode = {
             nodeType: "identifier",
-            name: "myVar",
+            value: "myVar",
         };
 
         const ast = {
@@ -41,7 +41,7 @@ describe("symbol resolution", () => {
                     nodeType: "declare-variable",
                     assignee: {
                         nodeType: "identifier",
-                        name: "myVar",
+                        value: "myVar",
                     },
                 },                
                 variableAccess,
@@ -72,7 +72,7 @@ describe("symbol resolution", () => {
             ],
             assignee: {
                 nodeType: "identifier",
-                name: "myVar",
+                value: "myVar",
             },
         };
 
@@ -83,7 +83,7 @@ describe("symbol resolution", () => {
                     nodeType: "declare-variable",
                     assignee: {
                         nodeType: "identifier",
-                        name: "myVar",
+                        value: "myVar",
                     },
                 },                
             ],
@@ -100,7 +100,7 @@ describe("symbol resolution", () => {
             nodeType: "declare-variable",
             assignee: {
                 nodeType: "identifier",
-                name: "myVar2",
+                value: "myVar2",
             },
         };
 
@@ -115,7 +115,7 @@ describe("symbol resolution", () => {
             nodeType: "declare-variable",
             assignee: {
                 nodeType: "identifier",
-                name: "myVar2",
+                value: "myVar2",
             },
         };
 
@@ -126,7 +126,7 @@ describe("symbol resolution", () => {
                     nodeType: "declare-variable",
                     assignee: {
                         nodeType: "identifier",
-                        name: "myVar1",
+                        value: "myVar1",
                     },        
                 },                
                 declareSecondVariable,                
@@ -144,7 +144,7 @@ describe("symbol resolution", () => {
             nodeType: "declare-variable",
             assignee: {
                 nodeType: "identifier",
-                name: "myVar",
+                value: "myVar",
             },
         };
 
@@ -165,7 +165,7 @@ describe("symbol resolution", () => {
             nodeType: "declare-variable",
             assignee: {
                 nodeType: "identifier",
-                name: "myVar",
+                value: "myVar",
             },
         };
 
@@ -186,7 +186,7 @@ describe("symbol resolution", () => {
             nodeType: "declare-variable",
             assignee: {
                 nodeType: "identifier",
-                name: "myVar",
+                value: "myVar",
             },
         };
 
@@ -211,7 +211,7 @@ describe("symbol resolution", () => {
             nodeType: "declare-variable",
             assignee: {
                 nodeType: "identifier",
-                name: "myVar",
+                value: "myVar",
             },
         };
 

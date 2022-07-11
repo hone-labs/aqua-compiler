@@ -180,7 +180,7 @@ describe("parser", () => {
                     "nodeType": "declare-variable",
                     "assignee": {
                         "nodeType": "identifier",
-                        "name": "a",
+                        "value": "a",
                     },
                     "symbolType": 1,
                     "initializer": {
@@ -188,7 +188,7 @@ describe("parser", () => {
                         "checkConstantAssignment": false,
                         "assignee": {
                             "nodeType": "identifier",
-                            "name": "a",
+                            "value": "a",
                         },
                         "children": [
                             {
@@ -212,7 +212,7 @@ describe("parser", () => {
                     "nodeType": "declare-variable",
                     "assignee": {
                         "nodeType": "identifier",
-                        "name": "a",
+                        "value": "a",
                     },
                     "symbolType": 0,
                     "initializer": {
@@ -220,7 +220,7 @@ describe("parser", () => {
                         "checkConstantAssignment": false,
                         "assignee": {
                             "nodeType": "identifier",
-                            "name": "a",
+                            "value": "a",
                         },
                         "children": [
                             {
@@ -247,11 +247,11 @@ describe("parser", () => {
                         "children": [
                             {
                                 "nodeType": "identifier",
-                                "name": "a"
+                                "value": "a"
                             },
                             {
                                 "nodeType": "identifier",
-                                "name": "b"
+                                "value": "b"
                             }
                         ]
                     },
@@ -274,11 +274,11 @@ describe("parser", () => {
                         "children": [
                             {
                                 "nodeType": "identifier",
-                                "name": "a"
+                                "value": "a"
                             },
                             {
                                 "nodeType": "identifier",
-                                "name": "b"
+                                "value": "b"
                             }
                         ]
                     },
@@ -290,11 +290,11 @@ describe("parser", () => {
                             "children": [
                                 {
                                     "nodeType": "identifier",
-                                    "name": "a"
+                                    "value": "a"
                                 },
                                 {
                                     "nodeType": "identifier",
-                                    "name": "b"
+                                    "value": "b"
                                 }
                             ]
                         },
@@ -333,11 +333,11 @@ describe("parser", () => {
                         "children": [
                             {
                                 "nodeType": "identifier",
-                                "name": "a"
+                                "value": "a"
                             },
                             {
                                 "nodeType": "identifier",
-                                "name": "b"
+                                "value": "b"
                             }
                         ]
                     },
@@ -349,11 +349,11 @@ describe("parser", () => {
                             "children": [
                                 {
                                     "nodeType": "identifier",
-                                    "name": "a"
+                                    "value": "a"
                                 },
                                 {
                                     "nodeType": "identifier",
-                                    "name": "b"
+                                    "value": "b"
                                 }
                             ]
                         },
@@ -445,7 +445,7 @@ describe("parser", () => {
             "children": [
                 {
                     "nodeType": "function-declaration",
-                    "name": "test",
+                    "value": "test",
                     "params": [],
                     "body": {
                         "nodeType": "block-statement",
@@ -464,7 +464,7 @@ describe("parser", () => {
             "children": [
                 {
                     "nodeType": "function-declaration",
-                    "name": "test",
+                    "value": "test",
                     "params": ["a", "b", "c"],
                     "body": {
                         "nodeType": "block-statement",
@@ -483,7 +483,7 @@ describe("parser", () => {
             "children": [
                 {
                     "nodeType": "function-declaration",
-                    "name": "test",
+                    "value": "test",
                     "params": [],
                     "body": {
                         "nodeType": "block-statement",
@@ -962,7 +962,7 @@ describe("parser", () => {
                             "nodeType": "declare-variable",
                             "assignee": {
                                 "nodeType": "identifier",
-                                "name": "x",
+                                "value": "x",
                             },
                             "symbolType": 0,
                             "initializer": {
@@ -970,7 +970,7 @@ describe("parser", () => {
                                 "checkConstantAssignment": false,
                                 "assignee": {
                                     "nodeType": "identifier",
-                                    "name": "x",
+                                    "value": "x",
                                 },
                                 "children": [
                                     {
@@ -1016,7 +1016,7 @@ describe("parser", () => {
                             "nodeType": "declare-variable",
                             "assignee": {
                                 "nodeType": "identifier",
-                                "name": "x",
+                                "value": "x",
                             },
                             "symbolType": 1,
                             "initializer": {
@@ -1024,7 +1024,7 @@ describe("parser", () => {
                                 "checkConstantAssignment": false,
                                 "assignee": {
                                     "nodeType": "identifier",
-                                    "name": "x",
+                                    "value": "x",
                                 },
                                 "children": [
                                     {

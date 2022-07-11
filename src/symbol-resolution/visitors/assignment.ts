@@ -17,9 +17,9 @@ export default function (node: ASTNode, symbolResolution: ISymbolResolution, sym
                 throw new Error(`Expected tuple element to be an lvalue.`);
             }
             else {
-                const symbol = symbolTable.get(child.name!);
+                const symbol = symbolTable.get(child.value!);
                 if (symbol === undefined) {
-                    throw new Error(`Variable ${child.name} is not declared!`);
+                    throw new Error(`Variable ${child.value} is not declared!`);
                 }
 
                 if (node.checkConstantAssignment && symbol.type !== SymbolType.Variable) {
@@ -34,9 +34,9 @@ export default function (node: ASTNode, symbolResolution: ISymbolResolution, sym
         throw new Error(`Expected assignee to be an lvalue.`);
     }
     else {
-        const symbol = symbolTable.get(assignee.name!);
+        const symbol = symbolTable.get(assignee.value!);
         if (symbol === undefined) {
-            throw new Error(`Variable ${assignee.name} is not declared!`);
+            throw new Error(`Variable ${assignee.value} is not declared!`);
         }
 
         if (node.checkConstantAssignment && symbol.type !== SymbolType.Variable) {

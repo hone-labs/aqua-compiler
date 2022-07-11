@@ -146,7 +146,7 @@ describe("parser", () => {
         const ast = parseExpressionOk("foo");
         expect(ast).toEqual({
             "nodeType": "identifier",
-            "name": "foo"
+            "value": "foo"
         });
     });
 
@@ -155,7 +155,7 @@ describe("parser", () => {
         const ast = parseExpressionOk("foo()");
         expect(ast).toEqual({
             "nodeType": "function-call",
-            "name": "foo",
+            "value": "foo",
             "functionArgs": []
         });
     });
@@ -165,7 +165,7 @@ describe("parser", () => {
         const ast = parseExpressionOk("foo(1, 2, 3)");
         expect(ast).toEqual({
             "nodeType": "function-call",
-            "name": "foo",
+            "value": "foo",
             "functionArgs": [
                 {
                     "nodeType": "number",
@@ -200,7 +200,7 @@ describe("parser", () => {
             "checkConstantAssignment": true,
             "assignee": {
                 "nodeType": "identifier",
-                "name": "x"
+                "value": "x"
             },
             "children": [
                 {

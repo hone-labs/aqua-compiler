@@ -116,7 +116,7 @@ export class CodeGenerator implements ICodeGenerator {
         //
         this.curFunction = functionNode;
 
-        this.codeEmitter.label(functionNode.name!);
+        this.codeEmitter.label(functionNode.value!);
 
         this.codeEmitter.section(`Function setup.`);
         this.codeEmitter.add(`load 0`, 1, 0, `Take copy of current stack_pointer on stack so that we can save it as the "previous stack pointer" in the new stack frame.`);
@@ -162,7 +162,7 @@ export class CodeGenerator implements ICodeGenerator {
         // 
         // Restore the original stack pointer.
         //
-        this.codeEmitter.label(`${functionNode.name}-cleanup`, `Function cleanup. Restores the previous stack frame`);
+        this.codeEmitter.label(`${functionNode.value}-cleanup`, `Function cleanup. Restores the previous stack frame`);
         this.codeEmitter.add(`load 0`, 1, 0, `Loads current stack_pointer`)
         this.codeEmitter.add(`loads`, 1, 1, `Loads previous_stack_pointer`);
         this.codeEmitter.add(`store 0`, 0, 1, `stack_pointer = previous_stack_pointer`); // Restore stack_pointer to previous_stack_pointer.

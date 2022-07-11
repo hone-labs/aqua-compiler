@@ -136,7 +136,7 @@ const builtins: IBuiltinsLookupMap = {
 
 export default function (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitter: ICodeEmitter) {
 
-    const builtin = builtins[node.name!];
+    const builtin = builtins[node.value!];
     if (!builtin) {
         //
         // If not a builtin function generate code for arguments immediately.
@@ -152,7 +152,7 @@ export default function (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitt
     }
     else {
         // Otherwise we "call" the user's function.
-        codeEmitter.add(`callsub ${node.name}`, 1, node.functionArgs?.length || 0); //TODO: Always assuming a function returns one value. This will have to change.
+        codeEmitter.add(`callsub ${node.value}`, 1, node.functionArgs?.length || 0); //TODO: Always assuming a function returns one value. This will have to change.
     }
 
     //todo: at this point we need to let the emitter know how many items have been push on the stack as a result of this function.
