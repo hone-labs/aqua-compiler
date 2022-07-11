@@ -202,9 +202,6 @@ export class CodeGenerator implements ICodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
-        "block-statement": (node) => {
-            this.visitChildren(node);
-        },
 
         "tuple": (node) => {
             this.visitChildren(node);
