@@ -219,21 +219,6 @@ export class CodeGenerator implements ICodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
-
-        "access-variable": (node) => {
-            this.visitChildren(node);
-
-            if (node.symbol!.isGlobal) {                    
-                this.codeEmitter.add(`load ${node.symbol!.position}`, 1, 0);
-            }
-            else {
-                this.codeEmitter.add(`load 0`, 1, 0); // stack_pointer
-                this.codeEmitter.add(`int ${node.symbol!.position}`, 1, 0); // Variable position within stack frame.                    
-                this.codeEmitter.add(`+`, 2, 1); // stack_pointer + variable_position
-                this.codeEmitter.add(`loads`, 1, 1); // Loads variable onto stack.
-            }
-        },
-
         "assignment-statement": (node) => {
             this.visitChildren(node);
 
