@@ -39,6 +39,11 @@ export interface ICodeGenerator {
     // Visits each child to generate code.
     //
     visitChildren(node: ASTNode): void;
+
+    //
+    // Tracks the function for which we are generating code.
+    //
+    readonly curFunction?: ASTNode;
 }
 
 //
@@ -57,14 +62,9 @@ export class CodeGenerator implements ICodeGenerator {
     private functions: ASTNode[] = [];
 
     //
-    // Tracks if we generating code within a function (or otherwise global code).
-    //
-    private inFunction: boolean = false;
-
-    //
     // Tracks the function for which we are generating code.
     //
-    private curFunction?: ASTNode = undefined;
+    curFunction?: ASTNode = undefined;
 
     constructor(private codeEmitter: ICodeEmitter) {
     }
@@ -77,7 +77,6 @@ export class CodeGenerator implements ICodeGenerator {
         //
         // To start with we generate global code.
         //
-        this.inFunction = false;
         this.curFunction = undefined;
 
         //
@@ -106,11 +105,6 @@ export class CodeGenerator implements ICodeGenerator {
             // Ensures the code for functions is never executed unless we specifically call the function.
             //
             this.codeEmitter.add(`b program_end`, 0, 0); 
-
-            //
-            // Now generating code within functions.
-            //
-            this.inFunction = true;
 
             for (const functionNode of this.functions) {
                 //
@@ -225,25 +219,6 @@ export class CodeGenerator implements ICodeGenerator {
     //
     visitors: INodeVisitorMap = {
 
-        "return-statement": (node) => {
-            this.codeEmitter.resetStack();
-
-            this.visitChildren(node);
-
-            if (this.inFunction) {
-                //
-                // End of function! Jump to function cleanup code.
-                //
-                this.codeEmitter.add(`b ${this.curFunction!.name}-cleanup`, 0, 0);
-            }
-            else {
-                //
-                // Global code executes the "return" opcode to finish the entire program.
-                //
-                this.codeEmitter.add(`return`, 0, 0);
-            }
-        },
-        
         "declare-variable": (node) => {
             this.codeEmitter.resetStack();
 
