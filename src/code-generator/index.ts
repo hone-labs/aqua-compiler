@@ -198,10 +198,9 @@ export class CodeGenerator implements ICodeGenerator {
     }
 
     //
-    // Code to be invoked to visit each node in the AST.
+    // Lookup table to cache loaded visitors.
     //
-    visitors: INodeVisitorMap = {
-    };
+    visitors: INodeVisitorMap = {};
 
     //
     // Walk the tree and collection functions so there code can be generated in a second pass.
