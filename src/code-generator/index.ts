@@ -30,7 +30,15 @@ interface IBuiltinsLookupMap {
 // Handles TEAL code generation for the Aqua compiler.
 //
 export interface ICodeGenerator {
+    //
+    // Visits a node to generate code.
+    //
+    visitNode(node: ASTNode): void;
 
+    //
+    // Visits each child to generate code.
+    //
+    visitChildren(node: ASTNode): void;
 }
 
 //
@@ -184,9 +192,9 @@ export class CodeGenerator implements ICodeGenerator {
     }
 
     //
-    // Geneates code for a node.
+    // Visits a node to generate code.
     //
-    private visitNode(node: ASTNode): void {
+    visitNode(node: ASTNode): void {
         let visitor = this.visitors[node.nodeType];
         if (!visitor) {
             //
@@ -202,9 +210,9 @@ export class CodeGenerator implements ICodeGenerator {
     }
 
     //
-    // Generates code from an AST representation of an Aqua script.
+    // Visits each child to generate code.
     //
-    private visitChildren(node: ASTNode): void {
+    visitChildren(node: ASTNode): void {
         if (node.children) {
             for (const child of node.children) {
                 this.visitNode(child);
@@ -216,16 +224,6 @@ export class CodeGenerator implements ICodeGenerator {
     // Code to be invoked to visit each node in the AST.
     //
     visitors: INodeVisitorMap = {
-
-        "operation": (node) => {
-            this.visitChildren(node);
-
-            let output = node.opcode!;
-            if (node.args) {
-                output += ` ${node.args.join(" ")}`;
-            }
-            this.codeEmitter.add(output, node.numItemsAdded !== undefined ? node.numItemsAdded : 1, node.numItemsRemoved !== undefined ? node.numItemsRemoved : 2);
-        },
 
         "expr-statement": (node) => {
             this.codeEmitter.resetStack();
