@@ -2,8 +2,9 @@ import dedent from "dedent";
 import { CodeEmitter } from "../code-emitter";
 import { CodeGenerator } from "../code-generator";
 import { parseExpression } from "../parser";
+import { SymbolType } from "../symbol";
 import { SymbolResolution } from "../symbol-resolution";
-import { ISymbolTable, SymbolTable, SymbolType } from "../symbol-table";
+import { ISymbolTable, SymbolTable } from "../symbol-table";
 
 //
 // Normalize whitespace so we don't have to consider it when testing.
@@ -209,7 +210,7 @@ describe("expression", () => {
 
         const globalSymbolTable = new SymbolTable(1);
         const symbol = globalSymbolTable.define("myFunction", SymbolType.Function);
-        symbol.returnType = "void";
+        symbol.returnType = { "type": "void" };
 
         check(
             'myFunction()',
@@ -224,7 +225,7 @@ describe("expression", () => {
 
         const globalSymbolTable = new SymbolTable(1);
         const symbol = globalSymbolTable.define("myFunction", SymbolType.Function);
-        symbol.returnType = "void";
+        symbol.returnType = { "type": "void" };
 
         check(
             'myFunction(1)',
@@ -240,7 +241,7 @@ describe("expression", () => {
 
         const globalSymbolTable = new SymbolTable(1);
         const symbol = globalSymbolTable.define("myFunction", SymbolType.Function);
-        symbol.returnType = "void";
+        symbol.returnType = { "type": "void" };
 
         check(
             'myFunction(1, 2, 3)',

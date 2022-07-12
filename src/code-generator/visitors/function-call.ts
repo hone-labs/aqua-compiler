@@ -154,13 +154,13 @@ export default function (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitt
         // Otherwise we "call" the user's function.
         let numItemsAdded: number;
         
-        if (node.symbol!.returnType === "void") {
+        if (node.symbol!.returnType!.type === "void") { //TODO: Would be good to delegate this logic to the type system.
             numItemsAdded = 0;
         }
-        else if (node.symbol!.returnType === "uint64") {
+        else if (node.symbol!.returnType!.type === "uint64") {
             numItemsAdded = 1;
         }
-        else if (node.symbol!.returnType === "byte[]") {
+        else if (node.symbol!.returnType!.type === "byte[]") {
             numItemsAdded = 1;
         }
         else {

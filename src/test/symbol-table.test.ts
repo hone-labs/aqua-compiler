@@ -1,4 +1,5 @@
-import { SymbolTable, SymbolType } from "../symbol-table";
+import { SymbolType } from "../symbol";
+import { SymbolTable } from "../symbol-table";
 
 describe("symbol table", () => {
 

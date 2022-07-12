@@ -1,7 +1,7 @@
 import { ASTNode } from "../ast";
 import { CodeEmitter } from "../code-emitter";
 import { CodeGenerator } from "../code-generator";
-import { SymbolType } from "../symbol-table";
+import { SymbolType } from "../symbol";
 
 describe("code generator", () => {
 
@@ -495,7 +495,7 @@ describe("code generator", () => {
             symbol: {
                 name: "myFunction",
                 type: SymbolType.Function,
-                returnType: "void",
+                returnType: { "type": "void" },
                 isGlobal: true,
             },
             functionArgs: [],
@@ -514,7 +514,7 @@ describe("code generator", () => {
             symbol: {
                 name: "myFunction",
                 type: SymbolType.Function,
-                returnType: "void",
+                returnType: { "type": "void" },
                 isGlobal: true,
             },
             functionArgs: [
@@ -546,7 +546,7 @@ describe("code generator", () => {
                     symbol: {
                         name: "myFunction",
                         type: SymbolType.Function,
-                        returnType: "uint64",
+                        returnType: { "type": "uint64" },
                         isGlobal: true,
                     },
                 },
@@ -569,7 +569,7 @@ describe("code generator", () => {
                     symbol: {
                         name: "myFunction",
                         type: SymbolType.Function,
-                        returnType: "byte[]",
+                        returnType: { "type": "byte[]" },
                         isGlobal: true,
                     },
                 },
@@ -592,7 +592,7 @@ describe("code generator", () => {
                     symbol: {
                         name: "myFunction",
                         type: SymbolType.Function,
-                        returnType: "void",
+                        returnType: { "type": "void" },
                         isGlobal: true,
                     },
                 },

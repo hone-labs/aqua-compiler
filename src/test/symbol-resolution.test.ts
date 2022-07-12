@@ -1,6 +1,7 @@
 import { ASTNode } from "../ast";
+import { SymbolType } from "../symbol";
 import { SymbolResolution } from "../symbol-resolution";
-import { SymbolTable, SymbolType } from "../symbol-table";
+import { SymbolTable } from "../symbol-table";
 
 describe("symbol resolution", () => {
 
@@ -149,9 +150,9 @@ describe("symbol resolution", () => {
             },
         };
 
-        const ast = {
+        const ast: ASTNode = {
             nodeType: "function-declaration",
-            returnType: "void",
+            returnType: { "type": "void" }, 
             body: declareVariable,
         };
 
@@ -234,7 +235,7 @@ describe("symbol resolution", () => {
         const ast: ASTNode = {
             nodeType: "function-declaration",
             params: ["a", "b"],
-            returnType: "void",
+            returnType: { "type": "void" },
             body: {
                 nodeType: "block-statement",
                 children: [],
@@ -262,7 +263,7 @@ describe("symbol resolution", () => {
                     nodeType: "function-declaration",
                     value: "myFunction",
                     params: ["a", "b"],
-                    returnType: "void",
+                    returnType: { "type": "void" },
                     body: {
                         nodeType: "block-statement",
                         children: [],

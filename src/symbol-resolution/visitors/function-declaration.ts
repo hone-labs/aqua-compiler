@@ -1,6 +1,7 @@
 import { ISymbolResolution } from "..";
 import { ASTNode } from "../../ast";
-import { ISymbolTable, SymbolTable, SymbolType } from "../../symbol-table";
+import { SymbolType } from "../../symbol";
+import { ISymbolTable, SymbolTable } from "../../symbol-table";
 
 export default function (node: ASTNode, symbolResolution: ISymbolResolution, symbolTable: ISymbolTable) {
 

@@ -1,6 +1,6 @@
 import { ASTNode } from "../ast";
 import { parse } from "../parser";
-import { SymbolType } from "../symbol-table";
+import { SymbolType } from "../symbol";
 import { IError } from "../tokenizer";
 
 describe("parser", () => {
@@ -447,7 +447,7 @@ describe("parser", () => {
                     "nodeType": "function-declaration",
                     "value": "test",
                     "params": [],
-                    "returnType": "void",
+                    "returnType": { "type": "void" },
                     "body": {
                         "nodeType": "block-statement",
                         "children": []
@@ -467,7 +467,7 @@ describe("parser", () => {
                     "nodeType": "function-declaration",
                     "value": "test",
                     "params": [],
-                    "returnType": "uint64",
+                    "returnType": { "type": "uint64" },
                     "body": {
                         "nodeType": "block-statement",
                         "children": []
@@ -487,7 +487,7 @@ describe("parser", () => {
                     "nodeType": "function-declaration",
                     "value": "test",
                     "params": [],
-                    "returnType": "byte[]",
+                    "returnType": { "type": "byte[]" },
                     "body": {
                         "nodeType": "block-statement",
                         "children": []
@@ -507,7 +507,7 @@ describe("parser", () => {
                     "nodeType": "function-declaration",
                     "value": "test",
                     "params": ["a", "b", "c"],
-                    "returnType": "void",
+                    "returnType": { "type": "void" },
                     "body": {
                         "nodeType": "block-statement",
                         "children": []
@@ -527,7 +527,7 @@ describe("parser", () => {
                     "nodeType": "function-declaration",
                     "value": "test",
                     "params": [],
-                    "returnType": "void",
+                    "returnType": { "type": "void" },
                     "body": {
                         "nodeType": "block-statement",
                         "children": [

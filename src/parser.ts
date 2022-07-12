@@ -4,6 +4,7 @@
 
 import { ASTNode } from "./ast";
 import { IToken, ITokenizer, OnErrorFn, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
+import { IType } from "./type";
 
 export interface IParser {
 
@@ -101,18 +102,18 @@ export class Parser implements IParser {
     //
     // Parses a type.
     //
-    private type(): string {
+    private type(): IType {
         if (this.match(TokenType.VOID)) {
-            return "void";
+            return { type: "void" };
         }
         if (this.match(TokenType.UINT64)) {
-            return "uint64";
+            return { type: "uint64" };
         }
         else {
             this.expect(TokenType.BYTE);
             this.expect(TokenType.OPEN_BRACE);
             this.expect(TokenType.CLOSE_BRACE);
-            return "byte[]";
+            return { type: "byte[]" };
         }
     }
 

@@ -1,9 +1,10 @@
+import { ISymbol, SymbolType } from "./symbol";
+import { ISymbolTable } from "./symbol-table";
+import { IType } from "./type";
+
 //
 // Defines a node in the abstract syntax tree (AST).
 //
-
-import { ISymbol, ISymbolTable, SymbolType } from "./symbol-table";
-
 export interface ASTNode {
 
     //
@@ -64,7 +65,7 @@ export interface ASTNode {
     //
     // Encodes the return type for a function.
     // 
-    returnType?: string;
+    returnType?: IType;
 
     //
     // If a function node, this is the body of the function.

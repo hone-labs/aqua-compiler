@@ -1,5 +1,5 @@
 import { ASTNode } from "../ast";
-import { ISymbolTable, SymbolTable, SymbolType } from "../symbol-table";
+import { ISymbolTable } from "../symbol-table";
 
 //
 // Defines a function that can visit nodes in the AST to resolve symbols.
