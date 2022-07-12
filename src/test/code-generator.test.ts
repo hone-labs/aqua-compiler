@@ -492,6 +492,12 @@ describe("code generator", () => {
         const node: ASTNode = {
             nodeType: "function-call",
             value: "myFunction",
+            symbol: {
+                name: "myFunction",
+                type: SymbolType.Function,
+                returnType: "void",
+                isGlobal: true,
+            },
             functionArgs: [],
         };
 
@@ -505,6 +511,12 @@ describe("code generator", () => {
         const node: ASTNode = {
             nodeType: "function-call",
             value: "myFunction",
+            symbol: {
+                name: "myFunction",
+                type: SymbolType.Function,
+                returnType: "void",
+                isGlobal: true,
+            },
             functionArgs: [
                 {
                     nodeType: "number",
@@ -521,6 +533,52 @@ describe("code generator", () => {
             `int 1`,
             `int 2`,
             `callsub myFunction`,
+        ]);
+    });
+
+    it("can call function with uint64 return value", () => {
+        const node: ASTNode = {
+            nodeType: "expr-statement",
+            children: [
+                {
+                    nodeType: "function-call",
+                    value: "myFunction",
+                    symbol: {
+                        name: "myFunction",
+                        type: SymbolType.Function,
+                        returnType: "uint64",
+                        isGlobal: true,
+                    },
+                },
+            ],
+        };
+
+        expect(generateCode(node)).toEqual([
+            `callsub myFunction`,
+            `pop`, // Pops the return value of the function.
+        ]);
+    });
+
+    it("can call function with void return value", () => {
+        const node: ASTNode = {
+            nodeType: "expr-statement",
+            children: [
+                {
+                    nodeType: "function-call",
+                    value: "myFunction",
+                    symbol: {
+                        name: "myFunction",
+                        type: SymbolType.Function,
+                        returnType: "void",
+                        isGlobal: true,
+                    },
+                },
+            ],
+        };
+
+        expect(generateCode(node)).toEqual([
+            `callsub myFunction`,
+            // Does not pop the return value of the function.
         ]);
     });
 

@@ -11,7 +11,7 @@ export enum SymbolType {
 // Represents a symbol (e.g. variable, constant or function).
 //
 export interface ISymbol {
-
+    
     //
     // The name of the symbol.
     //
@@ -21,6 +21,11 @@ export interface ISymbol {
     // The type of the symbol.
     //
     readonly type: SymbolType;
+
+    //
+    // The return type for function symbols.
+    //
+    returnType?: string;
 
     //
     // Position of the symbol in scratch memory (if not a function).

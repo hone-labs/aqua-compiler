@@ -10,10 +10,11 @@ export default function (node: ASTNode, symbolResolution: ISymbolResolution, sym
     node.scope = localSymbolTable;
 
     if (symbolTable.isDefinedLocally(node.value!)) {
-        throw new Error(`Function ${node.value!} is already declared!`);
+        throw new Error(`Symbol already declared: ${node.value!}`);
     }
 
     node.symbol = symbolTable.define(node.value!, SymbolType.Function);
+    node.symbol.returnType = node.returnType;
 
     if (node.params) {
         for (const param of node.params) {

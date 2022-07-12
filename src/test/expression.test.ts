@@ -208,7 +208,8 @@ describe("expression", () => {
     it("can call function with zero args", () => {
 
         const globalSymbolTable = new SymbolTable(1);
-        globalSymbolTable.define("myFunction", SymbolType.Function);
+        const symbol = globalSymbolTable.define("myFunction", SymbolType.Function);
+        symbol.returnType = "void";
 
         check(
             'myFunction()',
@@ -222,7 +223,8 @@ describe("expression", () => {
     it("can call function with one args", () => {
 
         const globalSymbolTable = new SymbolTable(1);
-        globalSymbolTable.define("myFunction", SymbolType.Function);
+        const symbol = globalSymbolTable.define("myFunction", SymbolType.Function);
+        symbol.returnType = "void";
 
         check(
             'myFunction(1)',
@@ -237,7 +239,8 @@ describe("expression", () => {
     it("can call function with multiple args", () => {
 
         const globalSymbolTable = new SymbolTable(1);
-        globalSymbolTable.define("myFunction", SymbolType.Function);
+        const symbol = globalSymbolTable.define("myFunction", SymbolType.Function);
+        symbol.returnType = "void";
 
         check(
             'myFunction(1, 2, 3)',

@@ -152,8 +152,19 @@ export default function (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitt
     }
     else {
         // Otherwise we "call" the user's function.
-        codeEmitter.add(`callsub ${node.value}`, 1, node.functionArgs?.length || 0); //TODO: Always assuming a function returns one value. This will have to change.
-    }
+        let numItemsAdded: number;
+        
+        if (node.symbol!.returnType === "void") {
+            numItemsAdded = 0;
+        }
+        else if (node.symbol!.returnType === "uint64") {
+            numItemsAdded = 1;
+        }
+        else {
+            throw new Error(`Unexpected return type ${node.symbol!.returnType}`);
+        }
 
-    //todo: at this point we need to let the emitter know how many items have been push on the stack as a result of this function.
+
+        codeEmitter.add(`callsub ${node.value}`, numItemsAdded, node.functionArgs?.length || 0);
+    }
 }

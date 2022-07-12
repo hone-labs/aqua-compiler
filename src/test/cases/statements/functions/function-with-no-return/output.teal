@@ -2,7 +2,6 @@
 int 255
 store 0
 callsub myFunction
-pop
 b program_end
 myFunction:
 load 0
