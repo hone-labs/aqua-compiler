@@ -150,6 +150,7 @@ describe("symbol resolution", () => {
 
         const ast = {
             nodeType: "function-declaration",
+            returnType: "void",
             body: declareVariable,
         };
 
@@ -232,6 +233,7 @@ describe("symbol resolution", () => {
         const ast: ASTNode = {
             nodeType: "function-declaration",
             params: ["a", "b"],
+            returnType: "void",
             body: {
                 nodeType: "block-statement",
                 children: [],

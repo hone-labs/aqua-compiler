@@ -10,10 +10,10 @@ else {
     return multiply(x, y);
 }
 
-function add(a, b) {
+function add(a, b): uint64 {
     return a + b;
 }
 
-function multiply(a, b) {
+function multiply(a, b): uint64 {
     return a * b;
 }

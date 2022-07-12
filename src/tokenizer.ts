@@ -8,6 +8,7 @@ export enum TokenType {
     MINUS,
     NUMBER,
     SEMICOLON,
+    COLON,
     CONST,
     LET,
     ASSIGNMENT,
@@ -45,6 +46,8 @@ export enum TokenType {
     ONCOMPLETE,
     TYPEENUM,
     STRING,
+    VOID,
+    UINT64,
 };
 
 //
@@ -56,6 +59,7 @@ export const TOKEN_NAME = [
     "-",
     "number",
     "semicolon",
+    "colon",
     "const",
     "let",
     "=",
@@ -93,6 +97,8 @@ export const TOKEN_NAME = [
     "OnComplete",
     "TypeEnum",
     "string literal",
+    "void",
+    "uint64",
 ];
 
 //
@@ -102,6 +108,7 @@ const SINGLE_CHARACTER_OPERATORS = {
     "+": TokenType.PLUS,
     "-": TokenType.MINUS,
     ";": TokenType.SEMICOLON,
+    ":": TokenType.COLON,
     "=": TokenType.ASSIGNMENT,
     "(": TokenType.OPEN_PAREN,
     ")": TokenType.CLOSE_PAREN,
@@ -161,6 +168,8 @@ export const KEYWORDS = {
     global: TokenType.GLOBAL,
     OnComplete: TokenType.ONCOMPLETE,
     TypeEnum: TokenType.TYPEENUM,
+    void: TokenType.VOID,
+    uint64: TokenType.UINT64,
 };
 
 //

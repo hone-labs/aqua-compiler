@@ -1,0 +1,5 @@
+function myFunction(): uint64 {
+    return 1;
+}
+
+myFunction();

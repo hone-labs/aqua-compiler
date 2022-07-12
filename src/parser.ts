@@ -80,7 +80,19 @@ export class Parser implements IParser {
         const identifier = this.expect(TokenType.IDENTIFIER);
 
         this.expect(TokenType.OPEN_PAREN);
-        const params = this.parameters();        
+        const params = this.parameters();  
+        
+        this.expect(TokenType.COLON);
+
+        let returnType: string;
+
+        if (this.match(TokenType.VOID)) {
+            returnType = "void";
+        }
+        else {
+            this.expect(TokenType.UINT64);
+            returnType = "uint64";
+        }
         
         this.expect(TokenType.OPEN_BRACKET);
         const body = this.blockStatement();
@@ -89,6 +101,7 @@ export class Parser implements IParser {
             nodeType: "function-declaration",
             value: identifier.value!,
             params: params,
+            returnType: returnType,
             body: body,
         };
     }

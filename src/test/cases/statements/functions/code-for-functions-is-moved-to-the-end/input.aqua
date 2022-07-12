@@ -1,5 +1,7 @@
 const a = 1;
-function myFunction() {
+
+function myFunction(): uint64 {
     return 1;
 }
+
 const b = 2;

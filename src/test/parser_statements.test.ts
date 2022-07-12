@@ -437,9 +437,9 @@ describe("parser", () => {
         });
     });
 
-    test("can declare a function", () => {
+    test("can declare a function with no return value", () => {
 
-        const ast = parseOk("function test () {\n}");
+        const ast = parseOk("function test (): void {\n}");
         expect(ast).toEqual({
             "nodeType": "block-statement",
             "children": [
@@ -447,6 +447,27 @@ describe("parser", () => {
                     "nodeType": "function-declaration",
                     "value": "test",
                     "params": [],
+                    "returnType": "void",
+                    "body": {
+                        "nodeType": "block-statement",
+                        "children": []
+                    }
+                }
+            ]
+        });
+    });
+
+    test("can declare a function with an integer return value", () => {
+
+        const ast = parseOk("function test (): uint64 {\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statement",
+            "children": [
+                {
+                    "nodeType": "function-declaration",
+                    "value": "test",
+                    "params": [],
+                    "returnType": "uint64",
                     "body": {
                         "nodeType": "block-statement",
                         "children": []
@@ -458,7 +479,7 @@ describe("parser", () => {
 
     test("can declare a function with parameters", () => {
 
-        const ast = parseOk("function test( a, b, c ) {}");
+        const ast = parseOk("function test( a, b, c ): void {}");
         expect(ast).toEqual({
             "nodeType": "block-statement",
             "children": [
@@ -466,6 +487,7 @@ describe("parser", () => {
                     "nodeType": "function-declaration",
                     "value": "test",
                     "params": ["a", "b", "c"],
+                    "returnType": "void",
                     "body": {
                         "nodeType": "block-statement",
                         "children": []
@@ -477,7 +499,7 @@ describe("parser", () => {
 
     test("a function can contain statements", () => {
 
-        const ast = parseOk("function test () {\n1;\n}");
+        const ast = parseOk("function test (): void {\n1;\n}");
         expect(ast).toEqual({
             "nodeType": "block-statement",
             "children": [
@@ -485,6 +507,7 @@ describe("parser", () => {
                     "nodeType": "function-declaration",
                     "value": "test",
                     "params": [],
+                    "returnType": "void",
                     "body": {
                         "nodeType": "block-statement",
                         "children": [

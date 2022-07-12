@@ -1,7 +1,7 @@
 let a = 3;
 let b = 4;
 
-function add(a, b) {
+function add(a, b): uint64 {
     return a + b;
 }
 

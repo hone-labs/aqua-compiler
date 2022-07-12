@@ -1,6 +1,7 @@
-function fn1() {
+function fn1(): uint64 {
     return 1;
 }
-function fn2() {
+
+function fn2(): uint64 {
     return 2;
 }

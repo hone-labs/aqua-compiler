@@ -62,6 +62,11 @@ export interface ASTNode {
     params?: string[];
 
     //
+    // Encodes the return type for a function.
+    // 
+    returnType?: string;
+
+    //
     // If a function node, this is the body of the function.
     //
     body?: ASTNode;
