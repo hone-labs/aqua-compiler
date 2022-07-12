@@ -8,10 +8,12 @@ export default function (node: ASTNode, symbolResolution: ISymbolResolution, sym
 
     const symbol = symbolTable.get(node.value!);
     if (symbol === undefined) {
-        throw new Error(`Function ${node.value} is not declared!`);
+        //TODO: Re add this when symbols are added for built ins.
+        // throw new Error(`Function ${node.value} is not declared!`);
     }
-
-    node.symbol = symbol;
+    else {
+        node.symbol = symbol;
+    }
 
     for (const arg of node.functionArgs || []) {
         symbolResolution.visitNode(arg, symbolTable);
