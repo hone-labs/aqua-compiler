@@ -48,6 +48,7 @@ export enum TokenType {
     STRING,
     VOID,
     UINT64,
+    BYTE,
 };
 
 //
@@ -170,6 +171,7 @@ export const KEYWORDS = {
     TypeEnum: TokenType.TYPEENUM,
     void: TokenType.VOID,
     uint64: TokenType.UINT64,
+    byte: TokenType.BYTE,
 };
 
 //

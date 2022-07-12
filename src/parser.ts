@@ -105,9 +105,14 @@ export class Parser implements IParser {
         if (this.match(TokenType.VOID)) {
             return "void";
         }
-        else {
-            this.expect(TokenType.UINT64);
+        if (this.match(TokenType.UINT64)) {
             return "uint64";
+        }
+        else {
+            this.expect(TokenType.BYTE);
+            this.expect(TokenType.OPEN_BRACE);
+            this.expect(TokenType.CLOSE_BRACE);
+            return "byte[]";
         }
     }
 

@@ -477,6 +477,26 @@ describe("parser", () => {
         });
     });
 
+    test("can declare a function with a byte array return value", () => {
+
+        const ast = parseOk("function test (): byte[] {\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statement",
+            "children": [
+                {
+                    "nodeType": "function-declaration",
+                    "value": "test",
+                    "params": [],
+                    "returnType": "byte[]",
+                    "body": {
+                        "nodeType": "block-statement",
+                        "children": []
+                    }
+                }
+            ]
+        });
+    });
+
     test("can declare a function with parameters", () => {
 
         const ast = parseOk("function test( a, b, c ): void {}");
