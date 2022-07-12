@@ -15,7 +15,7 @@
     "start:dev": "nodemon",
     "sd": "npm run start:dev",
     "c": "npm run clean",
-    "clean": "rm -rf build/* && rm -rf tsconfig.tsbuildinfo",
+    "clean": "rm -rf build/* tsconfig.tsbuildinfo",
     "b": "npm run build",
     "build": "tsc --incremental",
     "bw": "npm run build:watch",
