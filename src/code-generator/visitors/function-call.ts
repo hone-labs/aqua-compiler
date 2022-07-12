@@ -160,6 +160,9 @@ export default function (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitt
         else if (node.symbol!.returnType === "uint64") {
             numItemsAdded = 1;
         }
+        else if (node.symbol!.returnType === "byte[]") {
+            numItemsAdded = 1;
+        }
         else {
             throw new Error(`Unexpected return type ${node.symbol!.returnType}`);
         }

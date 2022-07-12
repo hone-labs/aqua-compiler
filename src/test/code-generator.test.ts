@@ -559,6 +559,29 @@ describe("code generator", () => {
         ]);
     });
 
+    it("can call function with byte[] return value", () => {
+        const node: ASTNode = {
+            nodeType: "expr-statement",
+            children: [
+                {
+                    nodeType: "function-call",
+                    value: "myFunction",
+                    symbol: {
+                        name: "myFunction",
+                        type: SymbolType.Function,
+                        returnType: "byte[]",
+                        isGlobal: true,
+                    },
+                },
+            ],
+        };
+
+        expect(generateCode(node)).toEqual([
+            `callsub myFunction`,
+            `pop`, // Pops the return value of the function.
+        ]);
+    });
+
     it("can call function with void return value", () => {
         const node: ASTNode = {
             nodeType: "expr-statement",
