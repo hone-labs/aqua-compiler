@@ -14,6 +14,22 @@ interface INodeVisitorMap {
 }
 
 //
+// Lookup table to cached visitors.
+//
+const visitors: INodeVisitorMap = {};
+
+function loadVisitors() {
+    // https://webpack.js.org/configuration/module/#module-contexts
+    const visitorsContext = require.context("./visitors", true, /\.\/.*\.js$/);
+    for (const key of visitorsContext.keys()) {
+        const nodeName = key.substring(2, key.length - 3);
+        visitors[nodeName] = visitorsContext(key).default;
+    }
+}
+
+loadVisitors();
+
+//
 // Handles symbol resolution for the Aqua compiler.
 //
 export interface ISymbolResolution {
@@ -41,11 +57,6 @@ export interface ISymbolResolution {
 export class SymbolResolution implements ISymbolResolution {
 
     //
-    // Lookup table to cached visitors.
-    //
-    private visitors: INodeVisitorMap = {};
-
-    //
     // Resolve symbols, annotates the AST and binds variables (etc) to their symbol table entries.
     // Computes space required by functions for local variables.
     //
@@ -58,34 +69,13 @@ export class SymbolResolution implements ISymbolResolution {
     }
 
     //
-    // Loads a visitor function from a code module.
-    //
-    private loadVisitor(filePath: string): NodeVisitorFn | undefined {
-        try {
-            require.resolve(filePath);
-        }
-        catch (e) {
-            // Module doesn't exist.
-            return undefined;
-        }
-
-        return require(filePath).default;
-    }
-
-    //
     // Resolves symbols and allocates space for variables.
     //
     visitNode(node: ASTNode, symbolTable: ISymbolTable): void {
-        let visitor = this.visitors[node.nodeType];
+        let visitor = visitors[node.nodeType];
         if (!visitor) {
-            //
-            // Load visitor.
-            //
-            visitor = this.visitors[node.nodeType] = this.loadVisitor(`./visitors/${node.nodeType}`);
-            if (!visitor) {
-                visitor = this.visitors[node.nodeType] = (node, symbolResolution, symbolTable) => {
-                    this.visitChildren(node, symbolTable);
-                }
+            visitor = visitors[node.nodeType] = (node, symbolResolution, symbolTable) => {
+                this.visitChildren(node, symbolTable);
             }
         }
 

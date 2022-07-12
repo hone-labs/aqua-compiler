@@ -3,6 +3,22 @@ import { ICodeEmitter } from "../code-emitter";
 import { MAX_SCRATCH } from "../config";
 
 //
+// Lookup table to cached visitors.
+//
+const visitors: INodeVisitorMap = {};
+
+function loadVisitors() {
+    // https://webpack.js.org/configuration/module/#module-contexts
+    const visitorsContext = require.context("./visitors", true, /\.\/.*\.js$/);
+    for (const key of visitorsContext.keys()) {
+        const nodeName = key.substring(2, key.length - 3);
+        visitors[nodeName] = visitorsContext(key).default;
+    }
+}
+
+loadVisitors();
+
+//
 // Defines a function that can visit nodes in the AST to generate code.
 //
 type NodeVisitorFn = (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitter: ICodeEmitter) => void;
@@ -49,11 +65,6 @@ export class CodeGenerator implements ICodeGenerator {
     //
     curFunction?: ASTNode = undefined;
 
-    //
-    // Lookup table to cached visitors.
-    //
-    visitors: INodeVisitorMap = {};
-
     constructor(private codeEmitter: ICodeEmitter) {
     }
 
@@ -71,6 +82,7 @@ export class CodeGenerator implements ICodeGenerator {
         // Collect functions so their code can be generated in a second pass.
         //
         this.functions = [];
+
         this.collectFunctions(ast);
 
         //
@@ -177,15 +189,10 @@ export class CodeGenerator implements ICodeGenerator {
     // Visits a node to generate code.
     //
     visitNode(node: ASTNode): void {
-        let visitor = this.visitors[node.nodeType];
+
+        let visitor = visitors[node.nodeType];
         if (!visitor) {
-            //
-            // Load visitor.
-            //
-            visitor =  this.visitors[node.nodeType] = require(`./visitors/${node.nodeType}`).default;
-            if (!visitor) {
-                throw new Error(`No visitor for node ${node.nodeType}`);
-            }
+            throw new Error(`No visitor for node ${node.nodeType}`);
         }
 
         visitor(node, this, this.codeEmitter);
@@ -217,5 +224,4 @@ export class CodeGenerator implements ICodeGenerator {
             this.functions.push(node);
         }
     }
-
 }
