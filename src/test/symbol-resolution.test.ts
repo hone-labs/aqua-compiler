@@ -1,6 +1,6 @@
 import { ASTNode } from "../ast";
 import { SymbolResolution } from "../symbol-resolution";
-import { SymbolType } from "../symbol-table";
+import { SymbolTable, SymbolType } from "../symbol-table";
 
 describe("symbol resolution", () => {
 
@@ -9,7 +9,8 @@ describe("symbol resolution", () => {
     //
     function resolveSymbols(ast: ASTNode): void {
         const symbolResolution = new SymbolResolution();
-        symbolResolution.resolveSymbols(ast);
+        const globalSymbolTable = new SymbolTable(1);
+        symbolResolution.resolveSymbols(ast, globalSymbolTable);
     }
 
     it("symbol is resolved for variable declaration", () => {
@@ -244,6 +245,36 @@ describe("symbol resolution", () => {
 
         expect(ast.scope!.isDefinedLocally("a"));
         expect(ast.scope!.isDefinedLocally("b"));
+    });
+
+    it("symbol is resolved for function call", () => {
+
+        const functionCall: ASTNode = {
+            nodeType: "function-call",
+            value: "myFunction",
+            functionArgs: [],
+        };
+
+        const ast: ASTNode = {
+            nodeType: "block-statement",
+            children: [
+                {
+                    nodeType: "function-declaration",
+                    value: "myFunction",
+                    params: ["a", "b"],
+                    returnType: "void",
+                    body: {
+                        nodeType: "block-statement",
+                        children: [],
+                    },
+                },
+                functionCall,
+            ],
+        };
+
+        resolveSymbols(ast);
+
+        expect(functionCall.symbol).toBeDefined();
     });
 
 });

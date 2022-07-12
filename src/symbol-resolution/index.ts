@@ -22,7 +22,7 @@ export interface ISymbolResolution {
     // Resolve symbols, annotates the AST and binds variables (etc) to their symbol table entries.
     // Computes space required by functions for local variables.
     //
-    resolveSymbols(ast: ASTNode): void;
+    resolveSymbols(ast: ASTNode, globalSymbolTable: ISymbolTable): void;
 
     //
     // Visits a node to resolve symbols.
@@ -49,12 +49,11 @@ export class SymbolResolution implements ISymbolResolution {
     // Resolve symbols, annotates the AST and binds variables (etc) to their symbol table entries.
     // Computes space required by functions for local variables.
     //
-    resolveSymbols(ast: ASTNode): void {
+    resolveSymbols(ast: ASTNode, globalSymbolTable: ISymbolTable): void {
 
         //
         // Resolve symbols for the AST and compute storage space.
         //
-        const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
         this.visitNode(ast, globalSymbolTable);
     }
 

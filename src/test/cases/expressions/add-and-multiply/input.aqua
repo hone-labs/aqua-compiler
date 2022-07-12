@@ -3,13 +3,6 @@ a = 3;
 const x = 5;
 const y = 8;
 
-if (x + y < 5) {
-    return add(x + y);
-}
-else {
-    return multiply(x, y);
-}
-
 function add(a, b): uint64 {
     return a + b;
 }
@@ -17,3 +10,11 @@ function add(a, b): uint64 {
 function multiply(a, b): uint64 {
     return a * b;
 }
+
+if (x + y < 5) {
+    return add(x + y);
+}
+else {
+    return multiply(x, y);
+}
+

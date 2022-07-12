@@ -3,6 +3,7 @@ import { CodeGenerator } from "./code-generator";
 import { SymbolResolution } from "./symbol-resolution";
 import { parse, parseExpression } from "./parser";
 import { OnErrorFn } from "./tokenizer";
+import { SymbolTable } from "./symbol-table";
 export { IError, OnErrorFn } from "./tokenizer";
 export { parse, parseExpression } from "./parser";
 
@@ -43,7 +44,8 @@ export function compile(input: string, onError?: OnErrorFn, options?: ICompilerO
     }
 
     const symbolResolution = new SymbolResolution();
-    symbolResolution.resolveSymbols(ast);
+    const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
+    symbolResolution.resolveSymbols(ast, globalSymbolTable);
 
     const codeEmitter = new CodeEmitter(!!options?.outputComments);
     const codeGenerator = new CodeGenerator(codeEmitter);
@@ -57,28 +59,5 @@ export function compile(input: string, onError?: OnErrorFn, options?: ICompilerO
     output += `#pragma version 5\r\n`;
     output += codeEmitter.getOutput().join("\r\n");
     return output;
-}
-
-//
-// Compiles an expression to TEAL.
-//
-export function compileExpression(input: string): string {
-    let errors = 0;
-    const ast = parseExpression(input, err => {
-        console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
-        errors += 1;
-    });
-
-    if (errors > 0) {
-        throw new Error(`Found ${errors} errors.`);
-    }
-
-    const symbolResolution = new SymbolResolution();
-    symbolResolution.resolveSymbols(ast);
-
-    const codeEmitter = new CodeEmitter(false);
-    const codeGenerator = new CodeGenerator(codeEmitter);
-    codeGenerator.generateCode(ast);
-    return codeEmitter.getOutput().join("\r\n");
 }
 

@@ -4,6 +4,7 @@
 export enum SymbolType {
     Variable = 0,
     Constant = 1,
+    Function = 2,
 }
 
 //
@@ -22,9 +23,9 @@ export interface ISymbol {
     readonly type: SymbolType;
 
     //
-    // Position of the symbol in scratch memory.
+    // Position of the symbol in scratch memory (if not a function).
     //
-    readonly position: number;
+    readonly position?: number;
 
     //
     // Records if a symbol is a global.
@@ -117,19 +118,24 @@ export class SymbolTable implements ISymbolTable {
     // Defines a symbol.
     //
     define(name: string, type: SymbolType): ISymbol {
-        const symbol = {
+        const symbol: ISymbol = {
             name: name,
             type: type,
-            position: this.nextVariablePosition,
+            position: type !== SymbolType.Function ? this.nextVariablePosition : undefined,
             isGlobal: this.parent === undefined,
         };
+
         this.symbols.set(name, symbol);
 
-        this.nextVariablePosition += 1;
+        if (type !== SymbolType.Function) {
+            // 
+            // Not a function, prepare to allocate next variable location.
+            //
+            this.nextVariablePosition += 1;
+        }
 
         return symbol;
     }
-
     
     //
     // Get the number of symbols defined.

@@ -1,5 +1,9 @@
-import { compileExpression } from "..";
 import dedent from "dedent";
+import { CodeEmitter } from "../code-emitter";
+import { CodeGenerator } from "../code-generator";
+import { parseExpression } from "../parser";
+import { SymbolResolution } from "../symbol-resolution";
+import { ISymbolTable, SymbolTable, SymbolType } from "../symbol-table";
 
 //
 // Normalize whitespace so we don't have to consider it when testing.
@@ -10,11 +14,35 @@ function normalize(input: string): string {
 
 describe("expression", () => {
 
+	//
+	// Compiles an expression to TEAL.
+	//
+	function compileExpression(input: string, globalSymbolTable: ISymbolTable): string {
+		let errors = 0;
+		const ast = parseExpression(input, err => {
+			console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
+			errors += 1;
+		});
+
+		if (errors > 0) {
+			throw new Error(`Found ${errors} errors.`);
+		}
+
+		const symbolResolution = new SymbolResolution();
+		symbolResolution.resolveSymbols(ast, globalSymbolTable);
+
+		const codeEmitter = new CodeEmitter(false);
+		const codeGenerator = new CodeGenerator(codeEmitter);
+		codeGenerator.generateCode(ast);
+		return codeEmitter.getOutput().join("\r\n");
+	}
+
+    
     //
     // Compile the input string and check it against the expected output.
     // 
-    function check(input: string, expected: string): void {
-        const teal = normalize(compileExpression(input));
+    function check(input: string, expected: string, globalSymbolTable: ISymbolTable = new SymbolTable(1)): void {
+        const teal = normalize(compileExpression(input, globalSymbolTable));
         const expectedTeal = normalize(expected);
         expect(teal).toEqual(expectedTeal);
     }
@@ -178,25 +206,39 @@ describe("expression", () => {
     });
 
     it("can call function with zero args", () => {
+
+        const globalSymbolTable = new SymbolTable(1);
+        globalSymbolTable.define("myFunction", SymbolType.Function);
+
         check(
             'myFunction()',
             dedent(`
                 callsub myFunction
-            `)
+            `),
+            globalSymbolTable
         );
     });
 
     it("can call function with one args", () => {
+
+        const globalSymbolTable = new SymbolTable(1);
+        globalSymbolTable.define("myFunction", SymbolType.Function);
+
         check(
             'myFunction(1)',
             dedent(`
                 int 1
                 callsub myFunction
-            `)
+            `),
+            globalSymbolTable
         );
     });
 
     it("can call function with multiple args", () => {
+
+        const globalSymbolTable = new SymbolTable(1);
+        globalSymbolTable.define("myFunction", SymbolType.Function);
+
         check(
             'myFunction(1, 2, 3)',
             dedent(`
@@ -204,7 +246,8 @@ describe("expression", () => {
                 int 2
                 int 3
                 callsub myFunction
-            `)
+            `),
+            globalSymbolTable
         );
     });
 });
