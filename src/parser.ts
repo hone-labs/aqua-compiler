@@ -84,15 +84,7 @@ export class Parser implements IParser {
         
         this.expect(TokenType.COLON);
 
-        let returnType: string;
-
-        if (this.match(TokenType.VOID)) {
-            returnType = "void";
-        }
-        else {
-            this.expect(TokenType.UINT64);
-            returnType = "uint64";
-        }
+        const returnType = this.type();
         
         this.expect(TokenType.OPEN_BRACKET);
         const body = this.blockStatement();
@@ -104,6 +96,19 @@ export class Parser implements IParser {
             returnType: returnType,
             body: body,
         };
+    }
+
+    //
+    // Parses a type.
+    //
+    private type(): string {
+        if (this.match(TokenType.VOID)) {
+            return "void";
+        }
+        else {
+            this.expect(TokenType.UINT64);
+            return "uint64";
+        }
     }
 
     //
