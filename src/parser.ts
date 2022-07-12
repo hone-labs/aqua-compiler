@@ -103,7 +103,21 @@ export class Parser implements IParser {
     // Parses a type.
     //
     private type(): IType {
-        if (this.match(TokenType.VOID)) {
+        if (this.match(TokenType.OPEN_PAREN)) {
+            const children = [ this.type() ];
+
+            while (this.match(TokenType.COMMA)) {
+                children.push(this.type());
+            }            
+
+            this.expect(TokenType.CLOSE_PAREN);
+
+            return {
+                type: "tuple",
+                children: children,
+            };
+        }
+        else if (this.match(TokenType.VOID)) {
             return { type: "void" };
         }
         if (this.match(TokenType.UINT64)) {

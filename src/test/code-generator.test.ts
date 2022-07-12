@@ -582,6 +582,36 @@ describe("code generator", () => {
         ]);
     });
 
+    it("can call function with tuple return value", () => {
+        const node: ASTNode = {
+            nodeType: "expr-statement",
+            children: [
+                {
+                    nodeType: "function-call",
+                    value: "myFunction",
+                    symbol: {
+                        name: "myFunction",
+                        type: SymbolType.Function,
+                        returnType: { 
+                            "type": "tuple",
+                            "children": [
+                                { type: "uint64" },
+                                { type: "byte[]" },
+                            ]
+                        },
+                        isGlobal: true,
+                    },
+                },
+            ],
+        };
+
+        expect(generateCode(node)).toEqual([
+            `callsub myFunction`,
+            `pop`,  // Pops first item of tuple.
+            `pop`,  // Pops second item of tuple.
+        ]);
+    });
+
     it("can call function with void return value", () => {
         const node: ASTNode = {
             nodeType: "expr-statement",

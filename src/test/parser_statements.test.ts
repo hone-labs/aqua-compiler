@@ -497,6 +497,36 @@ describe("parser", () => {
         });
     });
 
+    test("can declare a function with a tuple return value", () => {
+
+        const ast = parseOk("function test(): (uint64, byte[]) {\n}");
+        expect(ast).toEqual({
+            "nodeType": "block-statement",
+            "children": [
+                {
+                    "nodeType": "function-declaration",
+                    "value": "test",
+                    "params": [],
+                    "returnType": {
+                        "type": "tuple",
+                        "children": [
+                            {
+                                "type": "uint64",
+                            },
+                            {
+                                "type": "byte[]",
+                            },
+                        ],
+                    },
+                    "body": {
+                        "nodeType": "block-statement",
+                        "children": []
+                    }
+                }
+            ]
+        });
+    });
+
     test("can declare a function with parameters", () => {
 
         const ast = parseOk("function test( a, b, c ): void {}");

@@ -163,8 +163,11 @@ export default function (node: ASTNode, codeGenerator: ICodeGenerator, codeEmitt
         else if (node.symbol!.returnType!.type === "byte[]") {
             numItemsAdded = 1;
         }
+        else if (node.symbol!.returnType!.type === "tuple") {
+            numItemsAdded = node.symbol!.returnType!.children!.length;
+        }
         else {
-            throw new Error(`Unexpected return type ${node.symbol!.returnType}`);
+            throw new Error(`Unexpected return type ${node.symbol!.returnType!.type}`);
         }
 
 
