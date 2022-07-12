@@ -39,25 +39,30 @@ export function compile(input: string, onError?: OnErrorFn, options?: ICompilerO
         errors += 1;
     });
 
-    if (errors > 0) {
-        throw new Error(`Found ${errors} errors.`);
+    if (!onError && errors > 0) {
+        console.error(`Found ${errors} errors.`);
     }
 
-    const symbolResolution = new SymbolResolution();
-    const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
-    symbolResolution.resolveSymbols(ast, globalSymbolTable);
-
-    const codeEmitter = new CodeEmitter(!!options?.outputComments);
-    const codeGenerator = new CodeGenerator(codeEmitter);
-    codeGenerator.generateCode(ast);
-
-    let output = "";
-    if (!options?.disableVersionStamp) {
-        output += `// Aqua v${packageJson.version}\r\n`;
+    if (errors === 0) {
+        const symbolResolution = new SymbolResolution();
+        const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
+        symbolResolution.resolveSymbols(ast, globalSymbolTable);
+    
+        const codeEmitter = new CodeEmitter(!!options?.outputComments);
+        const codeGenerator = new CodeGenerator(codeEmitter);
+        codeGenerator.generateCode(ast);
+    
+        let output = "";
+        if (!options?.disableVersionStamp) {
+            output += `// Aqua v${packageJson.version}\r\n`;
+        }
+    
+        output += `#pragma version 5\r\n`;
+        output += codeEmitter.getOutput().join("\r\n");
+        return output;
     }
-
-    output += `#pragma version 5\r\n`;
-    output += codeEmitter.getOutput().join("\r\n");
-    return output;
+    else {
+        return "";
+    }
 }
 
