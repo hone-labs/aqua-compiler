@@ -28,42 +28,47 @@ export interface ICompilerOptions {
 //
 export function compile(input: string, onError?: OnErrorFn, options?: ICompilerOptions): string {
 
-    let errors = 0;
+    let numErrors = 0;
 
     function onCompileError(err: IError) {
+        numErrors += 1;
         if (onError) {
             onError(err); 
         }
         else {
             console.error(`${err.line}:${err.column}: Error: ${err.message}`);
         }
-        errors += 1;;
     }
 
     const ast = parse(input, onCompileError);
 
     let output: string = "";
 
-    if (errors === 0) {
+    if (numErrors === 0) {
         const symbolResolution = new SymbolResolution(onCompileError);
         const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
         symbolResolution.resolveSymbols(ast, globalSymbolTable);
-    
-        const codeEmitter = new CodeEmitter(!!options?.outputComments);
-        const codeGenerator = new CodeGenerator(codeEmitter, onCompileError);
-        codeGenerator.generateCode(ast);
-    
-        output = "";
-        if (!options?.disableVersionStamp) {
-            output += `// Aqua v${packageJson.version}\r\n`;
+
+
+        if (numErrors === 0) {    
+            const codeEmitter = new CodeEmitter(!!options?.outputComments);
+            const codeGenerator = new CodeGenerator(codeEmitter, onCompileError);
+            codeGenerator.generateCode(ast);
+
+            if (numErrors === 0) {
+                output = "";
+                if (!options?.disableVersionStamp) {
+                    output += `// Aqua v${packageJson.version}\r\n`;
+                }
+            
+                output += `#pragma version 5\r\n`;
+                output += codeEmitter.getOutput().join("\r\n");
+            }
         }
-    
-        output += `#pragma version 5\r\n`;
-        output += codeEmitter.getOutput().join("\r\n");
     }
 
-    if (!onError && errors > 0) {
-        console.error(`Found ${errors} errors.`);
+    if (!onError && numErrors > 0) {
+        console.error(`Found ${numErrors} errors.`);
     }
 
     return output;
