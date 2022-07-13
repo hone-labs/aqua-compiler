@@ -1,4 +1,5 @@
-import { IError, IToken, OnErrorFn, Tokenizer, TokenType } from "../tokenizer";
+import { IError, OnErrorFn } from "../error";
+import { IToken, Tokenizer, TokenType } from "../tokenizer";
 
 describe("tokenizer", () => {
 
@@ -234,7 +235,7 @@ describe("tokenizer", () => {
 
     test("error for unterminated string", () => {
         expectArray(retreiveErrors("\"unterminated string"), [{ 
-            msg: "Unterminated string literal.",
+            message: "Unterminated string literal.",
             line: 1, 
             column: 0 
         }]);
@@ -242,7 +243,7 @@ describe("tokenizer", () => {
 
     test("error for string that crosses a line break", () => {
         expectArray(retreiveErrors("\"bad string\n"), [{ 
-            msg: "String literal was terminated by a new line.",
+            message: "String literal was terminated by a new line.",
             line: 1, 
             column: 0 
         }]);

@@ -1,6 +1,6 @@
 import { ASTNode } from "../ast";
+import { IError } from "../error";
 import { parseExpression } from "../parser";
-import { IError } from "../tokenizer";
 
 describe("parser", () => {
 
@@ -16,7 +16,7 @@ describe("parser", () => {
         });
 
         if (errors.length > 0) {
-            throw new Error(`Got errors during parsing:\n${errors.map(err => err.msg).join('\n')}`);
+            throw new Error(`Got errors during parsing:\n${errors.map(err => err.message).join('\n')}`);
         }
 
         return ast;

@@ -1,10 +1,9 @@
 import { CodeEmitter } from "./code-emitter";
 import { CodeGenerator } from "./code-generator";
 import { SymbolResolution } from "./symbol-resolution";
-import { parse, parseExpression } from "./parser";
-import { OnErrorFn } from "./tokenizer";
+import { parse } from "./parser";
 import { SymbolTable } from "./symbol-table";
-export { IError, OnErrorFn } from "./tokenizer";
+import { IError, OnErrorFn } from "./error";
 export { parse, parseExpression } from "./parser";
 
 const packageJson = require("../package.json");
@@ -28,20 +27,22 @@ export interface ICompilerOptions {
 // Compiles an Aqua script to TEAL.
 //
 export function compile(input: string, onError?: OnErrorFn, options?: ICompilerOptions): string {
+
     let errors = 0;
-    const ast = parse(input, err => {
+
+    function onCompileError(err: IError) {
         if (onError) {
             onError(err); 
         }
         else {
-            console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
+            console.error(`${err.line}:${err.column}: Error: ${err.message}`);
         }
-        errors += 1;
-    });
-
-    if (!onError && errors > 0) {
-        console.error(`Found ${errors} errors.`);
+        errors += 1;;
     }
+
+    const ast = parse(input, onCompileError);
+
+    let output: string = "";
 
     if (errors === 0) {
         const symbolResolution = new SymbolResolution();
@@ -52,17 +53,19 @@ export function compile(input: string, onError?: OnErrorFn, options?: ICompilerO
         const codeGenerator = new CodeGenerator(codeEmitter);
         codeGenerator.generateCode(ast);
     
-        let output = "";
+        output = "";
         if (!options?.disableVersionStamp) {
             output += `// Aqua v${packageJson.version}\r\n`;
         }
     
         output += `#pragma version 5\r\n`;
         output += codeEmitter.getOutput().join("\r\n");
-        return output;
     }
-    else {
-        return "";
+
+    if (!onError && errors > 0) {
+        console.error(`Found ${errors} errors.`);
     }
+
+    return output;
 }
 

@@ -2,6 +2,8 @@
 // Tokenizer for the Aqua language.
 //
 
+import { IError, OnErrorFn } from "./error";
+
 export enum TokenType {
     EOF,
     PLUS,
@@ -207,26 +209,6 @@ export interface IToken {
 }
 
 //
-// Interface for reporting errors.
-//
-export interface IError {
-    //
-    // The error message.
-    //
-    msg: string;
-
-    //
-    // 1-based line number where the error occurred.
-    //
-    line: number;
-
-    //
-    // 0-based column number where the error occurred.
-    //
-    column: number;
-}
-
-//
 // Interface to a source code tokenizer for the Aqua language.
 //
 export interface ITokenizer {
@@ -255,11 +237,6 @@ export interface ITokenizer {
     //
     getColumn(): number;    
 }
-
-//
-// Defines a handler for errors.
-//
-export type OnErrorFn = (err: IError) => void;
 
 //
 // A source code tokenizer for the Aqua language.
@@ -396,7 +373,7 @@ export class Tokenizer implements ITokenizer {
             // Report error, then continue scanning at the next character.
 
             this.raiseError({
-                msg: `Encountered unexpected character "${ch}"`,
+                message: `Encountered unexpected character "${ch}"`,
                 line: this.curTokenLine,
                 column: this.curTokenColumn,
             });
@@ -606,7 +583,7 @@ export class Tokenizer implements ITokenizer {
             if (ch === undefined) {
                 // End of file!
                 this.raiseError({
-                    msg: "Unterminated string literal.",
+                    message: "Unterminated string literal.",
                     line: this.curTokenLine!,
                     column: this.curTokenColumn!,
                 });
@@ -615,7 +592,7 @@ export class Tokenizer implements ITokenizer {
             if (ch === "\n") {
                 // End of file!
                 this.raiseError({
-                    msg: "String literal was terminated by a new line.",
+                    message: "String literal was terminated by a new line.",
                     line: this.curTokenLine!,
                     column: this.curTokenColumn!,
                 });

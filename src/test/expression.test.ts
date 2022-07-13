@@ -1,6 +1,7 @@
 import dedent from "dedent";
 import { CodeEmitter } from "../code-emitter";
 import { CodeGenerator } from "../code-generator";
+import { IError } from "../error";
 import { parseExpression } from "../parser";
 import { SymbolType } from "../symbol";
 import { SymbolResolution } from "../symbol-resolution";
@@ -20,10 +21,11 @@ describe("expression", () => {
 	//
 	function compileExpression(input: string, globalSymbolTable: ISymbolTable): string {
 		let errors = 0;
-		const ast = parseExpression(input, err => {
-			console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
+        function onError(err: IError) {
+			console.error(`${err.line}:${err.column}: Error: ${err.message}`);
 			errors += 1;
-		});
+		}        
+		const ast = parseExpression(input, onError);
 
 		if (errors > 0) {
 			throw new Error(`Found ${errors} errors.`);

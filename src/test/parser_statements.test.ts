@@ -1,7 +1,7 @@
 import { ASTNode } from "../ast";
+import { IError } from "../error";
 import { parse } from "../parser";
 import { SymbolType } from "../symbol";
-import { IError } from "../tokenizer";
 
 describe("parser", () => {
 
@@ -17,7 +17,7 @@ describe("parser", () => {
         });
 
         if (errors.length > 0) {
-            throw new Error(`Got errors during parsing:\n${errors.map(err => err.msg).join('\n')}`);
+            throw new Error(`Got errors during parsing:\n${errors.map(err => err.message).join('\n')}`);
         }
 
         return ast;
@@ -108,11 +108,11 @@ describe("parser", () => {
     });
 
     test("error for unexpected character", () => {
-        expectArray(retreiveErrors("@"), [{ msg: 'Encountered unexpected character "@"' }]);
+        expectArray(retreiveErrors("@"), [{ message: 'Encountered unexpected character "@"' }]);
     });
 
     test("error unexpected token", () => {
-        expectArray(retreiveErrors("="), [{ msg: 'Unexpected token "="' }]);
+        expectArray(retreiveErrors("="), [{ message: 'Unexpected token "="' }]);
     });
 
     test("error reports line and column", () => {
@@ -1133,7 +1133,7 @@ describe("parser", () => {
     it("must initialize a constant", () => {
         expectArray(retreiveErrors("const a;"), [
             {
-                msg: `Constant must be initialized.`,
+                message: `Constant must be initialized.`,
             },
         ]);
     });

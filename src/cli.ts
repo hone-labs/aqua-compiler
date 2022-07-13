@@ -67,7 +67,7 @@ async function main() {
             // Parse and dump AST.
             console.log(`== AST ==`);
             const ast = parse(fileData, err => {
-                console.error(`${err.line}:${err.column}: Error: ${err.msg}`);
+                console.error(`${err.line}:${err.column}: Error: ${err.message}`);
             });
             console.log(colorJson(ast));
         }

@@ -3,7 +3,8 @@
 //
 
 import { ASTNode } from "./ast";
-import { IToken, ITokenizer, OnErrorFn, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
+import { OnErrorFn } from "./error";
+import { IToken, ITokenizer, Tokenizer, TokenType, TOKEN_NAME } from "./tokenizer";
 import { IType } from "./type";
 
 export interface IParser {
@@ -288,7 +289,7 @@ export class Parser implements IParser {
             const msg = `Constant must be initialized.`; //TODO: Be great to extract the name from the assignee.
             const token = this.tokenizer.getCurrent();
             this.onError({
-                msg: msg,
+                message: msg,
                 line: token!.line,
                 column: token!.column,
             });
@@ -849,7 +850,7 @@ export class Parser implements IParser {
         const token = this.tokenizer.getCurrent();
         const msg = `Unexpected token "${token!.string}"`;
         this.onError({
-            msg: msg,
+            message: msg,
             line: token!.line,
             column: token!.column,
         });
@@ -1060,7 +1061,7 @@ export class Parser implements IParser {
         if (!this.match(type)) {
             const msg = `Expected token "${TOKEN_NAME[type]}", found token "${TOKEN_NAME[token.type]}"`;
             this.onError({
-                msg: msg,
+                message: msg,
                 line: token.line,
                 column: token.column,
             });
