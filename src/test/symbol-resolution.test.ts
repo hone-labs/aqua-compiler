@@ -1,15 +1,23 @@
 import { ASTNode } from "../ast";
+import { IError } from "../error";
 import { SymbolType } from "../symbol";
-import { SymbolResolution } from "../symbol-resolution";
+import { SymbolResolution, visitors } from "../symbol-resolution";
 import { SymbolTable } from "../symbol-table";
+import { expectArray, expectFields } from "./lib/utils";
 
 describe("symbol resolution", () => {
+
+    let errors: IError[] = [];
+
+    beforeEach(() => {
+        errors = [];
+    });
 
     //
     // Resolves symbols for an AST.
     //
     function resolveSymbols(ast: ASTNode): void {
-        const symbolResolution = new SymbolResolution();
+        const symbolResolution = new SymbolResolution(err => { errors.push(err) });
         const globalSymbolTable = new SymbolTable(1);
         symbolResolution.resolveSymbols(ast, globalSymbolTable);
     }
@@ -276,6 +284,27 @@ describe("symbol resolution", () => {
         resolveSymbols(ast);
 
         expect(functionCall.symbol).toBeDefined();
+    });
+
+    it("symbol resolution reports an error when visitor throws", () => {
+
+        const nodeType = "bad-node";
+        const ast: ASTNode = {
+            nodeType,
+        };
+
+        const errMsg = "This node is bad!";
+        visitors[nodeType] = () => {
+            throw new Error(errMsg)
+        };
+
+        resolveSymbols(ast);
+
+        expectArray(errors, [
+            {
+                message: errMsg,
+            }
+        ]);
     });
 
 });

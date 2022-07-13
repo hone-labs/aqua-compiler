@@ -31,7 +31,7 @@ describe("expression", () => {
 			throw new Error(`Found ${errors} errors.`);
 		}
 
-		const symbolResolution = new SymbolResolution();
+		const symbolResolution = new SymbolResolution(onError);
 		symbolResolution.resolveSymbols(ast, globalSymbolTable);
 
 		const codeEmitter = new CodeEmitter(false);

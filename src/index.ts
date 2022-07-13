@@ -45,7 +45,7 @@ export function compile(input: string, onError?: OnErrorFn, options?: ICompilerO
     let output: string = "";
 
     if (errors === 0) {
-        const symbolResolution = new SymbolResolution();
+        const symbolResolution = new SymbolResolution(onCompileError);
         const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
         symbolResolution.resolveSymbols(ast, globalSymbolTable);
     

@@ -1,4 +1,5 @@
 import { ASTNode } from "../ast";
+import { IError, OnErrorFn } from "../error";
 import { ISymbolTable } from "../symbol-table";
 
 //
@@ -16,7 +17,7 @@ interface INodeVisitorMap {
 //
 // Lookup table to cached visitors.
 //
-const visitors: INodeVisitorMap = {};
+export const visitors: INodeVisitorMap = {};
 
 function loadVisitors() {
     if (require.context) {
@@ -57,6 +58,15 @@ export interface ISymbolResolution {
 // Handles symbol resolution for the Aqua compiler.
 //
 export class SymbolResolution implements ISymbolResolution {
+
+    //
+    // A simple interface that allows the tokenizer to report an error and continue scanning.
+    //
+    private onError: OnErrorFn;
+
+    constructor(onError: OnErrorFn) {
+        this.onError = onError;
+    }
 
     //
     // Resolve symbols, annotates the AST and binds variables (etc) to their symbol table entries.
@@ -105,7 +115,12 @@ export class SymbolResolution implements ISymbolResolution {
             }            
         }
 
-        visitor(node, this, symbolTable);
+        try {
+            visitor(node, this, symbolTable);
+        }
+        catch (err: any) {
+            this.onError(err);
+        }
     }
 
     //

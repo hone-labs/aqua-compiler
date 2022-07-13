@@ -27,19 +27,19 @@ describe("statement", () => {
     });
 
     it("can't redefine variable", () => {
-        expect(() => {
-            compile(`
-                let a;
-                let a;
-            `)
-        }).toThrow();
+        compile(`
+            let a;
+            let a;
+        `);
+
+        expect(numErrors).toBe(1);
     });
 
     it("can't redefine a constant", () => {
         expect(() => {
-            compile(`
-                const a = 1;
-                a = 2;
+        compile(`
+            const a = 1;
+            a = 2;
             `)
         }).toThrow();
     });
