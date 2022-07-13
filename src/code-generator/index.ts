@@ -8,11 +8,13 @@ import { MAX_SCRATCH } from "../config";
 const visitors: INodeVisitorMap = {};
 
 function loadVisitors() {
-    // https://webpack.js.org/configuration/module/#module-contexts
-    const visitorsContext = require.context("./visitors", true, /\.\/.*\.js$/);
-    for (const key of visitorsContext.keys()) {
-        const nodeName = key.substring(2, key.length - 3);
-        visitors[nodeName] = visitorsContext(key).default;
+    if (require.context) {
+        // https://webpack.js.org/configuration/module/#module-contexts
+        const visitorsContext = require.context("./visitors", true, /\.\/.*\.js$/);
+        for (const key of visitorsContext.keys()) {
+            const nodeName = key.substring(2, key.length - 3);
+            visitors[nodeName] = visitorsContext(key).default;
+        }
     }
 }
 
@@ -192,7 +194,13 @@ export class CodeGenerator implements ICodeGenerator {
 
         let visitor = visitors[node.nodeType];
         if (!visitor) {
-            throw new Error(`No visitor for node ${node.nodeType}`);
+            //
+            // Load visitor.
+            //
+            visitor =  visitors[node.nodeType] = require(`./visitors/${node.nodeType}`).default;
+            if (!visitor) {
+                throw new Error(`No visitor for node ${node.nodeType}`);
+            }
         }
 
         visitor(node, this, this.codeEmitter);
