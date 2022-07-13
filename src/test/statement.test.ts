@@ -3,8 +3,11 @@ import { compile } from "..";
 describe("statement", () => {
 
     it("can handle unterminated function body", () => {
-        expect(() => compile("function main() {", () => {})).toThrow();
-    })
+        let numErrors = 0;
+        compile("function main() {", () => { numErrors += 1 });
+
+        expect(numErrors).toBe(1);
+    });
 
     it("can't assign to a number", () => {
         expect(() => compile("1=1;")).toThrow();
