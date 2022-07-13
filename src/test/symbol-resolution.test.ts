@@ -7,19 +7,15 @@ import { expectArray, expectFields } from "./lib/utils";
 
 describe("symbol resolution", () => {
 
-    let errors: IError[] = [];
-
-    beforeEach(() => {
-        errors = [];
-    });
-
     //
     // Resolves symbols for an AST.
     //
-    function resolveSymbols(ast: ASTNode): void {
+    function resolveSymbols(ast: ASTNode) {
+        let errors: IError[] = [];
         const symbolResolution = new SymbolResolution(err => { errors.push(err) });
         const globalSymbolTable = new SymbolTable(1);
         symbolResolution.resolveSymbols(ast, globalSymbolTable);
+        return { errors };
     }
 
     it("symbol is resolved for variable declaration", () => {
@@ -298,7 +294,7 @@ describe("symbol resolution", () => {
             throw new Error(errMsg)
         };
 
-        resolveSymbols(ast);
+        const { errors } = resolveSymbols(ast);
 
         expectArray(errors, [
             {

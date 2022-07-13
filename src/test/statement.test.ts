@@ -3,36 +3,32 @@ import { IError } from "../error";
 
 describe("statement", () => {
 
-    let errors: IError[] = []
-
-    beforeEach(() => {
-        errors = [];
-    });
-
-    function compile(code: string): void {
+    function compile(code: string) {
+        let errors: IError[] = []
         aqua.compile(code, err => { errors.push(err); });
+        return { errors };
     }
 
     it("can handle unterminated function body", () => {
-        compile("function main() {");
+        const { errors } = compile("function main() {");
 
         expect(errors.length).toBe(1);
     });
 
     it("can't assign to a number", () => {
-        compile("1=1;");
+        const { errors } = compile("1=1;");
 
         expect(errors.length).toBe(1);
     });
 
     it("can't access undefined variable", () => {
-        compile("a = 1;");
+        const { errors } = compile("a = 1;");
 
         expect(errors.length).toBe(1);
     });
 
     it("can't redefine variable", () => {
-        compile(`
+        const { errors } = compile(`
             let a;
             let a;
         `);
@@ -41,7 +37,7 @@ describe("statement", () => {
     });
 
     it("can't redefine a constant", () => {
-        compile(`
+        const { errors } = compile(`
             const a = 1;
             a = 2;
         `);
