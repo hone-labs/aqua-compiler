@@ -1,29 +1,34 @@
 import * as aqua from "..";
+import { IError } from "../error";
 
 describe("statement", () => {
 
-    let numErrors = 0;
+    let errors: IError[] = []
 
     beforeEach(() => {
-        numErrors = 0;
+        errors = [];
     });
 
     function compile(code: string): void {
-        aqua.compile(code, () => { numErrors += 1 });
+        aqua.compile(code, err => { errors.push(err); });
     }
 
     it("can handle unterminated function body", () => {
         compile("function main() {");
 
-        expect(numErrors).toBe(1);
+        expect(errors.length).toBe(1);
     });
 
     it("can't assign to a number", () => {
-        expect(() => compile("1=1;")).toThrow();
+        compile("1=1;");
+
+        expect(errors.length).toBe(1);
     });
 
     it("can't access undefined variable", () => {
-        expect(() => compile("a = 1;")).toThrow();
+        compile("a = 1;");
+
+        expect(errors.length).toBe(1);
     });
 
     it("can't redefine variable", () => {
@@ -32,16 +37,16 @@ describe("statement", () => {
             let a;
         `);
 
-        expect(numErrors).toBe(1);
+        expect(errors.length).toBe(1);
     });
 
     it("can't redefine a constant", () => {
-        expect(() => {
         compile(`
             const a = 1;
             a = 2;
-            `)
-        }).toThrow();
+        `);
+
+        expect(errors.length).toBe(1);
     });
 
 });

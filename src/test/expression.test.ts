@@ -35,7 +35,7 @@ describe("expression", () => {
 		symbolResolution.resolveSymbols(ast, globalSymbolTable);
 
 		const codeEmitter = new CodeEmitter(false);
-		const codeGenerator = new CodeGenerator(codeEmitter);
+		const codeGenerator = new CodeGenerator(codeEmitter, onError);
 		codeGenerator.generateCode(ast);
 		return codeEmitter.getOutput().join("\r\n");
 	}

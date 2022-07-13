@@ -1,16 +1,24 @@
 import { ASTNode } from "../ast";
 import { CodeEmitter } from "../code-emitter";
-import { CodeGenerator } from "../code-generator";
+import { CodeGenerator, visitors } from "../code-generator";
+import { IError } from "../error";
 import { SymbolType } from "../symbol";
+import { expectArray } from "./lib/utils";
 
 describe("code generator", () => {
+
+    let errors: IError[] = [];
+
+    beforeEach(() => {
+        errors = [];
+    });
 
     //
     // Generates code from an AST.
     //
     function generateCode(ast: ASTNode): string[] {
         const codeEmitter = new CodeEmitter(false);
-        const codeGenerator = new CodeGenerator(codeEmitter);
+        const codeGenerator = new CodeGenerator(codeEmitter, err => { errors.push(err) });
         codeGenerator.generateCode(ast);
         const output = codeEmitter.getOutput();
         return output;
@@ -732,4 +740,26 @@ describe("code generator", () => {
             "program_end:"
         ]);
     });
+
+    it("code generation reports an error when visitor throws", () => {
+
+        const nodeType = "bad-node";
+        const ast: ASTNode = {
+            nodeType,
+        };
+
+        const errMsg = "This node is bad!";
+        visitors[nodeType] = () => {
+            throw new Error(errMsg)
+        };
+
+        generateCode(ast);
+
+        expectArray(errors, [
+            {
+                message: errMsg,
+            }
+        ]);
+    });
+
 });

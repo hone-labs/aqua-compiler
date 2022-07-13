@@ -1,11 +1,12 @@
 import { ASTNode } from "../ast";
 import { ICodeEmitter } from "../code-emitter";
 import { MAX_SCRATCH } from "../config";
+import { OnErrorFn } from "../error";
 
 //
 // Lookup table to cached visitors.
 //
-const visitors: INodeVisitorMap = {};
+export const visitors: INodeVisitorMap = {};
 
 function loadVisitors() {
     if (require.context) {
@@ -67,7 +68,13 @@ export class CodeGenerator implements ICodeGenerator {
     //
     curFunction?: ASTNode = undefined;
 
-    constructor(private codeEmitter: ICodeEmitter) {
+    //
+    // A simple interface that allows the tokenizer to report an error and continue scanning.
+    //
+    private onError: OnErrorFn;
+
+    constructor(private codeEmitter: ICodeEmitter, onError: OnErrorFn) {
+        this.onError = onError;
     }
 
     //
@@ -203,7 +210,12 @@ export class CodeGenerator implements ICodeGenerator {
             }
         }
 
-        visitor(node, this, this.codeEmitter);
+        try {
+            visitor(node, this, this.codeEmitter);
+        }
+        catch (err: any) {
+            this.onError(err);
+        }
     }
 
     //

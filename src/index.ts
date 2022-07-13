@@ -50,7 +50,7 @@ export function compile(input: string, onError?: OnErrorFn, options?: ICompilerO
         symbolResolution.resolveSymbols(ast, globalSymbolTable);
     
         const codeEmitter = new CodeEmitter(!!options?.outputComments);
-        const codeGenerator = new CodeGenerator(codeEmitter);
+        const codeGenerator = new CodeGenerator(codeEmitter, onCompileError);
         codeGenerator.generateCode(ast);
     
         output = "";
