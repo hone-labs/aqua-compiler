@@ -1,10 +1,19 @@
-import { compile } from "..";
+import * as aqua from "..";
 
 describe("statement", () => {
 
+    let numErrors = 0;
+
+    beforeEach(() => {
+        numErrors = 0;
+    });
+
+    function compile(code: string): void {
+        aqua.compile(code, () => { numErrors += 1 });
+    }
+
     it("can handle unterminated function body", () => {
-        let numErrors = 0;
-        compile("function main() {", () => { numErrors += 1 });
+        compile("function main() {");
 
         expect(numErrors).toBe(1);
     });
