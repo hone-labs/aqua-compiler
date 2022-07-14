@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs-extra";
-import { compile } from "..";
 import * as glob from "fast-glob";
+import { Compiler, ICompilerOptions } from "..";
 
 //
 // Set to true to force an update of all output TEAL files.
@@ -20,6 +20,23 @@ function normalize(input: string): string {
 
 describe("test cases", () => {
 
+    //
+    // Helper function to compile Aqua code to TEAL.
+    //
+    function compile(code: string, options?: ICompilerOptions): string {
+        const compiler = new Compiler(options);
+        const teal = compiler.compile(code);
+        if (compiler.errors.length > 0) {
+            console.error(`Found ${compiler.errors.length} errors.`);
+
+            for (const error of compiler.errors) {
+                console.error(`${error.line}:${error.column}: Error: ${error.message}`);
+            }
+        }    
+
+        return teal;
+    }
+
     const testCaseFiles = glob.sync([`${__dirname.replace(/\\/g, "/")}/cases/**/input.aqua`]);
     for (const testCaseFile of testCaseFiles) {
         const basename = path.basename(path.dirname(testCaseFile));
@@ -28,7 +45,7 @@ describe("test cases", () => {
             const dirPath = path.dirname(testCaseFile);
             const tealFilePath = path.join(dirPath, "output.teal");
             const input = await fs.readFile(testCaseFile, "utf8");
-            const compiled = normalize(compile(input, undefined, { disableVersionStamp: true }));
+            const compiled = normalize(compile(input, { disableVersionStamp: true }));
             if (!forceUpdate) {
                 const outputFileExists = await fs.pathExists(tealFilePath);
                 if (outputFileExists) {

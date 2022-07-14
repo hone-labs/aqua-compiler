@@ -17,7 +17,7 @@
 //
 
 import { execute } from "teal-interpreter";
-import { compile, ICompilerOptions } from ".";
+import { Compiler, ICompilerOptions } from ".";
 import { parse } from "./parser";
 
 const packageJson = require("../package.json");
@@ -47,26 +47,29 @@ async function main() {
         const filePath = argv._.shift();
 
         // Compile a file.
-        const fileData = await fs.readFile(filePath, "utf8");
+        const aquaCode = await fs.readFile(filePath, "utf8");
         if (command === "exec") {
             console.log(`== TEAL ==`);
-            const teal = compile(fileData);
-            console.log(teal.split("\n")
-                .map((line, index) => `${index+1}: ${line}`)
-                .join("\n")
-            );
 
-            // Execute the file directly.
-            console.log(`\r\n== EVALUATION ==`);
-            const result = await execute(teal);
-
-            console.log(`\r\n== RESULT ==`);
-            console.log(result);
+            const tealCode = compile(aquaCode);
+            if (tealCode !== undefined) {
+                console.log(tealCode.split("\n")
+                    .map((line, index) => `${index+1}: ${line}`)
+                    .join("\n")
+                );
+    
+                // Execute the file directly.
+                console.log(`\r\n== EVALUATION ==`);
+                const result = await execute(tealCode);
+    
+                console.log(`\r\n== RESULT ==`);
+                console.log(result);
+            }
         }
         else if (command === "ast") {
             // Parse and dump AST.
             console.log(`== AST ==`);
-            const ast = parse(fileData, err => {
+            const ast = parse(aquaCode, err => {
                 console.error(`${err.line}:${err.column}: Error: ${err.message}`);
             });
             console.log(colorJson(ast));
@@ -75,10 +78,12 @@ async function main() {
             const options: ICompilerOptions = {
                 outputComments: !!argv.comments,
             };
-            const tealCode = compile(fileData, undefined, options);
-
-            // Print compiled output.
-            console.log(tealCode);
+            
+            const tealCode = compile(aquaCode, options);
+            if (tealCode !== undefined) {
+                // Print compiled output.
+                console.log(tealCode);
+            }
         }
     }
     else {
@@ -134,3 +139,21 @@ function recogniseCommand(args: string[]): string | undefined {
     return undefined;
 }
 
+//
+// Helper function to compile Aqua code to TEAL.
+//
+function compile(code: string, options?: ICompilerOptions): string | undefined {
+    const compiler = new Compiler(options);
+    const teal = compiler.compile(code);
+    if (compiler.errors.length > 0) {
+        console.error(`Found ${compiler.errors.length} errors.`);
+
+        for (const error of compiler.errors) {
+            console.error(`${error.line}:${error.column}: Error: ${error.message}`);
+        }
+
+        return undefined;
+    }    
+
+    return teal;
+}

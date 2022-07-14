@@ -23,54 +23,70 @@ export interface ICompilerOptions {
     outputComments?: boolean;
 }
 
-//
-// Compiles an Aqua script to TEAL.
-//
-export function compile(input: string, onError?: OnErrorFn, options?: ICompilerOptions): string {
+export interface ICompiler {
 
-    let numErrors = 0;
+    //
+    // Errors collected while compiling.
+    //
+    readonly errors: IError[];
 
-    function onCompileError(err: IError) {
-        numErrors += 1;
-        if (onError) {
-            onError(err); 
-        }
-        else {
-            console.error(`${err.line}:${err.column}: Error: ${err.message}`);
-        }
+    //
+    // Compiles an Aqua script to TEAL.
+    //
+    compile(input: string): string;
+}
+
+export class Compiler implements ICompiler {
+
+    //
+    // Errors collected while compiling.
+    //
+    readonly errors: IError[] = [];
+
+    constructor(private options?: ICompilerOptions) {
+        this.onCompileError = this.onCompileError.bind(this);
     }
 
-    const ast = parse(input, onCompileError);
+    //
+    // Event raised when a compiler error occurs.
+    //
+    private onCompileError(err: IError) {
+        this.errors.push(err);
+    }
 
-    let output: string = "";
+    //
+    // Compiles an Aqua script to TEAL.
+    //
+    compile(input: string): string {
 
-    if (numErrors === 0) {
-        const symbolResolution = new SymbolResolution(onCompileError);
-        const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
-        symbolResolution.resolveSymbols(ast, globalSymbolTable);
+        const ast = parse(input, this.onCompileError);
+
+        let output: string = "";
+
+        if (this.errors.length === 0) {
+            const symbolResolution = new SymbolResolution(this.onCompileError);
+            const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
+            symbolResolution.resolveSymbols(ast, globalSymbolTable);
 
 
-        if (numErrors === 0) {    
-            const codeEmitter = new CodeEmitter(!!options?.outputComments);
-            const codeGenerator = new CodeGenerator(codeEmitter, onCompileError);
-            codeGenerator.generateCode(ast);
+            if (this.errors.length === 0) {    
+                const codeEmitter = new CodeEmitter(!!this.options?.outputComments);
+                const codeGenerator = new CodeGenerator(codeEmitter, this.onCompileError);
+                codeGenerator.generateCode(ast);
 
-            if (numErrors === 0) {
-                output = "";
-                if (!options?.disableVersionStamp) {
-                    output += `// Aqua v${packageJson.version}\r\n`;
+                if (this.errors.length === 0) {
+                    output = "";
+                    if (!this.options?.disableVersionStamp) {
+                        output += `// Aqua v${packageJson.version}\r\n`;
+                    }
+                
+                    output += `#pragma version 5\r\n`;
+                    output += codeEmitter.getOutput().join("\r\n");
                 }
-            
-                output += `#pragma version 5\r\n`;
-                output += codeEmitter.getOutput().join("\r\n");
             }
         }
-    }
 
-    if (!onError && numErrors > 0) {
-        console.error(`Found ${numErrors} errors.`);
+        return output;
     }
-
-    return output;
 }
 

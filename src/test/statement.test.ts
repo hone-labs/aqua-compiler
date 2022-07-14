@@ -1,12 +1,14 @@
-import * as aqua from "..";
+import { Compiler } from "..";
 import { IError } from "../error";
 
 describe("statement", () => {
 
     function compile(code: string) {
-        let errors: IError[] = []
-        aqua.compile(code, err => { errors.push(err); });
-        return { errors };
+        const compiler = new Compiler();
+        compiler.compile(code);
+        return {
+            errors: compiler.errors,
+        };
     }
 
     it("can handle unterminated function body", () => {

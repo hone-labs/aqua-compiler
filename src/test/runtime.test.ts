@@ -1,12 +1,25 @@
 import dedent from "dedent";
 import { execute } from "teal-interpreter";
-import { compile } from "..";
+import { Compiler, ICompilerOptions } from "..";
 
 describe("runtime tests", () => {
 
-    it("stub", () => {
-        // Stub to prevent error about zero tests.
-    })
+    //
+    // Helper function to compile Aqua code to TEAL.
+    //
+    function compile(code: string, options?: ICompilerOptions): string {
+        const compiler = new Compiler(options);
+        const teal = compiler.compile(code);
+        if (compiler.errors.length > 0) {
+            console.error(`Found ${compiler.errors.length} errors.`);
+
+            for (const error of compiler.errors) {
+                console.error(`${error.line}:${error.column}: Error: ${error.message}`);
+            }
+        }    
+
+        return teal;
+    }
 
     it("1 + 2", async () => {
         const result = await execute(compile("return 1 + 2;"));
