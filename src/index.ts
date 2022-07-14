@@ -2,8 +2,9 @@ import { CodeEmitter } from "./code-emitter";
 import { CodeGenerator } from "./code-generator";
 import { SymbolResolution } from "./symbol-resolution";
 import { parse } from "./parser";
-import { SymbolTable } from "./symbol-table";
+import { ISymbolTable, SymbolTable } from "./symbol-table";
 import { IError } from "./error";
+import { ASTNode } from "./ast";
 export { parse, parseExpression } from "./parser";
 export { IError, OnErrorFn } from "./error";
 
@@ -24,6 +25,27 @@ export interface ICompilerOptions {
     outputComments?: boolean;
 }
 
+//
+// The result of compiling a program.
+//
+export interface ICompilerResult {
+
+    //
+    // Code that was generated.
+    //
+    output: string;
+
+    //
+    // The abstract syntax tree that was parsed from input code.
+    //
+    ast: ASTNode;
+
+    //
+    // The symbol table for the program.
+    //
+    symbolTable: ISymbolTable;
+}
+
 export interface ICompiler {
 
     //
@@ -34,7 +56,7 @@ export interface ICompiler {
     //
     // Compiles an Aqua script to TEAL.
     //
-    compile(input: string): string;
+    compile(input: string): ICompilerResult;
 }
 
 export class Compiler implements ICompiler {
@@ -58,16 +80,17 @@ export class Compiler implements ICompiler {
     //
     // Compiles an Aqua script to TEAL.
     //
-    compile(input: string): string {
+    compile(input: string): ICompilerResult {
 
         const ast = parse(input, this.onCompileError);
 
         let output: string = "";
 
+        const symbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
+
         if (this.errors.length === 0) {
             const symbolResolution = new SymbolResolution(this.onCompileError);
-            const globalSymbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
-            symbolResolution.resolveSymbols(ast, globalSymbolTable);
+            symbolResolution.resolveSymbols(ast, symbolTable);
 
 
             if (this.errors.length === 0) {    
@@ -87,7 +110,11 @@ export class Compiler implements ICompiler {
             }
         }
 
-        return output;
+        return {
+            output,
+            ast,
+            symbolTable,
+        };
     }
 }
 
@@ -96,7 +123,7 @@ export class Compiler implements ICompiler {
 //
 export function compile(code: string, options?: ICompilerOptions): string | undefined {
     const compiler = new Compiler(options);
-    const teal = compiler.compile(code);
+    const result = compiler.compile(code);
     if (compiler.errors.length > 0) {
         console.error(`Found ${compiler.errors.length} errors.`);
 
@@ -107,5 +134,5 @@ export function compile(code: string, options?: ICompilerOptions): string | unde
         return undefined;
     }    
 
-    return teal;
+    return result.output;
 }
