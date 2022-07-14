@@ -3,8 +3,9 @@ import { CodeGenerator } from "./code-generator";
 import { SymbolResolution } from "./symbol-resolution";
 import { parse } from "./parser";
 import { SymbolTable } from "./symbol-table";
-import { IError, OnErrorFn } from "./error";
+import { IError } from "./error";
 export { parse, parseExpression } from "./parser";
+export { IError, OnErrorFn } from "./error";
 
 const packageJson = require("../package.json");
 
