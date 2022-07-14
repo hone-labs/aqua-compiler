@@ -16,6 +16,7 @@ export default function (node: ASTNode, symbolResolution: ISymbolResolution, sym
 
     node.symbol = symbolTable.define(node.value!, SymbolType.Function);
     node.symbol.returnType = node.returnType;
+    node.symbol.scope = localSymbolTable;
 
     if (node.params) {
         for (const param of node.params) {

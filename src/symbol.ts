@@ -1,6 +1,7 @@
 //
 // Sets the type of a symbol.
 
+import { ISymbolTable } from "./symbol-table";
 import { IType } from "./type";
 
 //
@@ -29,6 +30,11 @@ export interface ISymbol {
     // The return type for function symbols.
     //
     returnType?: IType;
+
+    //
+    // If this symbol defines a new scope, this is the scopes symbol table.
+    //
+    scope?: ISymbolTable;
 
     //
     // Position of the symbol in scratch memory (if not a function).
