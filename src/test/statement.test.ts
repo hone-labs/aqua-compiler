@@ -1,5 +1,4 @@
 import { Compiler } from "..";
-import { IError } from "../error";
 
 describe("statement", () => {
 
