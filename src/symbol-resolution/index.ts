@@ -110,7 +110,7 @@ export class SymbolResolution implements ISymbolResolution {
                 // Default the visitor.
                 //
                 visitor = visitors[node.nodeType] = (node, symbolResolution, symbolTable) => {
-                    symbolResolution.visitChildren(node, symbolTable);
+                    this.visitChildren(node, symbolTable);
                 }
             }            
         }
