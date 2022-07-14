@@ -1,4 +1,4 @@
-import { CodeEmitter } from "./code-emitter";
+import { CodeEmitter, ICodeEmitter } from "./code-emitter";
 import { CodeGenerator } from "./code-generator";
 import { SymbolResolution } from "./symbol-resolution";
 import { parse } from "./parser";
@@ -44,6 +44,11 @@ export interface ICompilerResult {
     // The symbol table for the program.
     //
     symbolTable: ISymbolTable;
+
+    //
+    // Collects the emitted code.
+    //
+    codeEmitter: ICodeEmitter;
 }
 
 export interface ICompiler {
@@ -87,6 +92,7 @@ export class Compiler implements ICompiler {
         let output: string = "";
 
         const symbolTable = new SymbolTable(1); // The stack pointer occupies position 0, so global variables are allocated from position 1.
+        const codeEmitter = new CodeEmitter(!!this.options?.outputComments);
 
         if (this.errors.length === 0) {
             const symbolResolution = new SymbolResolution(this.onCompileError);
@@ -94,7 +100,6 @@ export class Compiler implements ICompiler {
 
 
             if (this.errors.length === 0) {    
-                const codeEmitter = new CodeEmitter(!!this.options?.outputComments);
                 const codeGenerator = new CodeGenerator(codeEmitter, this.onCompileError);
                 codeGenerator.generateCode(ast);
 
@@ -114,6 +119,7 @@ export class Compiler implements ICompiler {
             output,
             ast,
             symbolTable,
+            codeEmitter,
         };
     }
 }
