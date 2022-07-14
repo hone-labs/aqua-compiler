@@ -90,3 +90,21 @@ export class Compiler implements ICompiler {
     }
 }
 
+//
+// Helper function to compile Aqua code to TEAL and write errors to the console.
+//
+export function compile(code: string, options?: ICompilerOptions): string | undefined {
+    const compiler = new Compiler(options);
+    const teal = compiler.compile(code);
+    if (compiler.errors.length > 0) {
+        console.error(`Found ${compiler.errors.length} errors.`);
+
+        for (const error of compiler.errors) {
+            console.error(`${error.line}:${error.column}: Error: ${error.message}`);
+        }
+
+        return undefined;
+    }    
+
+    return teal;
+}

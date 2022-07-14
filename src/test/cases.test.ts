@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs-extra";
 import * as glob from "fast-glob";
-import { Compiler, ICompilerOptions } from "..";
+import { compile, Compiler, ICompilerOptions } from "..";
 
 //
 // Set to true to force an update of all output TEAL files.
@@ -11,7 +11,11 @@ const forceUpdate = false;
 //
 // Normalize whitespace so we don't have to consider it when testing.
 //
-function normalize(input: string): string {
+function normalize(input?: string): string {
+    if (input === undefined) {
+        return "";
+    }
+    
     return input.split("\n")
         .map(line => line.trim())
         .filter(line => line.length > 0)
@@ -19,23 +23,6 @@ function normalize(input: string): string {
 }
 
 describe("test cases", () => {
-
-    //
-    // Helper function to compile Aqua code to TEAL.
-    //
-    function compile(code: string, options?: ICompilerOptions): string {
-        const compiler = new Compiler(options);
-        const teal = compiler.compile(code);
-        if (compiler.errors.length > 0) {
-            console.error(`Found ${compiler.errors.length} errors.`);
-
-            for (const error of compiler.errors) {
-                console.error(`${error.line}:${error.column}: Error: ${error.message}`);
-            }
-        }    
-
-        return teal;
-    }
 
     const testCaseFiles = glob.sync([`${__dirname.replace(/\\/g, "/")}/cases/**/input.aqua`]);
     for (const testCaseFile of testCaseFiles) {
