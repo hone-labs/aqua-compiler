@@ -21,6 +21,11 @@ export interface ISymbolTable {
     define(name: string, type: SymbolType): ISymbol;
 
     //
+    // Gets all symbols in the table.
+    //
+    getSymbols(): ISymbol[];
+
+    //
     // Get the number of symbols defined.
     //
     getNumSymbols(): number;
@@ -104,6 +109,13 @@ export class SymbolTable implements ISymbolTable {
         return symbol;
     }
     
+    //
+    // Gets all symbols in the table.
+    //
+    getSymbols(): ISymbol[] {
+        return Array.from(this.symbols.values());
+    }
+
     //
     // Get the number of symbols defined.
     //
