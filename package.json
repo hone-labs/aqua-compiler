@@ -21,7 +21,7 @@
     "build": "tsc --incremental",
     "bw": "npm run build:watch",
     "build:watch": "tsc --incremental --watch",
-    "prepublishOnly": "npm test && npm run clean && npm run build",
+    "prepublishOnly": "npm test && npm run clean && npm run pack-web",
     "t": "npm run test",
     "test": "jest --runInBand",
     "tw": "npm run test:watch",
