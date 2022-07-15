@@ -18,4 +18,3 @@ examples/
 tsconfig.tsbuildinfo
 .github
 docs/
-dist/
