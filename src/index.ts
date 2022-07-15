@@ -7,6 +7,7 @@ import { IError } from "./error";
 import { ASTNode } from "./ast";
 export { parse, parseExpression } from "./parser";
 export { IError, OnErrorFn } from "./error";
+export { ISymbolTable, SymbolTable } from "./symbol-table";
 
 const packageJson = require("../package.json");
 
