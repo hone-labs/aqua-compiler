@@ -9,11 +9,18 @@ import { OnErrorFn } from "../error";
 export const visitors: INodeVisitorMap = {};
 
 function loadVisitors() {
-    // https://webpack.js.org/configuration/module/#module-contexts
-    const visitorsContext = require.context("./visitors", true, /\.\/.*\.ts$/);
-    for (const key of visitorsContext.keys()) {
-        const nodeName = key.substring(2, key.length - 3);
-        visitors[nodeName] = visitorsContext(key).default;
+    try {
+        // https://webpack.js.org/configuration/module/#module-contexts
+        const visitorsContext = require.context("./visitors", true, /\.\/.*\.ts$/);
+        for (const key of visitorsContext.keys()) {
+            const nodeName = key.substring(2, key.length - 3);
+            visitors[nodeName] = visitorsContext(key).default;
+        }
+    }
+    catch (err) {
+        // 
+        // This code is for Webpack and is known not to work under Node.js.
+        //
     }
 }
 
