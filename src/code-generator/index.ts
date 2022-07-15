@@ -11,7 +11,7 @@ export const visitors: INodeVisitorMap = {};
 function loadVisitors() {
     if (require.context) {
         // https://webpack.js.org/configuration/module/#module-contexts
-        const visitorsContext = require.context("./visitors", true, /\.\/.*\.js$/);
+        const visitorsContext = require.context("./visitors", true, /\.\/.*\.ts$/);
         for (const key of visitorsContext.keys()) {
             const nodeName = key.substring(2, key.length - 3);
             visitors[nodeName] = visitorsContext(key).default;
