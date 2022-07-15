@@ -10,7 +10,7 @@ module.exports = {
         libraryTarget: "commonjs2",
     },
 
-    target: "web",
+    target: "node",
     mode: "development", //todo: production
     devtool: "source-map",
 
