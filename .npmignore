@@ -5,7 +5,7 @@ node_modules/
 *.log
 r.bat
 test/
-build/test/
+build/
 todo.txt
 .nyc_output/
 tsconfig.json
@@ -18,3 +18,4 @@ examples/
 tsconfig.tsbuildinfo
 .github
 docs/
+dist/
