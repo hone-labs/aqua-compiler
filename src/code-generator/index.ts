@@ -6,25 +6,22 @@ import { OnErrorFn } from "../error";
 //
 // Lookup table to cached visitors.
 //
-export const visitors: INodeVisitorMap = {};
-
-function loadVisitors() {
-    try {
-        // https://webpack.js.org/configuration/module/#module-contexts
-        const visitorsContext = require.context("./visitors", true, /\.\/.*\.ts$/);
-        for (const key of visitorsContext.keys()) {
-            const nodeName = key.substring(2, key.length - 3);
-            visitors[nodeName] = visitorsContext(key).default;
-        }
-    }
-    catch (err) {
-        // 
-        // This code is for Webpack and is known not to work under Node.js.
-        //
-    }
-}
-
-loadVisitors();
+export const visitors: INodeVisitorMap = {
+    "assignment": require("./visitors/assignment").default,
+    "declare-variable": require("./visitors/declare-variable").default,
+    "function-call": require("./visitors/function-call").default,
+    "identifier": require("./visitors/identifier").default,
+    "number": require("./visitors/number").default,
+    "return-statement": require("./visitors/return-statement").default,
+    "tuple": require("./visitors/tuple").default,
+    "block-statement": require("./visitors/block-statement").default,
+    "expr-statement": require("./visitors/expr-statement").default,
+    "function-declaration": require("./visitors/function-declaration").default,
+    "if-statement": require("./visitors/if-statement").default,
+    "operation": require("./visitors/operation").default,
+    "string-literal": require("./visitors/string-literal").default,
+    "while-statement": require("./visitors/while-statement").default,
+};
 
 //
 // Defines a function that can visit nodes in the AST to generate code.
@@ -206,13 +203,7 @@ export class CodeGenerator implements ICodeGenerator {
 
         let visitor = visitors[node.nodeType];
         if (!visitor) {
-            //
-            // Load visitor.
-            //
-            visitor =  visitors[node.nodeType] = require(`./visitors/${node.nodeType}`).default;
-            if (!visitor) {
-                throw new Error(`No visitor for node ${node.nodeType}`);
-            }
+            throw new Error(`No visitor for node ${node.nodeType}`);
         }
 
         try {

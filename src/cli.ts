@@ -21,7 +21,7 @@ import { compile, ICompilerOptions } from ".";
 import { parse } from "./parser";
 
 const packageJson = require("../package.json");
-const fs = require("fs/promises");
+const fs = require("fs-extra");
 const minimist = require("minimist");
 const readline = require('readline');
 const colorJson = require('color-json');

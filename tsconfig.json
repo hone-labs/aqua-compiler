@@ -2,10 +2,10 @@
   "compileOnSave": true,                      /* Setting a top-level property compileOnSave signals to the IDE to generate all files for a given tsconfig.json upon saving. */
   "compilerOptions": {
     /* Basic Options */
-    "target": "es2020",                       /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */
+    "target": "es2015",                       /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'. */
     "module": "commonjs",                     /* Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
     "lib": [                                  /* Specify library files to be included in the compilation:  */
-        "ES2020"
+        "es2015"
     ],                                        
     "allowJs": false,                         /* Allow javascript files to be compiled. */
     // "checkJs": true,                       /* Report errors in .js files. */
